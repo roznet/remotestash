@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "RemoteCopyClient.h"
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController<RemoteCopyDelegate>
 
 
 @end

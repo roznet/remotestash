@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04A0D1E24B82D6E285E6AD6E /* Pods_remotecopypaste.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 99989EE1175FCE6B5FD1F3A9 /* Pods_remotecopypaste.framework */; };
 		427B79EB246DD7DC005EDEAD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 427B79EA246DD7DC005EDEAD /* AppDelegate.m */; };
 		427B79EE246DD7DC005EDEAD /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 427B79ED246DD7DC005EDEAD /* SceneDelegate.m */; };
 		427B79F1246DD7DC005EDEAD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 427B79F0246DD7DC005EDEAD /* ViewController.m */; };
@@ -15,6 +16,7 @@
 		427B79F9246DD7DF005EDEAD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 427B79F7246DD7DF005EDEAD /* LaunchScreen.storyboard */; };
 		427B79FC246DD7DF005EDEAD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 427B79FB246DD7DF005EDEAD /* main.m */; };
 		427B7A06246DD7DF005EDEAD /* remotecopypasteTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 427B7A05246DD7DF005EDEAD /* remotecopypasteTests.m */; };
+		427B7A12246DD85D005EDEAD /* RemoteCopyClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 427B7A11246DD85D005EDEAD /* RemoteCopyClient.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +45,11 @@
 		427B7A01246DD7DF005EDEAD /* remotecopypasteTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = remotecopypasteTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		427B7A05246DD7DF005EDEAD /* remotecopypasteTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = remotecopypasteTests.m; sourceTree = "<group>"; };
 		427B7A07246DD7DF005EDEAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		427B7A10246DD85D005EDEAD /* RemoteCopyClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemoteCopyClient.h; sourceTree = "<group>"; };
+		427B7A11246DD85D005EDEAD /* RemoteCopyClient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RemoteCopyClient.m; sourceTree = "<group>"; };
+		7D2663AE0C799B8406F438A7 /* Pods-remotecopypaste.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-remotecopypaste.debug.xcconfig"; path = "Target Support Files/Pods-remotecopypaste/Pods-remotecopypaste.debug.xcconfig"; sourceTree = "<group>"; };
+		99989EE1175FCE6B5FD1F3A9 /* Pods_remotecopypaste.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_remotecopypaste.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E058E765D4F7EFD330B88913 /* Pods-remotecopypaste.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-remotecopypaste.release.xcconfig"; path = "Target Support Files/Pods-remotecopypaste/Pods-remotecopypaste.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04A0D1E24B82D6E285E6AD6E /* Pods_remotecopypaste.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,6 +77,8 @@
 				427B79E8246DD7DC005EDEAD /* remotecopypaste */,
 				427B7A04246DD7DF005EDEAD /* remotecopypasteTests */,
 				427B79E7246DD7DC005EDEAD /* Products */,
+				462BCC907395DCAD5B535D80 /* Pods */,
+				98E5223D4951DFBE4799836D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -95,6 +105,8 @@
 				427B79F7246DD7DF005EDEAD /* LaunchScreen.storyboard */,
 				427B79FA246DD7DF005EDEAD /* Info.plist */,
 				427B79FB246DD7DF005EDEAD /* main.m */,
+				427B7A10246DD85D005EDEAD /* RemoteCopyClient.h */,
+				427B7A11246DD85D005EDEAD /* RemoteCopyClient.m */,
 			);
 			path = remotecopypaste;
 			sourceTree = "<group>";
@@ -108,6 +120,24 @@
 			path = remotecopypasteTests;
 			sourceTree = "<group>";
 		};
+		462BCC907395DCAD5B535D80 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				7D2663AE0C799B8406F438A7 /* Pods-remotecopypaste.debug.xcconfig */,
+				E058E765D4F7EFD330B88913 /* Pods-remotecopypaste.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		98E5223D4951DFBE4799836D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				99989EE1175FCE6B5FD1F3A9 /* Pods_remotecopypaste.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -115,9 +145,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 427B7A0A246DD7DF005EDEAD /* Build configuration list for PBXNativeTarget "remotecopypaste" */;
 			buildPhases = (
+				6E08BB08CB98D4DDD2326DFA /* [CP] Check Pods Manifest.lock */,
 				427B79E2246DD7DC005EDEAD /* Sources */,
 				427B79E3246DD7DC005EDEAD /* Frameworks */,
 				427B79E4246DD7DC005EDEAD /* Resources */,
+				08DEC9A919E220418674825E /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -203,6 +235,48 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		08DEC9A919E220418674825E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-remotecopypaste/Pods-remotecopypaste-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-remotecopypaste/Pods-remotecopypaste-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-remotecopypaste/Pods-remotecopypaste-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6E08BB08CB98D4DDD2326DFA /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-remotecopypaste-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		427B79E2246DD7DC005EDEAD /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -211,6 +285,7 @@
 				427B79F1246DD7DC005EDEAD /* ViewController.m in Sources */,
 				427B79EB246DD7DC005EDEAD /* AppDelegate.m in Sources */,
 				427B79FC246DD7DF005EDEAD /* main.m in Sources */,
+				427B7A12246DD85D005EDEAD /* RemoteCopyClient.m in Sources */,
 				427B79EE246DD7DC005EDEAD /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -365,6 +440,7 @@
 		};
 		427B7A0B246DD7DF005EDEAD /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7D2663AE0C799B8406F438A7 /* Pods-remotecopypaste.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -381,6 +457,7 @@
 		};
 		427B7A0C246DD7DF005EDEAD /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E058E765D4F7EFD330B88913 /* Pods-remotecopypaste.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
