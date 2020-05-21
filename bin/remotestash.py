@@ -2,6 +2,7 @@
 
 from zeroconf import ServiceBrowser, Zeroconf, ServiceInfo
 import hashlib
+import ssl
 import socket
 import os
 from contextlib import closing
@@ -254,6 +255,12 @@ class Driver :
         advertiser.start_advertisement(name)
         port = int(self.args.port) if self.args.port else advertiser.port
         server = HTTPServer((advertiser.ip, port), RequestHandler)
+        if os.path.isfile( os.path.expanduser( '~/.remotestash/homeweb.key' ) ):
+            print( 'setup ssl' )
+            server.socket = ssl.wrap_socket( server.socket,
+                                             keyfile = os.path.expanduser( '~/.remotestash/homeweb.key' ),
+                                             certfile = os.path.expanduser( '~/.remotestash/homeweb.crt' ),
+                                             server_side = True )
         print(f'Starting server as {name} on {advertiser.ip}:{port}, use <Ctrl-C> to stop')
         try:
             while True:
