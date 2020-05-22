@@ -8,11 +8,11 @@
 
 #import <XCTest/XCTest.h>
 
-@interface remotecopypasteTests : XCTestCase
+@interface remotestashTests : XCTestCase
 
 @end
 
-@implementation remotecopypasteTests
+@implementation remotestashTests
 
 - (void)setUp {
     // Put setup code here. This method is called before the invocation of each test method in the class.
