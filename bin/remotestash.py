@@ -109,7 +109,20 @@ class Listener:
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         response = self.session.get( f'https://{ip}:{port}/{path}', verify=False )
         return response
-        
+    
+    def post(self,path,data):
+        self.session = Session()
+        ip = self.ip
+        port = self.port
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+        response = self.session.get( f'https://{ip}:{port}/{path}', verify=False, data = data )
+        return response
+
+    def push(self):
+        response = self.post('push',self.content)
+        print( response.content )
+        exit()
+
     def pull(self):
         response = self.get('pull')
         print( response.content )
@@ -271,6 +284,12 @@ class Driver :
     def cmd_listen(self,path = 'last'):
         zeroconf = Zeroconf()
         listener = Listener(path)
+        if path == 'push':
+            inputf = self.get_input_file()
+            listener.content = inputf.read()
+        else:
+            listener.content = None
+            
         browser = ServiceBrowser(zeroconf, "_remotestash._tcp.local.", listener)
         time.sleep(0.1)
 
@@ -307,11 +326,14 @@ class Driver :
             return sys.stdin
             
     def cmd_push(self):
-        inputf = self.get_input_file()
-        content = inputf.read()
         if self.args.local:
+            inputf = self.get_input_file()
+            content = inputf.read()
             stash = Stash(self.args)
             stash.push( 'nn', content )
+        else:
+            self.cmd_listen('push')
+            
 
     def cmd_pull(self):
         if self.args.local:
@@ -327,7 +349,7 @@ class Driver :
             data = stash.last()
             print( data )
         else:
-            self.cmd_listen('pull')
+            self.cmd_listen('last')
 
             
 if __name__ == "__main__":
