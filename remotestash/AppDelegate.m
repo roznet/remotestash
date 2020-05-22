@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "RemoteCopyClient.h"
+#import "RemoteStashServer.h"
 
 @interface AppDelegate ()
 @end

@@ -6,19 +6,19 @@
 //  Copyright © 2020 Brice Rosenzweig. All rights reserved.
 //
 
-#import "RemoteCopyClient.h"
+#import "RemoteStashServer.h"
 #include <arpa/inet.h>
-@interface RemoteCopyClient ()
+@interface RemoteStashServer ()
 @property (nonatomic,retain) NSNetService * service;
 @property (nonatomic,retain) GCDAsyncSocket * socket;
 @property (nonatomic,retain) GCDAsyncSocket * clientSocket;
 @property (nonatomic,retain) dispatch_queue_t worker;
 @end
 
-@implementation RemoteCopyClient
+@implementation RemoteStashServer
 
-+(RemoteCopyClient*)client{
-    RemoteCopyClient * rv =[[RemoteCopyClient alloc] init];
++(RemoteStashServer*)client{
+    RemoteStashServer * rv =[[RemoteStashServer alloc] init];
     if( rv ){
         [rv startBroadCast];
     }

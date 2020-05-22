@@ -7,11 +7,13 @@
 //
 
 #import "ViewController.h"
-#import "RemoteCopyClient.h"
+#import "RemoteStashServer.h"
+#import "RemoteStashClient.h"
 
 @interface ViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *textField;
-@property (nonatomic,retain) RemoteCopyClient * client;
+@property (nonatomic,retain) RemoteStashServer * server;
+@property (nonatomic,retain) RemoteStashClient * client;
 @property (weak, nonatomic) IBOutlet UILabel *connectedTo;
 @property (weak, nonatomic) IBOutlet UILabel *received;
 
@@ -22,13 +24,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.client = [RemoteCopyClient client];
-    self.client.delegate = self;
+    self.client = [[RemoteStashClient alloc] init];
 
 }
 
 - (IBAction)send:(id)sender {
-    [self.client sendString:self.textField.text];
 }
 #pragma mark - remote client
 

@@ -18,7 +18,8 @@
 		427B79F9246DD7DF005EDEAD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 427B79F7246DD7DF005EDEAD /* LaunchScreen.storyboard */; };
 		427B79FC246DD7DF005EDEAD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 427B79FB246DD7DF005EDEAD /* main.m */; };
 		427B7A06246DD7DF005EDEAD /* remotestashTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 427B7A05246DD7DF005EDEAD /* remotestashTests.m */; };
-		427B7A12246DD85D005EDEAD /* RemoteCopyClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 427B7A11246DD85D005EDEAD /* RemoteCopyClient.m */; };
+		427B7A12246DD85D005EDEAD /* RemoteStashServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 427B7A11246DD85D005EDEAD /* RemoteStashServer.m */; };
+		42C7C191247829C400D1796B /* RemoteStashClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C7C190247829C400D1796B /* RemoteStashClient.m */; };
 		D7A4DC040D055668D23A7A86 /* Pods_remotestash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16F273AE5217395CDFA37CA1 /* Pods_remotestash.framework */; };
 /* End PBXBuildFile section */
 
@@ -76,8 +77,10 @@
 		427B7A01246DD7DF005EDEAD /* remotestashTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = remotestashTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		427B7A05246DD7DF005EDEAD /* remotestashTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = remotestashTests.m; sourceTree = "<group>"; };
 		427B7A07246DD7DF005EDEAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		427B7A10246DD85D005EDEAD /* RemoteCopyClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemoteCopyClient.h; sourceTree = "<group>"; };
-		427B7A11246DD85D005EDEAD /* RemoteCopyClient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RemoteCopyClient.m; sourceTree = "<group>"; };
+		427B7A10246DD85D005EDEAD /* RemoteStashServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemoteStashServer.h; sourceTree = "<group>"; };
+		427B7A11246DD85D005EDEAD /* RemoteStashServer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RemoteStashServer.m; sourceTree = "<group>"; };
+		42C7C18F247829C400D1796B /* RemoteStashClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemoteStashClient.h; sourceTree = "<group>"; };
+		42C7C190247829C400D1796B /* RemoteStashClient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RemoteStashClient.m; sourceTree = "<group>"; };
 		6052B14A4FB8859A5DFAC90B /* Pods-remotestash.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-remotestash.release.xcconfig"; path = "Target Support Files/Pods-remotestash/Pods-remotestash.release.xcconfig"; sourceTree = "<group>"; };
 		7D2663AE0C799B8406F438A7 /* Pods-remotecopypaste.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-remotecopypaste.debug.xcconfig"; path = "Target Support Files/Pods-remotecopypaste/Pods-remotecopypaste.debug.xcconfig"; sourceTree = "<group>"; };
 		E058E765D4F7EFD330B88913 /* Pods-remotecopypaste.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-remotecopypaste.release.xcconfig"; path = "Target Support Files/Pods-remotecopypaste/Pods-remotecopypaste.release.xcconfig"; sourceTree = "<group>"; };
@@ -156,8 +159,10 @@
 				427B79F7246DD7DF005EDEAD /* LaunchScreen.storyboard */,
 				427B79FA246DD7DF005EDEAD /* Info.plist */,
 				427B79FB246DD7DF005EDEAD /* main.m */,
-				427B7A10246DD85D005EDEAD /* RemoteCopyClient.h */,
-				427B7A11246DD85D005EDEAD /* RemoteCopyClient.m */,
+				427B7A10246DD85D005EDEAD /* RemoteStashServer.h */,
+				427B7A11246DD85D005EDEAD /* RemoteStashServer.m */,
+				42C7C18F247829C400D1796B /* RemoteStashClient.h */,
+				42C7C190247829C400D1796B /* RemoteStashClient.m */,
 			);
 			path = remotestash;
 			sourceTree = "<group>";
@@ -375,8 +380,9 @@
 			files = (
 				427B79F1246DD7DC005EDEAD /* ViewController.m in Sources */,
 				427B79EB246DD7DC005EDEAD /* AppDelegate.m in Sources */,
+				42C7C191247829C400D1796B /* RemoteStashClient.m in Sources */,
 				427B79FC246DD7DF005EDEAD /* main.m in Sources */,
-				427B7A12246DD85D005EDEAD /* RemoteCopyClient.m in Sources */,
+				427B7A12246DD85D005EDEAD /* RemoteStashServer.m in Sources */,
 				427B79EE246DD7DC005EDEAD /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

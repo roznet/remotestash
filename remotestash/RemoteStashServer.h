@@ -19,10 +19,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface RemoteCopyClient : NSObject<NSNetServiceDelegate,NSNetServiceBrowserDelegate,GCDAsyncSocketDelegate>
+@interface RemoteStashServer : NSObject<NSNetServiceDelegate,NSNetServiceBrowserDelegate,GCDAsyncSocketDelegate>
 @property (nonatomic,retain) NSObject<RemoteCopyDelegate>*delegate;
 
-+(RemoteCopyClient*)client;
++(RemoteStashServer*)client;
 -(void)sendString:(NSString*)str;
 @end
 
