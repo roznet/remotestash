@@ -2,6 +2,7 @@
 
 from zeroconf import ServiceBrowser, Zeroconf, ServiceInfo
 import hashlib
+import urllib3
 import ssl
 import socket
 import os
@@ -70,7 +71,7 @@ class Stash:
                     data = readf.read()
             return data
 
-        return None
+        return ''
 
     def push(self,name,data):
         item = { 'name': name, 'file': content_hash( data ) }
@@ -85,6 +86,10 @@ class Stash:
             json.dump( self.contents, jf )
 
 class Listener:
+
+    def __init__(self,cmd):
+        self.cmd = cmd
+    
     def remove_service(self, zeroconf, type, name):
         print( f'Service {name} removed' )
 
@@ -93,18 +98,33 @@ class Listener:
         self.ip = socket.inet_ntoa(info.addresses[0])
         self.port = info.port
         self.info = info
-        print( f'Found Service {info.name} added, connecting to: {self.ip}:{self.port}')
+        print( f'Found Service {info.name} added, running {self.cmd} on {self.ip}:{self.port}')
+        getattr(self,self.cmd)()
+
+
+    def get(self,path):
         self.session = Session()
         ip = self.ip
         port = self.port
-        response = self.session.get( f'http://{ip}:{port}/yo' )
-        print( response )
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+        response = self.session.get( f'https://{ip}:{port}/{path}', verify=False )
+        return response
+        
+    def pull(self):
+        response = self.get('pull')
+        print( response.content )
         exit()
 
+    def last(self):
+        response = self.get('last')
+        print( response.content )
+        exit()
+
+        
 class Advertiser:
-    def __init__(self):
+    def __init__(self,port=None):
         self.ip = self.get_ip()
-        self.port = self.get_port()
+        self.port = port if port else self.get_port() 
         
     def get_ip(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -161,6 +181,11 @@ class RequestHandler(BaseHTTPRequestHandler):
         stash = Stash({})
         data = stash.pull()
         self.respond( 200, {'Content-type':'text/html'}, data )
+        
+    def last(self):
+        stash = Stash({})
+        data = stash.last()
+        self.respond( 200, {'Content-type':'text/html'}, data )
 
     def do_POST(self):
         self.do_GET()
@@ -176,8 +201,10 @@ class RequestHandler(BaseHTTPRequestHandler):
             self.push()
         elif self.parsed_path.path.startswith( '/pull' ):
             self.pull()
+        elif self.parsed_path.path.startswith( '/last' ):
+            self.last()
         else:
-            self.respond( 500, {}, None )
+            self.respond( 500, {}, '' )
                 
     def breakdown_request(self):
         self.parsed_path = parse.urlparse(self.path)
@@ -226,34 +253,36 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.respond( 200, { 'Content-Type' : 'text/plain; charset=utf-8' }, message )
 
     def respond(self,response_value, headers, content ):
-        print( 'respond' )
+        print( f'respond {response_value}  bytes' )
         self.send_response(response_value)
         if headers:
             for header,value in headers.items():
                 self.send_header(header,value)
         self.end_headers()
-        self.wfile.write(content if isinstance(content,bytes) else content.encode( 'utf-8' ) )
+        if content:
+            self.wfile.write(content if isinstance(content,bytes) else content.encode( 'utf-8' ) )
+            
         
 class Driver :
     def __init__(self,args=None):
         self.args = args
         self.verbose = True;
 
-    def cmd_listen(self):
+    def cmd_listen(self,path = 'last'):
         zeroconf = Zeroconf()
-        listener = Listener()
+        listener = Listener(path)
         browser = ServiceBrowser(zeroconf, "_remotestash._tcp.local.", listener)
         time.sleep(0.1)
 
     def cmd_serve(self):
         zeroconf = Zeroconf()
-        advertiser = Advertiser()
+        advertiser = Advertiser(int(self.args.port) if self.args.port else None)
         if self.args.name:
             name = self.args.name
         else:
             name = f'{advertiser.get_name()} remote stash'
         advertiser.start_advertisement(name)
-        port = int(self.args.port) if self.args.port else advertiser.port
+        port = advertiser.port
         server = HTTPServer((advertiser.ip, port), RequestHandler)
         if os.path.isfile( os.path.expanduser( '~/.remotestash/homeweb.key' ) ):
             print( 'setup ssl' )
@@ -289,12 +318,17 @@ class Driver :
             stash = Stash(self.args)
             data = stash.pull()
             print( data )
+        else:
+            self.cmd_listen('pull')
+            
     def cmd_last(self):
         if self.args.local:
             stash = Stash(self.args)
             data = stash.last()
             print( data )
-        
+        else:
+            self.cmd_listen('pull')
+
             
 if __name__ == "__main__":
     commands = {
@@ -310,7 +344,7 @@ if __name__ == "__main__":
     
     parser = argparse.ArgumentParser( description='Remote Copy', formatter_class=argparse.RawTextHelpFormatter )
     parser.add_argument( 'command', metavar='Command', help='command to execute:\n' + description)
-    parser.add_argument( '-l', '--local', action='store_true', help='use local stash', default=True )
+    parser.add_argument( '-l', '--local', action='store_true', help='use local stash' )
     parser.add_argument( '-n', '--name', help='name for service' )
     parser.add_argument( '-v', '--verbose', action='store_true', help='verbose output' )
     parser.add_argument( '-p', '--port', help='port to use if not set will use a free port' )
