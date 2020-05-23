@@ -9,6 +9,9 @@
 #import "AppDelegate.h"
 #import "RemoteStashServer.h"
 
+NSString * kNotificationApplicationEnteredForeground = @"kNotificationApplicationEnteredForeground";
+
+
 @interface AppDelegate ()
 @end
 
@@ -24,6 +27,13 @@
 
 #pragma mark - UISceneSession lifecycle
 
+-(void)applicationDidBecomeActive:(UIApplication *)application{
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationApplicationEnteredForeground object:self];
+
+}
+-(void)applicationWillEnterForeground:(UIApplication *)application{
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationApplicationEnteredForeground object:self];
+}
 
 - (UISceneConfiguration *)application:(UIApplication *)application configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession options:(UISceneConnectionOptions *)options {
     // Called when a new scene session is being created.

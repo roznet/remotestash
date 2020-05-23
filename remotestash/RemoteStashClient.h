@@ -7,10 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import <UIKit/UIKit.h>
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RemoteStashClient : NSObject<NSNetServiceBrowserDelegate,NSNetServiceDelegate>
+@class RemoteStashService;
+
+@interface RemoteStashClient : NSObject<NSNetServiceBrowserDelegate,UITableViewDataSource>
+
+@property (nonatomic,nullable,readonly) RemoteStashService * currentService;
 
 @end
 

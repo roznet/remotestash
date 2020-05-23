@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+extern NSString * kNotificationApplicationEnteredForeground;
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 

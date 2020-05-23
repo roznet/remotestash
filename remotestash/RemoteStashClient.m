@@ -7,10 +7,12 @@
 //
 
 #import "RemoteStashClient.h"
+#import "RemoteStashService.h"
 
 @interface RemoteStashClient ()
 @property (nonatomic,retain) NSNetServiceBrowser * browser;
-@property (nonatomic,retain) NSArray<NSNetService*>*services;
+@property (nonatomic,retain) NSArray<RemoteStashService*>*services;
+@property (nonatomic,assign) NSInteger currentServiceIndex;
 @end
 
 @implementation RemoteStashClient
@@ -22,6 +24,7 @@
         self.browser.delegate = self;
         self.services = @[];
         [self.browser searchForServicesOfType:@"_remotestash._tcp" inDomain:@""];
+        self.currentServiceIndex = -1;
     }
     return self;
 }
@@ -34,16 +37,30 @@
           didFindService:(NSNetService *)service
               moreComing:(BOOL)moreComing{
     NSLog(@"discovered %@", service);
-    self.services = [self.services arrayByAddingObject:service];
-    service.delegate = self;
-    
-    [service resolveWithTimeout:5.0];
+    self.services = [self.services arrayByAddingObject:[RemoteStashService serviceFor:service]];
+    if( self.currentServiceIndex == -1 && self.services.count > 0){
+        self.currentServiceIndex = 0;
+    }
 }
 
--(void)netServiceDidResolveAddress:(NSNetService *)sender{
-    NSLog(@"resolved %@", sender);
+-(RemoteStashService*)currentService{
+    if( self.currentServiceIndex == -1 || self.currentServiceIndex >= self.services.count){
+        return nil;
+    }else{
+        return self.services[self.currentServiceIndex];
+    }
 }
--(void)netService:(NSNetService *)sender didNotResolve:(NSDictionary<NSString *,NSNumber *> *)errorDict{
-    NSLog(@"failed to resolve %@", sender);
+
+
+- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath{
+    UITableViewCell * cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"servicecell"];
+    cell.textLabel.text = self.services[indexPath.row].name;
+    return cell;
 }
+
+- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return self.services.count;
+}
+
+
 @end
