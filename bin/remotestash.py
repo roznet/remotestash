@@ -16,6 +16,7 @@ from requests import Session, Request
 import pwd
 import json
 import sys
+from pprint import pprint
 
 def file_hash(filepath):
     openedFile = open(filepath)
@@ -87,27 +88,36 @@ class Stash:
 
 class Listener:
 
-    def __init__(self,cmd):
+    def __init__(self,cmd,args):
         self.cmd = cmd
-    
+        self.args = args
+        if args.verbose:
+            self.verbose = args.verbose
+        else:
+            self.verbose = False
+            
     def remove_service(self, zeroconf, type, name):
-        print( f'Service {name} removed' )
+        if self.verbose:
+            print( f'Service {name} removed' )
 
     def add_service(self, zeroconf, type, name):
         info = zeroconf.get_service_info(type, name)
         self.ip = socket.inet_ntoa(info.addresses[0])
         self.port = info.port
         self.info = info
-        print( f'Found Service {info.name} added, running {self.cmd} on {self.ip}:{self.port}')
+        if self.verbose:
+            print( f'Found Service {info.name} added, running {self.cmd} on {self.ip}:{self.port}')
         getattr(self,self.cmd)()
-
 
     def get(self,path):
         self.session = Session()
         ip = self.ip
         port = self.port
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-        response = self.session.get( f'https://{ip}:{port}/{path}', verify=False )
+        url = f'https://{ip}:{port}/{path}'
+        if self.verbose:
+            print( f'starting GET {url}' )
+        response = self.session.get( url, verify=False )
         return response
     
     def post(self,path,data):
@@ -115,24 +125,32 @@ class Listener:
         ip = self.ip
         port = self.port
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-        response = self.session.get( f'https://{ip}:{port}/{path}', verify=False, data = data )
+        url = f'https://{ip}:{port}/{path}'
+        if self.verbose:
+            print( f'starting POST {url}' )
+        response = self.session.get( url, verify=False, data = data )
         return response
 
     def push(self):
         response = self.post('push',self.content)
         print( response.content )
-        exit()
+        self.exit()
 
     def pull(self):
         response = self.get('pull')
-        print( response.content )
-        exit()
+        # if binary use response.content
+        print( response.text )
+        self.exit()
 
     def last(self):
         response = self.get('last')
-        print( response.content )
-        exit()
+        # if binary use response.content
+        print( response.text )
+        self.exit()
 
+    def exit(self):
+        sys.stdout.flush()
+        os._exit(0)
         
 class Advertiser:
     def __init__(self,port=None):
@@ -188,17 +206,17 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         stash = Stash({})
         stash.push( 'web', self.body )
-        self.respond( 200, {'Content-type':'application/json'}, json.dumps( {'success':1} ).encode('utf-8') )
+        self.respond( 200, {'Content-type':'application/json; charset=utf-8'}, json.dumps( {'success':1} ).encode('utf-8') )
 
     def pull(self):
         stash = Stash({})
         data = stash.pull()
-        self.respond( 200, {'Content-type':'text/html'}, data )
+        self.respond( 200, {'Content-type':'text/plain; charset=utf-8'}, data )
         
     def last(self):
         stash = Stash({})
         data = stash.last()
-        self.respond( 200, {'Content-type':'text/html'}, data )
+        self.respond( 200, {'Content-type':'text/plain; charset=utf-8'}, data )
 
     def do_POST(self):
         self.do_GET()
@@ -283,7 +301,7 @@ class Driver :
 
     def cmd_listen(self,path = 'last'):
         zeroconf = Zeroconf()
-        listener = Listener(path)
+        listener = Listener(path,self.args)
         if path == 'push':
             inputf = self.get_input_file()
             listener.content = inputf.read()
@@ -291,7 +309,8 @@ class Driver :
             listener.content = None
             
         browser = ServiceBrowser(zeroconf, "_remotestash._tcp.local.", listener)
-        time.sleep(0.1)
+        time.sleep(1.0)
+        print( 'Failed to find a stash on the local network'  )
 
     def cmd_serve(self):
         zeroconf = Zeroconf()

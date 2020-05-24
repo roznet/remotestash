@@ -128,9 +128,23 @@
 			path = share;
 			sourceTree = "<group>";
 		};
+		4272F3BA247A649600F9ACC5 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				427B7A10246DD85D005EDEAD /* RemoteStashServer.h */,
+				427B7A11246DD85D005EDEAD /* RemoteStashServer.m */,
+				42C7C18F247829C400D1796B /* RemoteStashClient.h */,
+				42C7C190247829C400D1796B /* RemoteStashClient.m */,
+				42C7C192247970E200D1796B /* RemoteStashService.h */,
+				42C7C193247970E200D1796B /* RemoteStashService.m */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
 		427B79DD246DD7DC005EDEAD = {
 			isa = PBXGroup;
 			children = (
+				4272F3BA247A649600F9ACC5 /* Common */,
 				427B79E8246DD7DC005EDEAD /* remotestash */,
 				427B7A04246DD7DF005EDEAD /* remotestashTests */,
 				422A24D924719EF600D6C2FB /* share */,
@@ -164,12 +178,6 @@
 				427B79F7246DD7DF005EDEAD /* LaunchScreen.storyboard */,
 				427B79FA246DD7DF005EDEAD /* Info.plist */,
 				427B79FB246DD7DF005EDEAD /* main.m */,
-				427B7A10246DD85D005EDEAD /* RemoteStashServer.h */,
-				427B7A11246DD85D005EDEAD /* RemoteStashServer.m */,
-				42C7C18F247829C400D1796B /* RemoteStashClient.h */,
-				42C7C190247829C400D1796B /* RemoteStashClient.m */,
-				42C7C192247970E200D1796B /* RemoteStashService.h */,
-				42C7C193247970E200D1796B /* RemoteStashService.m */,
 			);
 			path = remotestash;
 			sourceTree = "<group>";
