@@ -104,6 +104,7 @@ NSString * kNotificationNewServiceDiscovered = @"kNotificationNewServiceDiscover
         self.request = request;
         self.task = [self.session dataTaskWithRequest:request completionHandler:^(NSData * data, NSURLResponse*response,NSError*error){
             NSLog(@"Done %@ %@", response, error);
+            completion(self);
         }];
         [self.task resume];
         

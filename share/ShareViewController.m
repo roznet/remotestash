@@ -29,7 +29,9 @@
                                                        queue:nil
                                                   usingBlock:^(NSNotification*notification){
         NSLog(@"Got services");
-        [self reloadConfigurationItems];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self reloadConfigurationItems];
+        });
     }];
 }
 
@@ -61,8 +63,11 @@
             NSLog(@"got url %@", url);
             [self.client.currentService pushString:url.description completion:^(RemoteStashService*service){
                 NSLog(@"Done posting");
-                [self.extensionContext completeRequestReturningItems:@[]
-                                                   completionHandler:nil];
+                dispatch_async( dispatch_get_main_queue(), ^(){
+                    [self.extensionContext completeRequestReturningItems:self.extensionContext.inputItems
+                                                       completionHandler:nil];
+
+                });
             }];
         }];
     }else{
