@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface RemoteStashClient : NSObject<NSNetServiceBrowserDelegate,UITableViewDataSource>
 
 @property (nonatomic,nullable,readonly) RemoteStashService * currentService;
+@property (nonatomic,readonly) NSArray<RemoteStashService*>*services;
 
 @end
 

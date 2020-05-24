@@ -10,6 +10,7 @@
 		422A24DC24719EF600D6C2FB /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 422A24DB24719EF600D6C2FB /* ShareViewController.m */; };
 		422A24DF24719EF600D6C2FB /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 422A24DD24719EF600D6C2FB /* MainInterface.storyboard */; };
 		422A24E324719EF600D6C2FB /* share.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 422A24D824719EF600D6C2FB /* share.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		4272F3B9247A610200F9ACC5 /* RemoteStashClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C7C190247829C400D1796B /* RemoteStashClient.m */; };
 		427B79EB246DD7DC005EDEAD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 427B79EA246DD7DC005EDEAD /* AppDelegate.m */; };
 		427B79EE246DD7DC005EDEAD /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 427B79ED246DD7DC005EDEAD /* SceneDelegate.m */; };
 		427B79F1246DD7DC005EDEAD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 427B79F0246DD7DC005EDEAD /* ViewController.m */; };
@@ -378,6 +379,7 @@
 			files = (
 				422A24DC24719EF600D6C2FB /* ShareViewController.m in Sources */,
 				42C7C195247970E200D1796B /* RemoteStashService.m in Sources */,
+				4272F3B9247A610200F9ACC5 /* RemoteStashClient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
