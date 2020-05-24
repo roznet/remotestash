@@ -20,7 +20,7 @@ typedef void(^RemoteStashCompletionHandler)(RemoteStashService*service);
 
 @property (nonatomic,retain) NSNetService * service;
 @property (nonatomic,readonly) NSString * name;
-
+@property (nonatomic,readonly) BOOL isReady;
 @property (nonatomic,readonly,nullable) NSString * lastPullString;
 
 +(RemoteStashService*)serviceFor:(NSNetService*)service;

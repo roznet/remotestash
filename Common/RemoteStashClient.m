@@ -36,7 +36,6 @@
 -(void)netServiceBrowser:(NSNetServiceBrowser *)browser
           didFindService:(NSNetService *)service
               moreComing:(BOOL)moreComing{
-    NSLog(@"discovered %@", service);
     self.services = [self.services arrayByAddingObject:[RemoteStashService serviceFor:service]];
     if( self.currentServiceIndex == -1 && self.services.count > 0){
         self.currentServiceIndex = 0;

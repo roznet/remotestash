@@ -31,7 +31,6 @@
 
     self.socket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:self.worker];
     [self.socket acceptOnPort:0 error:nil];
-    NSLog(@"socket %@ %@", self.socket.localHost, @(self.socket.localPort));
     NSString * name = [NSString stringWithFormat:@"%@ CopyPaste", [[UIDevice currentDevice] name]];
     self.service = [[NSNetService alloc] initWithDomain:@"local." type:@"_remotecopypaste._tcp" name:name port:self.socket.localPort];
     [self.service publish];
@@ -40,13 +39,11 @@
 #pragma mark - NetService
 
 -(void)netServiceDidPublish:(NSNetService *)sender{
-    NSLog(@"DidPublish");
 }
 
 #pragma mark - Socket
 
 -(void)socket:(GCDAsyncSocket *)sock didAcceptNewSocket:(GCDAsyncSocket *)newSocket{
-    NSLog(@"new socket %@ %@", newSocket.connectedHost, @(newSocket.connectedPort));
     self.clientSocket = newSocket;
     if( self.delegate){
         [self.delegate connectedTo:self.clientSocket];
@@ -59,12 +56,10 @@
     if( tag == 1){
         int64_t length = 0;
         [data getBytes:&length length:sizeof(length)];
-        NSLog(@"Received %@ bytes", @(length));
         [self.clientSocket readDataToLength:length withTimeout:-1 tag:2];
     }
     else if( tag == 2){
         NSString * str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        NSLog(@"Received data %@", str);
         if( self.delegate){
             [self.delegate received:str];
         }

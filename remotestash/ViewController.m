@@ -82,7 +82,6 @@
             NSLog(@"Done with %@", service);
         }];
     }
-    NSLog(@"push");
 }
 
 

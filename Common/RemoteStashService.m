@@ -46,8 +46,11 @@ NSString * kNotificationNewServiceDiscovered = @"kNotificationNewServiceDiscover
     return self.service.name;
 }
 
+-(BOOL)isReady{
+    return self.addresses.count > 0;
+}
+
 -(void)netServiceDidResolveAddress:(NSNetService *)sender{
-    NSLog(@"resolved %@", sender);
     
     NSMutableArray * found = [NSMutableArray array];
     
@@ -84,7 +87,6 @@ NSString * kNotificationNewServiceDiscovered = @"kNotificationNewServiceDiscover
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNewServiceDiscovered object:self];
 }
 -(void)netService:(NSNetService *)sender didNotResolve:(NSDictionary<NSString *,NSNumber *> *)errorDict{
-    NSLog(@"failed to resolve %@", sender);
 }
 
 -(void)pushString:(NSString *)str completion:(RemoteStashCompletionHandler)completion{
@@ -103,7 +105,12 @@ NSString * kNotificationNewServiceDiscovered = @"kNotificationNewServiceDiscover
         [request addValue:@"text/html" forHTTPHeaderField:@"Content-type"];
         self.request = request;
         self.task = [self.session dataTaskWithRequest:request completionHandler:^(NSData * data, NSURLResponse*response,NSError*error){
-            NSLog(@"Done %@ %@", response, error);
+            self.data = data;
+            if( [response isKindOfClass:[NSHTTPURLResponse class]]){
+                self.response = (NSHTTPURLResponse*)response;
+            }else{
+                self.response = nil;
+            }
             completion(self);
         }];
         [self.task resume];
@@ -123,7 +130,6 @@ NSString * kNotificationNewServiceDiscovered = @"kNotificationNewServiceDiscover
         NSMutableURLRequest * request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
         self.request = request;
         self.task = [self.session dataTaskWithRequest:request completionHandler:^(NSData * data, NSURLResponse*response,NSError*error){
-            NSLog(@"Done %@ %@", response, error);
             self.data = data;
             if( [response isKindOfClass:[NSHTTPURLResponse class]]){
                 self.response = (NSHTTPURLResponse*)response;

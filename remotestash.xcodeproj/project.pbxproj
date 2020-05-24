@@ -65,7 +65,7 @@
 		422A24DB24719EF600D6C2FB /* ShareViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareViewController.m; sourceTree = "<group>"; };
 		422A24DE24719EF600D6C2FB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		422A24E024719EF600D6C2FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		427B79E6246DD7DC005EDEAD /* remotestash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = remotestash.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		427B79E6246DD7DC005EDEAD /* RemoteStash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RemoteStash.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		427B79E9246DD7DC005EDEAD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		427B79EA246DD7DC005EDEAD /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		427B79EC246DD7DC005EDEAD /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
@@ -157,7 +157,7 @@
 		427B79E7246DD7DC005EDEAD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				427B79E6246DD7DC005EDEAD /* remotestash.app */,
+				427B79E6246DD7DC005EDEAD /* RemoteStash.app */,
 				427B7A01246DD7DF005EDEAD /* remotestashTests.xctest */,
 				422A24D824719EF600D6C2FB /* share.appex */,
 			);
@@ -248,7 +248,7 @@
 			);
 			name = remotestash;
 			productName = remotecopypaste;
-			productReference = 427B79E6246DD7DC005EDEAD /* remotestash.app */;
+			productReference = 427B79E6246DD7DC005EDEAD /* RemoteStash.app */;
 			productType = "com.apple.product-type.application";
 		};
 		427B7A00246DD7DF005EDEAD /* remotestashTests */ = {
@@ -615,7 +615,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.remotecopypaste";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = RemoteStash;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -633,7 +633,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.remotecopypaste";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = RemoteStash;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
