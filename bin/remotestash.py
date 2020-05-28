@@ -26,7 +26,6 @@ def file_hash(filepath):
     return hash.hexdigest()
 
 def content_hash(content):
-
     if isinstance(content,str):
         data = content.encode('utf-8')
     else:

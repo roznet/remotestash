@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "427B79E5246DD7DC005EDEAD"
-               BuildableName = "remotestash.app"
+               BuildableName = "RemoteStash.app"
                BlueprintName = "remotestash"
                ReferencedContainer = "container:remotestash.xcodeproj">
             </BuildableReference>
@@ -55,7 +55,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "427B79E5246DD7DC005EDEAD"
-            BuildableName = "remotestash.app"
+            BuildableName = "RemoteStash.app"
             BlueprintName = "remotestash"
             ReferencedContainer = "container:remotestash.xcodeproj">
          </BuildableReference>
@@ -72,7 +72,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "427B79E5246DD7DC005EDEAD"
-            BuildableName = "remotestash.app"
+            BuildableName = "RemoteStash.app"
             BlueprintName = "remotestash"
             ReferencedContainer = "container:remotestash.xcodeproj">
          </BuildableReference>
