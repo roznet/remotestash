@@ -22,7 +22,7 @@ from pprint import pprint
 
 class Item:
     def __init__(self,info):
-        self.info = info.copy()
+        self.info = { k.lower(): v for (k,v) in info.items() }
         self.data = None
         self.text = None
 
@@ -59,6 +59,7 @@ class Item:
             
         return rv
 
+    
     def from_data(data,info):
         rv = Item(info)
         rv.data = data
@@ -72,11 +73,12 @@ class Item:
         return rv
 
     def validate_info(self):
-        if 'Content-type' not in self.info:
+
+        if 'content-type' not in self.info:
             print( 'Missing Content Type' )
 
     def encoding(self,strict=False):
-        ctype, options = cgi.parse_header( self.info['Content-type'] )
+        ctype, options = cgi.parse_header( self.info['content-type'] )
         encoding = None
         if 'charset' in options:
             encoding = options['charset']
@@ -91,6 +93,9 @@ class Item:
 
         return encoding
 
+    def content_type(self):
+        return self.info['content-type']
+    
     def ensure_filename(self,filename=None):
         if filename:
             self.info[ 'file'] =  filename
@@ -156,12 +161,20 @@ class Item:
             outfile.write( data )
         else:
             data = self.as_str()
-            outfile.write( data )
+            if data:
+                outfile.write( data )
+            else:
+                data = self.as_data()
+                t = self.info['content-type']
+                outfile.write( f'{len(data)} bytes of type {t}' )
 
 class Stash:
     def __init__(self,args):
         self.args = args
-        self.verbose = args.verbose
+        if 'verbose' in args:
+            self.verbose = args.verbose
+        else:
+            self.verbose = False
         if 'dir' in self.args:
             self.location = self.args['dir']
         else:
@@ -339,18 +352,19 @@ class RequestHandler(BaseHTTPRequestHandler):
             pass
 
         stash = Stash({})
-        stash.push( 'web', self.body )
-        self.respond( 200, {'Content-type':'application/json; charset=utf-8'}, json.dumps( {'success':1} ).encode('utf-8') )
+        item = Item.from_data( self.body, { 'content-type': self.headers['Content-Type'] } )
+        stash.push( item )
+        self.respond( 200, {'content-type':'application/json; charset=utf-8'}, json.dumps( {'success':1} ).encode('utf-8') )
 
     def pull(self):
         stash = Stash({})
-        data = stash.pull()
-        self.respond( 200, {'Content-type':'text/plain; charset=utf-8'}, data )
+        item = stash.pull()
+        self.respond_item( item )
         
     def last(self):
         stash = Stash({})
-        data = stash.last()
-        self.respond( 200, {'Content-type':'text/plain; charset=utf-8'}, data )
+        item = stash.last()
+        self.respond_item( item )
 
     def do_POST(self):
         self.do_GET()
@@ -415,8 +429,14 @@ class RequestHandler(BaseHTTPRequestHandler):
             message_parts.append( self.body.decode('utf-8') )
             
         message = '\n'.join(message_parts)
-        self.respond( 200, { 'Content-Type' : 'text/plain; charset=utf-8' }, message )
+        self.respond( 200, { 'Content-type' : 'text/plain; charset=utf-8' }, message )
 
+    def respond_item(self,item):
+        headers = { 'content-type' : item.info['content-type'] }
+        message = item.as_data()
+
+        self.respond( 200, headers, message )
+        
     def respond(self,response_value, headers, content ):
         print( f'respond {response_value}  bytes' )
         self.send_response(response_value)
@@ -456,11 +476,11 @@ class Driver :
         advertiser.start_advertisement(name)
         port = advertiser.port
         server = HTTPServer((advertiser.ip, port), RequestHandler)
-        if os.path.isfile( os.path.expanduser( '~/.remotestash/homeweb.key' ) ):
+        if os.path.isfile( os.path.expanduser( '~/.remotestash/remotestash.key' ) ):
             print( 'setup ssl' )
             server.socket = ssl.wrap_socket( server.socket,
-                                             keyfile = os.path.expanduser( '~/.remotestash/homeweb.key' ),
-                                             certfile = os.path.expanduser( '~/.remotestash/homeweb.crt' ),
+                                             keyfile = os.path.expanduser( '~/.remotestash/remotestash.key' ),
+                                             certfile = os.path.expanduser( '~/.remotestash/remotestash.crt' ),
                                              server_side = True )
         print(f'Starting server as {name} on {advertiser.ip}:{port}, use <Ctrl-C> to stop')
         try:
@@ -506,7 +526,7 @@ class Driver :
             inputf = self.get_input_file()
             content_type = self.get_content_type()
             
-            item = Item.from_file( {'Content-type': content_type}, inputf )
+            item = Item.from_file( {'content-type': content_type}, inputf )
             stash = Stash(self.args)
             stash.push( item )
         else:
@@ -531,7 +551,7 @@ class Driver :
             self.cmd_listen('last')
 
     def cmd_test(self):
-        a = Item.from_string( 'hello', { 'Content-type': 'text/plain; charset=utf-8' } )
+        a = Item.from_string( 'hello', { 'content-type': 'text/plain; charset=utf-8' } )
 
         print( a.as_data() )
         print( a.as_str() )
