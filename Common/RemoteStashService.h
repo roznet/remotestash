@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+@import UIKit;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -22,11 +23,17 @@ typedef void(^RemoteStashCompletionHandler)(RemoteStashService*service);
 @property (nonatomic,readonly) NSString * name;
 @property (nonatomic,readonly) BOOL isReady;
 @property (nonatomic,readonly,nullable) NSString * lastPullString;
+@property (nonatomic,readonly,nullable) UIImage * lastPullImage;
+@property (nonatomic,readonly,nullable) NSDictionary * lastPullJson;
 
 +(RemoteStashService*)serviceFor:(NSNetService*)service;
 
 -(void)pushString:(NSString*)str completion:(nullable RemoteStashCompletionHandler)completion;
+-(void)pushImage:(UIImage*)img completion:(RemoteStashCompletionHandler)completion;
 -(void)pullWithCompletion:(RemoteStashCompletionHandler)completion;
+-(void)lastWithCompletion:(RemoteStashCompletionHandler)completion;
+-(void)statusWithCompletion:(RemoteStashCompletionHandler)completion;
+
 @end
 
 NS_ASSUME_NONNULL_END

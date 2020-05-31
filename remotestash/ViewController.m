@@ -30,7 +30,23 @@
     // Do any additional setup after loading the view.
     self.client = [[RemoteStashClient alloc] init];
     self.serviceTableView.dataSource = self.client;
+    self.serviceTableView.delegate = self.client;
     
+    UIToolbar* keyboardToolbar = [[UIToolbar alloc] init];
+    [keyboardToolbar sizeToFit];
+    UIBarButtonItem *flexBarButton = [[UIBarButtonItem alloc]
+                                      initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                      target:nil action:nil];
+    UIBarButtonItem *doneBarButton = [[UIBarButtonItem alloc]
+                                      initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                      target:self action:@selector(textViewDone:)];
+    keyboardToolbar.items = @[flexBarButton, doneBarButton];
+    self.textView.inputAccessoryView = keyboardToolbar;
+}
+
+-(void)textViewDone:(UITextView*)view{
+    [UIPasteboard generalPasteboard].string = self.textView.text;
+    [self.textView resignFirstResponder];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -75,6 +91,7 @@
     }else{
         self.connectedTo.text = @"Not Connected";
     }
+    [self.serviceTableView reloadData];
 }
        
 -(void)viewWillDisappear:(BOOL)animated{
@@ -91,30 +108,37 @@
         }];
     }
 }
-- (IBAction)last:(id)sender {
-    [[self.client currentService] pullWithCompletion:^(RemoteStashService*service){
-        NSString * got = service.lastPullString;
-        if( got ){
+
+-(void)processResponseFromService:(RemoteStashService*)service{
+    NSString * got = service.lastPullString;
+    if( got ){
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            self.textView.text = got;
+            [UIPasteboard generalPasteboard].string = got;
+            [self update];
+        });
+    }else{
+        UIImage * image = service.lastPullImage;
+        if( image ){
             dispatch_async(dispatch_get_main_queue(), ^(){
-                self.received.text = got;
-                [UIPasteboard generalPasteboard].string = got;
+                self.textView.text = nil;
+                self.imagePreview.image = image;
+                [UIPasteboard generalPasteboard].image = image;
+                [self update];
             });
         }
+    }
+}
+- (IBAction)last:(id)sender {
+    [[self.client currentService] lastWithCompletion:^(RemoteStashService*service){
+        [self processResponseFromService:service];
     }];
 }
 
 
 - (IBAction)pull:(id)sender {
-    NSLog(@"pull");
-    
     [[self.client currentService] pullWithCompletion:^(RemoteStashService*service){
-        NSString * got = service.lastPullString;
-        if( got ){
-            dispatch_async(dispatch_get_main_queue(), ^(){
-                self.received.text = got;
-                [UIPasteboard generalPasteboard].string = got;
-            });
-        }
+        [self processResponseFromService:service];
     }];
 }
 #pragma mark - remote client

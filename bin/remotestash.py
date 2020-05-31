@@ -237,8 +237,12 @@ class Stash:
             if self.verbose:
                 print( item.info )
                 print( item.as_data() )
-            rv['last'] = {'bytes': len(item.as_data()), 'content-type':item.info['content-type'] }
-            
+            if item.as_data():
+                rv['last'] = {'bytes': len(item.as_data()), 'content-type':item.info['content-type'] }
+            else:
+                rv['last'] = {'bytes': 0, 'content-type':item.info['content-type'] }
+        else:                
+            rv['last'] = {'bytes': 0, 'content-type':'empty' }
         return rv
             
     def last(self):

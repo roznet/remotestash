@@ -89,67 +89,112 @@ NSString * kNotificationNewServiceDiscovered = @"kNotificationNewServiceDiscover
 -(void)netService:(NSNetService *)sender didNotResolve:(NSDictionary<NSString *,NSNumber *> *)errorDict{
 }
 
--(void)pushString:(NSString *)str completion:(RemoteStashCompletionHandler)completion{
+
+-(NSMutableURLRequest*)mutableRequest:(NSString*)path{
+    if( self.addresses.count > 0){
+        
+        RemoteAddressAndPort * addressAndPort = self.addresses.firstObject;
+        NSString * url = [NSString stringWithFormat:@"https://%@:%@/%@", addressAndPort.ip, @(addressAndPort.port), path];
+        NSMutableURLRequest * request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
+        return request;
+    }
+    return nil;
+}
+-(void)startTask:(RemoteStashCompletionHandler)completion{
     if( self.session == nil){
         self.session = [NSURLSession sessionWithConfiguration:[[NSURLSession sharedSession] configuration]
                                                      delegate:self
                                                 delegateQueue:nil];
     }
-    
-    if( self.addresses.count > 0){
-        RemoteAddressAndPort * addressAndPort = self.addresses.firstObject;
-        NSString * url = [NSString stringWithFormat:@"https://%@:%@/push", addressAndPort.ip, @(addressAndPort.port)];
-        NSMutableURLRequest * request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
+
+    self.task = [self.session dataTaskWithRequest:self.request completionHandler:^(NSData * data, NSURLResponse*response,NSError*error){
+        self.data = data;
+        if( [response isKindOfClass:[NSHTTPURLResponse class]]){
+            self.response = (NSHTTPURLResponse*)response;
+        }else{
+            self.response = nil;
+        }
+        completion(self);
+    }];
+    [self.task resume];
+}
+
+-(void)pushImage:(UIImage*)img completion:(RemoteStashCompletionHandler)completion{
+    NSMutableURLRequest * request = [self mutableRequest:@"push"];
+    if( request ){
+        request.HTTPBody = UIImageJPEGRepresentation(img, 1.0);
+        request.HTTPMethod = @"POST";
+        [request addValue:@"image/jpeg" forHTTPHeaderField:@"Content-type"];
+        self.request = request;
+        [self startTask:completion];
+    }
+}
+
+-(void)pushString:(NSString *)str completion:(RemoteStashCompletionHandler)completion{
+    NSMutableURLRequest * request = [self mutableRequest:@"push"];
+    if( request ){
         request.HTTPBody = [str dataUsingEncoding:NSUTF8StringEncoding];
         request.HTTPMethod = @"POST";
         [request addValue:@"text/html" forHTTPHeaderField:@"Content-type"];
         self.request = request;
-        self.task = [self.session dataTaskWithRequest:request completionHandler:^(NSData * data, NSURLResponse*response,NSError*error){
-            self.data = data;
-            if( [response isKindOfClass:[NSHTTPURLResponse class]]){
-                self.response = (NSHTTPURLResponse*)response;
-            }else{
-                self.response = nil;
-            }
-            completion(self);
-        }];
-        [self.task resume];
-        
+        [self startTask:completion];
     }
 }
 
 -(void)pullWithCompletion:(RemoteStashCompletionHandler)completion{
-    if( self.session == nil){
-        self.session = [NSURLSession sessionWithConfiguration:[[NSURLSession sharedSession] configuration]
-                                                     delegate:self
-                                                delegateQueue:nil];
-    }
-    if( self.addresses.count > 0){
-        RemoteAddressAndPort * addressAndPort = self.addresses.firstObject;
-        NSString * url = [NSString stringWithFormat:@"https://%@:%@/last", addressAndPort.ip, @(addressAndPort.port)];
-        NSMutableURLRequest * request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
+    NSMutableURLRequest * request = [self mutableRequest:@"pull"];
+    if( request ){
         self.request = request;
-        self.task = [self.session dataTaskWithRequest:request completionHandler:^(NSData * data, NSURLResponse*response,NSError*error){
-            self.data = data;
-            if( [response isKindOfClass:[NSHTTPURLResponse class]]){
-                self.response = (NSHTTPURLResponse*)response;
-            }else{
-                self.response = nil;
-            }
-            completion(self);
-        }];
-        [self.task resume];
+        [self startTask:completion];
     }
 }
 
+-(void)lastWithCompletion:(RemoteStashCompletionHandler)completion{
+    NSMutableURLRequest * request = [self mutableRequest:@"last"];
+    if( request ){
+        self.request = request;
+        [self startTask:completion];
+    }
+}
+-(void)statusWithCompletion:(RemoteStashCompletionHandler)completion{
+    NSMutableURLRequest * request = [self mutableRequest:@"status"];
+    if( request ){
+        self.request = request;
+        [self startTask:completion];
+    }
+}
+
+-(NSString*)contentType{
+    return self.response.allHeaderFields[@"Content-Type"];
+}
+-(UIImage*)lastPullImage{
+    if( [self.contentType hasPrefix:@"image/"] ){
+        return [UIImage imageWithData:self.data];
+    }
+    
+    return nil;
+}
 -(NSString * )lastPullString{
+    if( [self.contentType hasPrefix:@"image/"] ){
+        return nil;
+    }
     if( self.data ){
         NSStringEncoding encoding = self.response.textEncodingName ? CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef)self.response.textEncodingName)) : NSUTF8StringEncoding;
         return [[NSString alloc] initWithData:self.data encoding:encoding];
     }
     return nil;
 }
+-(NSDictionary*)lastPullJson{
+    if( ! [self.contentType hasPrefix:@"application/json"] ){
+        return nil;
+    }
+    if( self.data ){
+        NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:self.data options:NSJSONReadingAllowFragments error:nil];
+        return [dict isKindOfClass:[NSDictionary class]]?dict:nil;
+    }
+    return nil;
 
+}
 -(void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler{
     completionHandler(NSURLSessionAuthChallengeUseCredential, [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]);
 }

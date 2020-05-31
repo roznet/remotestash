@@ -41,7 +41,6 @@
     
     for (NSExtensionItem * item in self.extensionContext.inputItems) {
         for (NSItemProvider * provider in item.attachments) {
-            NSLog( @"%@", provider.registeredTypeIdentifiers );
             if ([provider hasItemConformingToTypeIdentifier:@"public.url"]) {
                 urlProvider = provider;
             }
@@ -56,7 +55,6 @@
                                         options:nil
                               completionHandler:^(NSURL *url, NSError *error) {
             // Do what you want to do with url
-            NSLog(@"got url %@", url);
             [self.client.currentService pushString:url.description completion:^(RemoteStashService*service){
                 NSLog(@"Done posting");
                 dispatch_async( dispatch_get_main_queue(), ^(){
@@ -68,7 +66,14 @@
         }];
     }else if (jpegProvider){
         [jpegProvider loadItemForTypeIdentifier:@"public.jpeg" options:nil completionHandler:^(NSURL * url, NSError * error){
-            NSLog(@"got url %@", url);
+            UIImage * image = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
+            [self.client.currentService pushImage:image completion:^(RemoteStashService*service){
+                dispatch_async( dispatch_get_main_queue(), ^(){
+                    [self.extensionContext completeRequestReturningItems:self.extensionContext.inputItems
+                                                       completionHandler:nil];
+
+                });
+            }];
         }];
     }else{
         [self.extensionContext completeRequestReturningItems:@[] completionHandler:nil];
@@ -83,7 +88,11 @@
             SLComposeSheetConfigurationItem * item = [[SLComposeSheetConfigurationItem alloc] init];
             item.title = service.name;
             item.value = service.name;
+            item.tapHandler = ^(){
+                NSLog(@"select %@", service.name);
+            };
             [rv addObject:item];
+
         }
     }
     return rv;
