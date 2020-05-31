@@ -42,7 +42,13 @@ class Item:
             rv.data = None
             
         return rv
-        
+
+    def from_json(jsondata):
+        if isinstance( jsondata, bytes):
+            return Item.from_data( jsondata, { 'content-type':'application/json' }  )
+        else:
+            return Item.from_data( jsondata.encode( 'utf-8'), { 'content-type':'application/json' }  )
+    
     def from_filename(info,location=None):
         '''
         info should contains 'Content-Type' and 'file'
@@ -73,7 +79,6 @@ class Item:
         return rv
 
     def validate_info(self):
-
         if 'content-type' not in self.info:
             print( 'Missing Content Type' )
 
@@ -211,7 +216,31 @@ class Stash:
                 
 
         return None
+
+    def clear(self):
+        for c in self.contents['items']:
+            item = Item.from_filename(c,self.location)
+            item.clear_file()
+        if self.verbose:
+            size = len(self.contents['items'])
+            print( f'Cleared {size}' )
+        self.contents['items'] = []
+        self.save_content()
+            
     
+    def status(self):
+        total = len( self.contents['items'] )
+        rv = {'items_count':total}
+        
+        if total > 0:
+            item = Item.from_filename(self.contents['items'][-1],self.location)
+            if self.verbose:
+                print( item.info )
+                print( item.as_data() )
+            rv['last'] = {'bytes': len(item.as_data()), 'content-type':item.info['content-type'] }
+            
+        return rv
+            
     def last(self):
         if len(self.contents['items']):
             item = Item.from_filename(self.contents['items'][-1],self.location)
@@ -234,7 +263,6 @@ class Stash:
 
 
 class Listener:
-
     def __init__(self,cmd,args):
         self.cmd = cmd
         self.args = args
@@ -266,6 +294,10 @@ class Listener:
             print( f'starting GET {url}' )
         response = self.session.get( url, verify=False )
         return response
+
+    def item_from_response(self,response):
+        ctype = response.headers['Content-Type']
+        return Item.from_data( response.content, { 'content-type': ctype } )
     
     def post(self,path,data):
         self.session = Session()
@@ -275,7 +307,10 @@ class Listener:
         url = f'https://{ip}:{port}/{path}'
         if self.verbose:
             print( f'starting POST {url}' )
-        response = self.session.get( url, verify=False, data = data )
+        headers = {}
+        if self.content_type:
+            headers[ 'Content-Type'] =  self.content_type
+        response = self.session.get( url, verify=False, data = data, headers = headers )
         return response
 
     def push(self):
@@ -285,18 +320,27 @@ class Listener:
 
     def pull(self):
         response = self.get('pull')
-        # if binary use response.content
-        print( response.text )
+        item = self.item_from_response( response )
+        item.output(self.outfile)
         self.exit()
 
     def last(self):
         response = self.get('last')
         # if binary use response.content
-        print( response.text )
+        item = self.item_from_response( response )
+        item.output(self.outfile)
+        self.exit()
+        
+    def status(self):
+        response = self.get('status')
+        item = self.item_from_response( response )
+        item.output(self.outfile)
         self.exit()
 
     def exit(self):
         sys.stdout.flush()
+        if self.outfile:
+            self.outfile.flush()
         os._exit(0)
         
 class Advertiser:
@@ -346,7 +390,6 @@ class Advertiser:
         zeroconf.close() 
     
 class RequestHandler(BaseHTTPRequestHandler):
-        
     def push(self):
         if self.body is None:
             pass
@@ -354,7 +397,8 @@ class RequestHandler(BaseHTTPRequestHandler):
         stash = Stash({})
         item = Item.from_data( self.body, { 'content-type': self.headers['Content-Type'] } )
         stash.push( item )
-        self.respond( 200, {'content-type':'application/json; charset=utf-8'}, json.dumps( {'success':1} ).encode('utf-8') )
+        rv = Item.from_json( json.dumps( {'success':1} ) )
+        self.respond_item( rv )
 
     def pull(self):
         stash = Stash({})
@@ -366,6 +410,12 @@ class RequestHandler(BaseHTTPRequestHandler):
         item = stash.last()
         self.respond_item( item )
 
+    def status(self):
+        stash = Stash({})
+        val = stash.status()
+        rv = Item.from_json( json.dumps(val) )
+        self.respond_item( rv )
+        
     def do_POST(self):
         self.do_GET()
         
@@ -382,21 +432,33 @@ class RequestHandler(BaseHTTPRequestHandler):
             self.pull()
         elif self.parsed_path.path.startswith( '/last' ):
             self.last()
+        elif self.parsed_path.path.startswith( '/status' ):
+            self.status()
         else:
             self.respond( 500, {}, '' )
                 
     def breakdown_request(self):
         self.parsed_path = parse.urlparse(self.path)
         self.query_dict = parse.parse_qs(self.parsed_path.query)
-        
-        if 'Content-Length' in self.headers:
-            self.content_length = int( self.headers.get('Content-Length') )
-            print( self.content_length )
+
+        self.headers_dict = {}
+        for (k,v) in self.headers.items():
+            self.headers_dict[ k.lower() ] = v;
+            
+        if 'content-type' in self.headers_dict:
+            self.content_type = self.headers_dict['content-type']
+        else:
+            self.content_type = None
+            
+        if 'content-length' in self.headers_dict:
+            self.content_length = int( self.headers_dict.get('content-length') )
             self.body = self.rfile.read(self.content_length)
-            print( 'read' )
         else:
             self.body = None
             self.content_length = 0
+
+        if self.content_length > 0:
+            print( f'Received {self.content_length} bytes, content-type: {self.content_type}' )
             
     def request_debug_info(self):
         parsed_path = self.parsed_path
@@ -438,14 +500,21 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.respond( 200, headers, message )
         
     def respond(self,response_value, headers, content ):
-        print( f'respond {response_value}  bytes' )
         self.send_response(response_value)
+        ctype = None
         if headers:
             for header,value in headers.items():
+                if header.lower() == 'content-type':
+                    ctype = value
                 self.send_header(header,value)
         self.end_headers()
+        
         if content:
             self.wfile.write(content if isinstance(content,bytes) else content.encode( 'utf-8' ) )
+            print( f'Response: {response_value}, {len(content)} bytes, {ctype}' )
+        else:
+            print( f'Response: {response_value}' )
+            
             
         
 class Driver :
@@ -459,11 +528,14 @@ class Driver :
         if path == 'push':
             inputf = self.get_input_file()
             listener.content = inputf.read()
+            listener.outfile = None
         else:
             listener.content = None
-            
+            listener.outfile = self.get_output_file()
+        
+        listener.content_type = self.get_content_type()
         browser = ServiceBrowser(zeroconf, "_remotestash._tcp.local.", listener)
-        time.sleep(1.0)
+        time.sleep(5.0)
         print( 'Failed to find a stash on the local network'  )
 
     def cmd_serve(self):
@@ -546,9 +618,29 @@ class Driver :
         if self.args.local:
             stash = Stash(self.args)
             item = stash.last()
-            item.output(self.get_output_file())
+            if item:
+                item.output(self.get_output_file())
+            else:
+                if self.verbose:
+                    print( 'Local Stash empty no last item' )
         else:
             self.cmd_listen('last')
+            
+    def cmd_status(self):
+        if self.args.local:
+            stash = Stash(self.args)
+            status = stash.status()
+            item = Item.from_json( json.dumps( status ) )
+            item.output( self.get_output_file() )
+        else:
+            self.cmd_listen('status')
+            
+    def cmd_clear(self):
+        if self.args.local:
+            stash = Stash(self.args)
+            status = stash.clear()
+        else:
+            print( 'Clear not implemented for remote' )
 
     def cmd_test(self):
         a = Item.from_string( 'hello', { 'content-type': 'text/plain; charset=utf-8' } )
@@ -565,7 +657,9 @@ if __name__ == "__main__":
         'last':{'attr':'cmd_last','help':'push content to stash'},
         'pull':{'attr':'cmd_pull','help':'pull content to stash'},
         'list':{'attr':'cmd_list','help':'list stash'},
+        'status':{'attr':'cmd_status','help':'status of stash'},
         'test':{'attr':'cmd_test','help':'random tests'},
+        'clear':{'attr':'cmd_clear','help':'clear stash (local only)'},
     }
     
     description = "\n".join( [ '  {}: {}'.format( k,v['help'] ) for (k,v) in commands.items() ] )

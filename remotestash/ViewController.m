@@ -13,7 +13,7 @@
 #import "AppDelegate.h"
 
 @interface ViewController ()
-@property (weak, nonatomic) IBOutlet UITextField *textField;
+@property (weak, nonatomic) IBOutlet UITextView *textView;
 @property (nonatomic,retain) RemoteStashServer * server;
 @property (nonatomic,retain) RemoteStashClient * client;
 @property (weak, nonatomic) IBOutlet UILabel *connectedTo;
@@ -48,18 +48,26 @@
 }
 
 -(void)update{
-    NSLog(@"update");
     UIPasteboard * pasteboard = [UIPasteboard generalPasteboard];
     if ([pasteboard hasStrings]){
-        self.textField.text = pasteboard.string;
+        self.textView.text = pasteboard.string;
         self.imagePreview.image = nil;
+        self.textView.hidden = false;
+        self.imagePreview.hidden = true;
+        self.received.text = NSLocalizedString(@"Text", @"Received Text");
     }else if( [pasteboard hasURLs] ){
         NSURL * url = pasteboard.URL;
-        self.textField.text = url.description;
+        self.textView.text = url.description;
         self.imagePreview.image = nil;
+        self.textView.hidden = false;
+        self.imagePreview.hidden = true;
+        self.received.text = NSLocalizedString(@"URL", @"Received Text");
     }else if( [pasteboard hasImages] ){
-        self.textField.text = @"Image";
+        self.textView.text = nil;
         self.imagePreview.image = pasteboard.image;
+        self.textView.hidden = true;
+        self.imagePreview.hidden = false;
+        self.received.text = NSLocalizedString(@"Image", @"Received Text");
     }
     
     if( self.client.currentService ){
@@ -82,6 +90,17 @@
             NSLog(@"Done with %@", service);
         }];
     }
+}
+- (IBAction)last:(id)sender {
+    [[self.client currentService] pullWithCompletion:^(RemoteStashService*service){
+        NSString * got = service.lastPullString;
+        if( got ){
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                self.received.text = got;
+                [UIPasteboard generalPasteboard].string = got;
+            });
+        }
+    }];
 }
 
 
