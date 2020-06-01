@@ -21,10 +21,13 @@ typedef void(^RemoteStashCompletionHandler)(RemoteStashService*service);
 
 @property (nonatomic,retain) NSNetService * service;
 @property (nonatomic,readonly) NSString * name;
+@property (nonatomic,retain) NSString * hostname;
 @property (nonatomic,readonly) BOOL isReady;
 @property (nonatomic,readonly,nullable) NSString * lastPullString;
 @property (nonatomic,readonly,nullable) UIImage * lastPullImage;
 @property (nonatomic,readonly,nullable) NSDictionary * lastPullJson;
+@property (nonatomic,retain,nullable) NSString * lastContentType;
+@property (nonatomic,assign) NSUInteger lastItemsCount;
 
 +(RemoteStashService*)serviceFor:(NSNetService*)service;
 
@@ -32,7 +35,8 @@ typedef void(^RemoteStashCompletionHandler)(RemoteStashService*service);
 -(void)pushImage:(UIImage*)img completion:(RemoteStashCompletionHandler)completion;
 -(void)pullWithCompletion:(RemoteStashCompletionHandler)completion;
 -(void)lastWithCompletion:(RemoteStashCompletionHandler)completion;
--(void)statusWithCompletion:(RemoteStashCompletionHandler)completion;
+
+-(void)updateRemoteStatus:(RemoteStashCompletionHandler)completion;
 
 @end
 

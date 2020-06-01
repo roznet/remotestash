@@ -66,35 +66,10 @@
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath{
     UITableViewCell * cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"servicecell"];
     cell.textLabel.text = self.services[indexPath.row].name;
-    cell.detailTextLabel.text = nil;
+    cell.detailTextLabel.text = self.services[indexPath.row].hostname;
 
     if( indexPath.row == self.currentServiceIndex ){
         cell.textLabel.font = [UIFont systemFontOfSize:16. weight:UIFontWeightBold];
-        [self.services[self.currentServiceIndex] statusWithCompletion:^(RemoteStashService*service){
-            NSDictionary * last = [service lastPullJson];
-            
-            NSString * ctype = last[@"last"][@"content-type"];
-            if( last && ctype ){
-                NSString * niceType = nil;
-                if( [ctype hasPrefix:@"text/"] ){
-                    niceType = NSLocalizedString(@"Text", @"Type");
-                }else if ([ctype hasPrefix:@"image/"]){
-                    niceType = NSLocalizedString(@"Image", @"Type");
-                }
-                NSMutableString * info = [NSMutableString stringWithFormat:@"%@ items", last[@"items_count"]];
-                if( niceType ){
-                    [info appendFormat:@", last: %@", niceType];
-                }
-                dispatch_async(dispatch_get_main_queue(), ^(){
-                    cell.detailTextLabel.text = info;
-                });
-            }else{
-                dispatch_async(dispatch_get_main_queue(), ^(){
-                    cell.detailTextLabel.text = NSLocalizedString(@"In error", @"Type");;
-                });
-
-            }
-        }];
     }else{
         cell.textLabel.font = [UIFont systemFontOfSize:16. weight:UIFontWeightRegular];
     }
@@ -109,6 +84,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     self.currentServiceIndex = indexPath.row;
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNewServiceDiscovered object:self];
     [tableView reloadData];
 }
 @end

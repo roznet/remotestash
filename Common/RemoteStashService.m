@@ -27,6 +27,7 @@ NSString * kNotificationNewServiceDiscovered = @"kNotificationNewServiceDiscover
 @property (nonatomic,retain) NSURLSessionDataTask * task;
 @property (nonatomic,retain) NSData * data;
 @property (nonatomic,retain) NSHTTPURLResponse * response;
+
 @end
 
 @implementation RemoteStashService
@@ -82,7 +83,12 @@ NSString * kNotificationNewServiceDiscovered = @"kNotificationNewServiceDiscover
             [found addObject:holder];
         }
     }
+    self.hostname = sender.hostName;
     self.addresses = found;
+    NSString * suffix = [NSString stringWithFormat:@".%@", [sender domain]];
+    if( [self.hostname hasSuffix:suffix]){
+        self.hostname = [self.hostname substringToIndex:(self.hostname.length-suffix.length)];
+    }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNewServiceDiscovered object:self];
 }
@@ -162,6 +168,15 @@ NSString * kNotificationNewServiceDiscovered = @"kNotificationNewServiceDiscover
         self.request = request;
         [self startTask:completion];
     }
+}
+
+-(void)updateRemoteStatus:(RemoteStashCompletionHandler)completion{
+    [self statusWithCompletion:^(RemoteStashService*service){
+        NSDictionary * last = [service lastPullJson];
+        self.lastContentType = last[@"last"][@"content-type"];
+        self.lastItemsCount = [last[@"items_count"] doubleValue];
+        completion(self);
+    }];
 }
 
 -(NSString*)contentType{

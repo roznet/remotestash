@@ -20,7 +20,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *received;
 @property (weak, nonatomic) IBOutlet UITableView *serviceTableView;
 @property (weak, nonatomic) IBOutlet UIImageView *imagePreview;
-
+@property (weak, nonatomic) IBOutlet UIButton *shareButton;
+@property (nonatomic,retain) UIImage * lastPullImage;
+@property (nonatomic,retain) NSString * lastPullString;
 @end
 
 @implementation ViewController
@@ -42,6 +44,7 @@
                                       target:self action:@selector(textViewDone:)];
     keyboardToolbar.items = @[flexBarButton, doneBarButton];
     self.textView.inputAccessoryView = keyboardToolbar;
+    self.shareButton.imageView.tintColor = [UIColor systemBlueColor];
 }
 
 -(void)textViewDone:(UITextView*)view{
@@ -52,7 +55,9 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserverForName:kNotificationNewServiceDiscovered object:nil queue:nil usingBlock:^(NSNotification * notification){
-        NSLog(@"Notified new service");
+        [self.client.currentService updateRemoteStatus:^(RemoteStashService*service){
+            [self update];
+        }];
         [self update];
         [self.serviceTableView reloadData];
     }];
@@ -64,34 +69,45 @@
 }
 
 -(void)update{
-    UIPasteboard * pasteboard = [UIPasteboard generalPasteboard];
-    if ([pasteboard hasStrings]){
-        self.textView.text = pasteboard.string;
-        self.imagePreview.image = nil;
-        self.textView.hidden = false;
-        self.imagePreview.hidden = true;
-        self.received.text = NSLocalizedString(@"Text", @"Received Text");
-    }else if( [pasteboard hasURLs] ){
-        NSURL * url = pasteboard.URL;
-        self.textView.text = url.description;
-        self.imagePreview.image = nil;
-        self.textView.hidden = false;
-        self.imagePreview.hidden = true;
-        self.received.text = NSLocalizedString(@"URL", @"Received Text");
-    }else if( [pasteboard hasImages] ){
-        self.textView.text = nil;
-        self.imagePreview.image = pasteboard.image;
-        self.textView.hidden = true;
-        self.imagePreview.hidden = false;
-        self.received.text = NSLocalizedString(@"Image", @"Received Text");
-    }
-    
-    if( self.client.currentService ){
-        self.connectedTo.text = [self.client.currentService name];
-    }else{
-        self.connectedTo.text = @"Not Connected";
-    }
-    [self.serviceTableView reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        UIPasteboard * pasteboard = [UIPasteboard generalPasteboard];
+        if ([pasteboard hasStrings]){
+            self.textView.text = pasteboard.string;
+            self.imagePreview.image = nil;
+            self.textView.hidden = false;
+            self.imagePreview.hidden = true;
+            self.received.text = NSLocalizedString(@"Text", @"Received Text");
+        }else if( [pasteboard hasURLs] ){
+            NSURL * url = pasteboard.URL;
+            self.textView.text = url.description;
+            self.imagePreview.image = nil;
+            self.textView.hidden = false;
+            self.imagePreview.hidden = true;
+            self.received.text = NSLocalizedString(@"URL", @"Received Text");
+        }else if( [pasteboard hasImages] ){
+            self.textView.text = nil;
+            self.imagePreview.image = pasteboard.image;
+            self.textView.hidden = true;
+            self.imagePreview.hidden = false;
+            self.received.text = NSLocalizedString(@"Image", @"Received Text");
+        }
+        
+        if( self.client.currentService ){
+            NSString * content = self.client.currentService.lastContentType;
+            if( content ){
+                content = [NSString stringWithFormat:@", next: %@", content];
+            }else{
+                content = @"";
+            }
+            
+            NSString * message = [NSString stringWithFormat:@"%@ items %@", @(self.client.currentService.lastItemsCount), content];
+            self.connectedTo.text = message;
+                
+        }else{
+            self.connectedTo.text = @"Not Connected";
+        }
+        [self.serviceTableView reloadData];
+    });
 }
        
 -(void)viewWillDisappear:(BOOL)animated{
@@ -112,6 +128,8 @@
 -(void)processResponseFromService:(RemoteStashService*)service{
     NSString * got = service.lastPullString;
     if( got ){
+        self.lastPullString = got;
+        self.lastPullImage = nil;
         dispatch_async(dispatch_get_main_queue(), ^(){
             self.textView.text = got;
             [UIPasteboard generalPasteboard].string = got;
@@ -120,6 +138,8 @@
     }else{
         UIImage * image = service.lastPullImage;
         if( image ){
+            self.lastPullString = nil;
+            self.lastPullImage = image;
             dispatch_async(dispatch_get_main_queue(), ^(){
                 self.textView.text = nil;
                 self.imagePreview.image = image;
@@ -129,16 +149,36 @@
         }
     }
 }
+
+- (IBAction)share:(id)sender {
+    NSArray * items = nil;
+    
+    if( self.lastPullImage ){
+        items = @[ self.lastPullImage];
+    }else if (self.lastPullString){
+        items = @[ self.lastPullString];
+    }
+    if( items ){
+        UIActivityViewController * avc = [[UIActivityViewController alloc] initWithActivityItems:items applicationActivities:nil];
+        
+        [self presentViewController:avc animated:YES completion:^(){
+            
+        }];
+    }
+}
+
 - (IBAction)last:(id)sender {
     [[self.client currentService] lastWithCompletion:^(RemoteStashService*service){
         [self processResponseFromService:service];
     }];
 }
 
-
 - (IBAction)pull:(id)sender {
     [[self.client currentService] pullWithCompletion:^(RemoteStashService*service){
         [self processResponseFromService:service];
+        [self.client.currentService updateRemoteStatus:^(RemoteStashService*service){
+            [self update];
+        }];
     }];
 }
 #pragma mark - remote client

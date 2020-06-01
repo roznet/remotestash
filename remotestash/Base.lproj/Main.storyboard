@@ -31,6 +31,14 @@
                                             <action selector="push:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0XT-ew-eKz"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Ur-4p-PM8">
+                                        <rect key="frame" x="175" y="15" width="21" height="28"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="702-share"/>
+                                        <connections>
+                                            <action selector="share:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ZUX-UZ-Tni"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -151,6 +159,7 @@
                         <outlet property="imagePreview" destination="fAw-tQ-Cec" id="ecl-5X-hFJ"/>
                         <outlet property="received" destination="7Tq-nY-po3" id="dnO-8w-XZL"/>
                         <outlet property="serviceTableView" destination="jOv-2K-kIX" id="vP8-JJ-1Le"/>
+                        <outlet property="shareButton" destination="5Ur-4p-PM8" id="oYL-yt-lAa"/>
                         <outlet property="textView" destination="wxR-RG-X08" id="sJZ-Sw-smO"/>
                     </connections>
                 </viewController>
@@ -159,4 +168,7 @@
             <point key="canvasLocation" x="136.80000000000001" y="94.581280788177338"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="702-share" width="21" height="28"/>
+    </resources>
 </document>
