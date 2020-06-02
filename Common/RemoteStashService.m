@@ -8,6 +8,7 @@
 
 #import "RemoteStashService.h"
 #import <arpa/inet.h>
+#import "RemoteStashItem.h"
 
 NSString * kNotificationNewServiceDiscovered = @"kNotificationNewServiceDiscovered";
 
@@ -28,7 +29,7 @@ NSString * kNotificationNewServiceDiscovered = @"kNotificationNewServiceDiscover
 @property (nonatomic,retain) NSArray<RemoteAddressAndPort*>*addresses;
 @property (nonatomic,retain) NSURLRequest * request;
 @property (nonatomic,retain) NSURLSessionDataTask * task;
-@property (nonatomic,retain) NSData * data;
+@property (nonatomic,retain,nullable) RemoteStashItem * lastItem;
 @property (nonatomic,retain) NSHTTPURLResponse * response;
 
 @end
@@ -138,6 +139,7 @@ NSString * kNotificationNewServiceDiscovered = @"kNotificationNewServiceDiscover
     }
     return nil;
 }
+
 -(void)startTask:(RemoteStashCompletionHandler)completion{
     if( self.session == nil){
         self.session = [NSURLSession sessionWithConfiguration:[[NSURLSession sharedSession] configuration]
@@ -146,34 +148,24 @@ NSString * kNotificationNewServiceDiscovered = @"kNotificationNewServiceDiscover
     }
 
     self.task = [self.session dataTaskWithRequest:self.request completionHandler:^(NSData * data, NSURLResponse*response,NSError*error){
-        self.data = data;
         if( [response isKindOfClass:[NSHTTPURLResponse class]]){
             self.response = (NSHTTPURLResponse*)response;
+            self.lastItem = [RemoteStashItem itemFromData:data andResponse:self.response];
         }else{
             self.response = nil;
+            self.lastItem = nil;
         }
         completion(self);
     }];
     [self.task resume];
 }
 
--(void)pushImage:(UIImage*)img completion:(RemoteStashCompletionHandler)completion{
+-(void)pushItem:(RemoteStashItem*)item completion:(RemoteStashCompletionHandler)completion{
     NSMutableURLRequest * request = [self mutableRequest:@"push"];
     if( request ){
-        request.HTTPBody = UIImageJPEGRepresentation(img, 1.0);
         request.HTTPMethod = @"POST";
-        [request addValue:@"image/jpeg" forHTTPHeaderField:@"Content-type"];
-        self.request = request;
-        [self startTask:completion];
-    }
-}
-
--(void)pushString:(NSString *)str completion:(RemoteStashCompletionHandler)completion{
-    NSMutableURLRequest * request = [self mutableRequest:@"push"];
-    if( request ){
-        request.HTTPBody = [str dataUsingEncoding:NSUTF8StringEncoding];
-        request.HTTPMethod = @"POST";
-        [request addValue:@"text/html" forHTTPHeaderField:@"Content-type"];
+        [item prepareURLRequest:request];
+        
         self.request = request;
         [self startTask:completion];
     }
@@ -204,43 +196,15 @@ NSString * kNotificationNewServiceDiscovered = @"kNotificationNewServiceDiscover
 
 -(void)updateRemoteStatus:(RemoteStashCompletionHandler)completion{
     [self statusWithCompletion:^(RemoteStashService*service){
-        NSDictionary * last = [service lastPullJson];
-        self.lastContentType = last[@"last"][@"content-type"];
-        self.lastItemsCount = [last[@"items_count"] doubleValue];
+        NSDictionary * last = service.lastItem.asJson;
+        self.availableContentType = last[@"last"][@"content-type"];
+        self.availableItemsCount = [last[@"items_count"] doubleValue];
         completion(self);
     }];
 }
 
 -(NSString*)contentType{
     return self.response.allHeaderFields[@"Content-Type"];
-}
--(UIImage*)lastPullImage{
-    if( [self.contentType hasPrefix:@"image/"] ){
-        return [UIImage imageWithData:self.data];
-    }
-    
-    return nil;
-}
--(NSString * )lastPullString{
-    if( [self.contentType hasPrefix:@"image/"] ){
-        return nil;
-    }
-    if( self.data ){
-        NSStringEncoding encoding = self.response.textEncodingName ? CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef)self.response.textEncodingName)) : NSUTF8StringEncoding;
-        return [[NSString alloc] initWithData:self.data encoding:encoding];
-    }
-    return nil;
-}
--(NSDictionary*)lastPullJson{
-    if( ! [self.contentType hasPrefix:@"application/json"] ){
-        return nil;
-    }
-    if( self.data ){
-        NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:self.data options:NSJSONReadingAllowFragments error:nil];
-        return [dict isKindOfClass:[NSDictionary class]]?dict:nil;
-    }
-    return nil;
-
 }
 -(void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler{
     completionHandler(NSURLSessionAuthChallengeUseCredential, [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]);

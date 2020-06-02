@@ -11,6 +11,7 @@
 #import "RemoteStashClient.h"
 #import "RemoteStashService.h"
 #import "AppDelegate.h"
+#import "RemoteStashItem.h"
 
 @interface ViewController ()
 @property (weak, nonatomic) IBOutlet UITextView *textView;
@@ -21,8 +22,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *serviceTableView;
 @property (weak, nonatomic) IBOutlet UIImageView *imagePreview;
 @property (weak, nonatomic) IBOutlet UIButton *shareButton;
-@property (nonatomic,retain) UIImage * lastPullImage;
-@property (nonatomic,retain) NSString * lastPullString;
+@property (nonatomic,retain) RemoteStashItem * lastItem;
 @end
 
 @implementation ViewController
@@ -60,7 +60,6 @@
             [self update];
         }];
         [self update];
-        [self.serviceTableView reloadData];
     }];
     [[NSNotificationCenter defaultCenter] addObserverForName:kNotificationApplicationEnteredForeground object:nil queue:nil usingBlock:^(NSNotification*notification){
         [self update];
@@ -94,14 +93,14 @@
         }
         
         if( self.client.currentService ){
-            NSString * content = self.client.currentService.lastContentType;
+            NSString * content = self.client.currentService.availableContentType;
             if( content ){
                 content = [NSString stringWithFormat:@", next: %@", content];
             }else{
                 content = @"";
             }
             
-            NSString * message = [NSString stringWithFormat:@"%@ items %@", @(self.client.currentService.lastItemsCount), content];
+            NSString * message = [NSString stringWithFormat:@"%@ items %@", @(self.client.currentService.availableItemsCount), content];
             self.connectedTo.text = message;
                 
         }else{
@@ -118,52 +117,48 @@
 }
 - (IBAction)push:(id)sender {
     [self update];
-    UIPasteboard * pasteboard = [UIPasteboard generalPasteboard];
-    if ([pasteboard hasStrings]){
-        [[self.client currentService] pushString:pasteboard.string completion:^(RemoteStashService*service){
-            NSLog(@"Done with %@", service);
-        }];
-    }
+    RemoteStashItem * item = [RemoteStashItem itemFromPasteBoard:[UIPasteboard generalPasteboard]];
+    [[self.client currentService] pushItem:item completion:^(RemoteStashService*service){
+        NSLog(@"Done with %@", service);
+    }];
 }
 
 -(void)processResponseFromService:(RemoteStashService*)service{
-    NSString * got = service.lastPullString;
-    if( got ){
-        self.lastPullString = got;
-        self.lastPullImage = nil;
+    RemoteStashItem * got = service.lastItem;
+    self.lastItem = got;
+    NSString * asString = got.asString;
+    if( asString ){
         dispatch_async(dispatch_get_main_queue(), ^(){
-            self.textView.text = got;
-            [UIPasteboard generalPasteboard].string = got;
+            self.textView.text = asString;
+            [UIPasteboard generalPasteboard].string = asString;
             [self update];
         });
-    }else{
-        UIImage * image = service.lastPullImage;
-        if( image ){
-            self.lastPullString = nil;
-            self.lastPullImage = image;
-            dispatch_async(dispatch_get_main_queue(), ^(){
-                self.textView.text = nil;
-                self.imagePreview.image = image;
-                [UIPasteboard generalPasteboard].image = image;
-                [self update];
-            });
-        }
+    }
+    UIImage * asImage = got.asImage;
+    if( asImage ){
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            self.textView.text = nil;
+            self.imagePreview.image = asImage;
+            [UIPasteboard generalPasteboard].image = asImage;
+            [self update];
+        });
     }
 }
 
 - (IBAction)share:(id)sender {
     NSArray * items = nil;
-    
-    if( self.lastPullImage ){
-        items = @[ self.lastPullImage];
-    }else if (self.lastPullString){
-        items = @[ self.lastPullString];
+    NSString * asString = self.lastItem.asString;
+    if( asString ){
+        items = @[ asString ];
+    }else{
+        UIImage * asImage = self.lastItem.asImage;
+        if( asImage ){
+            items = @[ asImage ];
+        }
     }
     if( items ){
         UIActivityViewController * avc = [[UIActivityViewController alloc] initWithActivityItems:items applicationActivities:nil];
-        
         [self presentViewController:avc animated:YES completion:^(){
-            
         }];
     }
 }

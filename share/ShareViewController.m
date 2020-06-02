@@ -9,6 +9,7 @@
 #import "ShareViewController.h"
 #import "RemoteStashClient.h"
 #import "RemoteStashService.h"
+#import "RemoteStashItem.h"
 
 @interface ShareViewController ()
 @property (nonatomic,retain) RemoteStashClient * client;
@@ -36,48 +37,14 @@
 }
 
 - (void)didSelectPost {
-    NSItemProvider * urlProvider = nil;
-    NSItemProvider * jpegProvider = nil;
-    
-    for (NSExtensionItem * item in self.extensionContext.inputItems) {
-        for (NSItemProvider * provider in item.attachments) {
-            if ([provider hasItemConformingToTypeIdentifier:@"public.url"]) {
-                urlProvider = provider;
-            }
-            if( [provider hasItemConformingToTypeIdentifier:@"public.jpeg"]){
-                jpegProvider = provider;
-            }
-        }
-    }
-    
-    if (urlProvider) {
-        [urlProvider loadItemForTypeIdentifier:@"public.url"
-                                        options:nil
-                              completionHandler:^(NSURL *url, NSError *error) {
-            // Do what you want to do with url
-            [self.client.currentService pushString:url.description completion:^(RemoteStashService*service){
-                NSLog(@"Done posting");
-                dispatch_async( dispatch_get_main_queue(), ^(){
-                    [self.extensionContext completeRequestReturningItems:self.extensionContext.inputItems
-                                                       completionHandler:nil];
-
-                });
-            }];
+    [RemoteStashItem itemFromExtensionContext:self.extensionContext completion:^(RemoteStashItem*item){
+        [self.client.currentService pushItem:item completion:^(RemoteStashService*service){
+            dispatch_async( dispatch_get_main_queue(), ^(){
+                [self.extensionContext completeRequestReturningItems:self.extensionContext.inputItems
+                                                   completionHandler:nil];
+            });
         }];
-    }else if (jpegProvider){
-        [jpegProvider loadItemForTypeIdentifier:@"public.jpeg" options:nil completionHandler:^(NSURL * url, NSError * error){
-            UIImage * image = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
-            [self.client.currentService pushImage:image completion:^(RemoteStashService*service){
-                dispatch_async( dispatch_get_main_queue(), ^(){
-                    [self.extensionContext completeRequestReturningItems:self.extensionContext.inputItems
-                                                       completionHandler:nil];
-
-                });
-            }];
-        }];
-    }else{
-        [self.extensionContext completeRequestReturningItems:@[] completionHandler:nil];
-    }
+    }];
 }
 
 - (NSArray *)configurationItems {

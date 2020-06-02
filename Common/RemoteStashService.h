@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 extern NSString * kNotificationNewServiceDiscovered;
 
 @class RemoteStashService;
+@class RemoteStashItem;
 
 typedef void(^RemoteStashCompletionHandler)(RemoteStashService*service);
 
@@ -25,16 +26,15 @@ typedef void(^RemoteStashCompletionHandler)(RemoteStashService*service);
 @property (nonatomic,readonly) NSString * domain;
 @property (nonatomic,readonly) NSString * shortHostName;
 @property (nonatomic,readonly) BOOL isReady;
-@property (nonatomic,readonly,nullable) NSString * lastPullString;
-@property (nonatomic,readonly,nullable) UIImage * lastPullImage;
-@property (nonatomic,readonly,nullable) NSDictionary * lastPullJson;
-@property (nonatomic,retain,nullable) NSString * lastContentType;
-@property (nonatomic,assign) NSUInteger lastItemsCount;
+
+@property (nonatomic,readonly,nullable) RemoteStashItem * lastItem;
+
+@property (nonatomic,retain,nullable) NSString * availableContentType;
+@property (nonatomic,assign) NSUInteger availableItemsCount;
 
 +(RemoteStashService*)serviceFor:(NSNetService*)service;
 
--(void)pushString:(NSString*)str completion:(nullable RemoteStashCompletionHandler)completion;
--(void)pushImage:(UIImage*)img completion:(RemoteStashCompletionHandler)completion;
+-(void)pushItem:(RemoteStashItem*)str completion:(nullable RemoteStashCompletionHandler)completion;
 -(void)pullWithCompletion:(RemoteStashCompletionHandler)completion;
 -(void)lastWithCompletion:(RemoteStashCompletionHandler)completion;
 

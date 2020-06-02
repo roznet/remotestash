@@ -21,7 +21,6 @@
 @interface RemoteStashServer ()
 @property (nonatomic,retain) NSNetService * service;
 @property (nonatomic,retain) GCDAsyncSocket * socket;
-@property (nonatomic,retain) GCDAsyncSocket * clientSocket;
 @property (nonatomic,retain) dispatch_queue_t worker;
 @property (nonatomic,retain) CRHTTPServer * httpServer;
 @property (nonatomic,assign) int port;

@@ -147,7 +147,7 @@ class Item:
     
     def ensure_filename(self,filename=None):
         '''
-        Ensures a file is present in the meta data
+        Ensures a file is present in the meta data or create a unique one by hash
         '''
         if filename:
             self.info[ 'file'] =  filename
