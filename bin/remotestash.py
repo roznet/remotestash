@@ -1,4 +1,27 @@
 #!/usr/bin/env python3
+#  MIT Licence
+#
+#  Copyright (c) 2020 Brice Rosenzweig.
+#
+#  Permission is hereby granted, free of charge, to any person obtaining a copy
+#  of this software and associated documentation files (the "Software"), to deal
+#  in the Software without restriction, including without limitation the rights
+#  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+#  copies of the Software, and to permit persons to whom the Software is
+#  furnished to do so, subject to the following conditions:
+#  
+#  The above copyright notice and this permission notice shall be included in all
+#  copies or substantial portions of the Software.
+#  
+#  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+#  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+#  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+#  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+#  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+#  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+#  SOFTWARE.
+#  
+#
 
 from zeroconf import ServiceBrowser, Zeroconf, ServiceInfo
 import hashlib
@@ -21,7 +44,22 @@ import sys
 from pprint import pprint
 
 class Item:
+    '''
+    this class represent information about an item in the stash
+    it contains functionality to load from file or other types, ability to output/save/format itself
+
+    it will maintain the data either in text as str or data as bytes
+    '''
     def __init__(self,info):
+        '''
+        info should be a dictionary of meta data. All keys will
+        be kept in lower case. 
+
+        Expected keys are:
+           content-type: mime-type of the content of the item
+           file: filename for the item if applicable, without path
+
+        '''
         self.info = { k.lower(): v for (k,v) in info.items() }
         self.data = None
         self.text = None
@@ -32,11 +70,13 @@ class Item:
     
     def from_file(info,infile):
         '''
-        info should contains 'Content-Type' and 'file'
+        load itself from the data of a file object
+        info should contains 'content-type' and 'file' with the name
         '''
         rv = None
         rv = Item(info)
         rv.data = infile.read()
+        # If we read a string, (file open without 'b' mode), save in text
         if isinstance( rv.data,str ):
             rv.text = rv.data
             rv.data = None
@@ -83,6 +123,10 @@ class Item:
             print( 'Missing Content Type' )
 
     def encoding(self,strict=False):
+        '''
+        determine (or guess) the encoding. Will try to parse content-type or
+        if strict is False, will guess based on the type of the data 
+        '''
         ctype, options = cgi.parse_header( self.info['content-type'] )
         encoding = None
         if 'charset' in options:
@@ -102,6 +146,9 @@ class Item:
         return self.info['content-type']
     
     def ensure_filename(self,filename=None):
+        '''
+        Ensures a file is present in the meta data
+        '''
         if filename:
             self.info[ 'file'] =  filename
         else:
@@ -174,6 +221,13 @@ class Item:
                 outfile.write( f'{len(data)} bytes of type {t}' )
 
 class Stash:
+    '''
+    this class implements a locally saved stash of Item
+    The stash will be saved by default in ~/.remotestah
+    The information of the content of the stash will be saved as contents.json
+    will support pull,push,last,status operations
+    '''
+    
     def __init__(self,args):
         self.args = args
         if 'verbose' in args:

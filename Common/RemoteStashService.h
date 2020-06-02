@@ -21,7 +21,9 @@ typedef void(^RemoteStashCompletionHandler)(RemoteStashService*service);
 
 @property (nonatomic,retain) NSNetService * service;
 @property (nonatomic,readonly) NSString * name;
-@property (nonatomic,retain) NSString * hostname;
+@property (nonatomic,readonly) NSString * hostName;
+@property (nonatomic,readonly) NSString * domain;
+@property (nonatomic,readonly) NSString * shortHostName;
 @property (nonatomic,readonly) BOOL isReady;
 @property (nonatomic,readonly,nullable) NSString * lastPullString;
 @property (nonatomic,readonly,nullable) UIImage * lastPullImage;

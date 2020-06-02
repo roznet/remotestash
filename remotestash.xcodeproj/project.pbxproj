@@ -23,6 +23,8 @@
 		42C7C191247829C400D1796B /* RemoteStashClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C7C190247829C400D1796B /* RemoteStashClient.m */; };
 		42C7C194247970E200D1796B /* RemoteStashService.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C7C193247970E200D1796B /* RemoteStashService.m */; };
 		42C7C195247970E200D1796B /* RemoteStashService.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C7C193247970E200D1796B /* RemoteStashService.m */; };
+		42DB00C124866733008CD97F /* remotestash-ios-cert.pem in Resources */ = {isa = PBXBuildFile; fileRef = 42DB00BF24866733008CD97F /* remotestash-ios-cert.pem */; };
+		42DB00C224866733008CD97F /* remotestash-ios-key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 42DB00C024866733008CD97F /* remotestash-ios-key.pem */; };
 		D7A4DC040D055668D23A7A86 /* Pods_remotestash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16F273AE5217395CDFA37CA1 /* Pods_remotestash.framework */; };
 /* End PBXBuildFile section */
 
@@ -86,6 +88,8 @@
 		42C7C190247829C400D1796B /* RemoteStashClient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RemoteStashClient.m; sourceTree = "<group>"; };
 		42C7C192247970E200D1796B /* RemoteStashService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemoteStashService.h; sourceTree = "<group>"; };
 		42C7C193247970E200D1796B /* RemoteStashService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RemoteStashService.m; sourceTree = "<group>"; };
+		42DB00BF24866733008CD97F /* remotestash-ios-cert.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "remotestash-ios-cert.pem"; sourceTree = "<group>"; };
+		42DB00C024866733008CD97F /* remotestash-ios-key.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "remotestash-ios-key.pem"; sourceTree = "<group>"; };
 		6052B14A4FB8859A5DFAC90B /* Pods-remotestash.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-remotestash.release.xcconfig"; path = "Target Support Files/Pods-remotestash/Pods-remotestash.release.xcconfig"; sourceTree = "<group>"; };
 		7D2663AE0C799B8406F438A7 /* Pods-remotecopypaste.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-remotecopypaste.debug.xcconfig"; path = "Target Support Files/Pods-remotecopypaste/Pods-remotecopypaste.debug.xcconfig"; sourceTree = "<group>"; };
 		E058E765D4F7EFD330B88913 /* Pods-remotecopypaste.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-remotecopypaste.release.xcconfig"; path = "Target Support Files/Pods-remotecopypaste/Pods-remotecopypaste.release.xcconfig"; sourceTree = "<group>"; };
@@ -144,6 +148,7 @@
 		427B79DD246DD7DC005EDEAD = {
 			isa = PBXGroup;
 			children = (
+				42DB00BE24866733008CD97F /* certs */,
 				4272F3BA247A649600F9ACC5 /* Common */,
 				427B79E8246DD7DC005EDEAD /* remotestash */,
 				427B7A04246DD7DF005EDEAD /* remotestashTests */,
@@ -189,6 +194,15 @@
 				427B7A07246DD7DF005EDEAD /* Info.plist */,
 			);
 			path = remotestashTests;
+			sourceTree = "<group>";
+		};
+		42DB00BE24866733008CD97F /* certs */ = {
+			isa = PBXGroup;
+			children = (
+				42DB00BF24866733008CD97F /* remotestash-ios-cert.pem */,
+				42DB00C024866733008CD97F /* remotestash-ios-key.pem */,
+			);
+			path = certs;
 			sourceTree = "<group>";
 		};
 		462BCC907395DCAD5B535D80 /* Pods */ = {
@@ -324,7 +338,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				427B79F9246DD7DF005EDEAD /* LaunchScreen.storyboard in Resources */,
+				42DB00C224866733008CD97F /* remotestash-ios-key.pem in Resources */,
 				427B79F6246DD7DF005EDEAD /* Assets.xcassets in Resources */,
+				42DB00C124866733008CD97F /* remotestash-ios-cert.pem in Resources */,
 				427B79F4246DD7DC005EDEAD /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

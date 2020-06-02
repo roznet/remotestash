@@ -33,6 +33,24 @@
     [self.browser stop];
 }
 
+-(void)netServiceBrowser:(NSNetServiceBrowser*)browser didRemoveService:(nonnull NSNetService *)service moreComing:(BOOL)moreComing{
+    NSMutableArray * newServices = [NSMutableArray array];
+
+    // build new array without removed service
+    for (RemoteStashService * rservice in self.services) {
+        if( ![rservice.service isEqual:service] ){
+            [newServices addObject:rservice];
+        }
+    }
+    self.services = newServices;
+    if( self.currentServiceIndex < 0 || self.currentServiceIndex >= self.services.count){
+        self.currentServiceIndex = 0;
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNewServiceDiscovered object:self.currentService];
+    
+    
+}
+
 -(void)netServiceBrowser:(NSNetServiceBrowser *)browser
           didFindService:(NSNetService *)service
               moreComing:(BOOL)moreComing{
@@ -66,7 +84,7 @@
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath{
     UITableViewCell * cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"servicecell"];
     cell.textLabel.text = self.services[indexPath.row].name;
-    cell.detailTextLabel.text = self.services[indexPath.row].hostname;
+    cell.detailTextLabel.text = self.services[indexPath.row].shortHostName;
 
     if( indexPath.row == self.currentServiceIndex ){
         cell.textLabel.font = [UIFont systemFontOfSize:16. weight:UIFontWeightBold];

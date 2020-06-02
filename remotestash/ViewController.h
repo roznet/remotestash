@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "RemoteStashServer.h"
 
-@interface ViewController : UIViewController<RemoteCopyDelegate>
+@interface ViewController : UIViewController<RemoteStashServerDelegate>
 
 
 @end

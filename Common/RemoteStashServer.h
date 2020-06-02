@@ -10,20 +10,17 @@
 @import CocoaAsyncSocket;
 
 NS_ASSUME_NONNULL_BEGIN
+@class RemoteStashServer;
 
-@protocol RemoteCopyDelegate <NSObject>
-
--(void)connectedTo:(GCDAsyncSocket*)socket;
--(void)disconnected;
--(void)received:(NSString*)str;
-
+@protocol RemoteStashServerDelegate <NSObject>
+-(void)remoteStashServerStarted:(RemoteStashServer*)server;
 @end
 
 @interface RemoteStashServer : NSObject<NSNetServiceDelegate,NSNetServiceBrowserDelegate,GCDAsyncSocketDelegate>
-@property (nonatomic,retain) NSObject<RemoteCopyDelegate>*delegate;
+@property (nonatomic,retain,nullable) NSObject<RemoteStashServerDelegate>*delegate;
 
-+(RemoteStashServer*)client;
--(void)sendString:(NSString*)str;
++(RemoteStashServer*)server:(NSObject<RemoteStashServerDelegate>*)delegate;
+
 @end
 
 NS_ASSUME_NONNULL_END

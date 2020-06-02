@@ -31,6 +31,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.client = [[RemoteStashClient alloc] init];
+    self.server = [RemoteStashServer server:self];
     self.serviceTableView.dataSource = self.client;
     self.serviceTableView.delegate = self.client;
     
@@ -181,23 +182,9 @@
         }];
     }];
 }
-#pragma mark - remote client
+#pragma mark - remote server
 
--(void)connectedTo:(GCDAsyncSocket*)socket{
-    dispatch_async(dispatch_get_main_queue(), ^(){
-            self.connectedTo.text = [socket connectedHost];
-    });
+-(void)remoteStashServerStarted:(RemoteStashServer*)server{
     
 }
--(void)disconnected{
-    dispatch_async(dispatch_get_main_queue(), ^(){
-        self.connectedTo.text = @"Disconnected";
-    });
-}
--(void)received:(NSString*)str{
-    dispatch_async(dispatch_get_main_queue(), ^(){
-        self.received.text = str;
-    });
-}
-
 @end

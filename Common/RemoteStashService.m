@@ -18,6 +18,9 @@ NSString * kNotificationNewServiceDiscovered = @"kNotificationNewServiceDiscover
 @end
 
 @implementation RemoteAddressAndPort
+-(NSString*)description{
+    return [NSString stringWithFormat:@"%@:%@ %@", self.ip, @(self.port), self.family == AF_INET ? @"ipv4": @"ipv6"];
+}
 @end
 
 @interface RemoteStashService ()
@@ -46,6 +49,18 @@ NSString * kNotificationNewServiceDiscovered = @"kNotificationNewServiceDiscover
 -(NSString*)name{
     return self.service.name;
 }
+-(NSString*)hostName{
+    return self.service.hostName;
+}
+-(NSString*)shortHostName{
+    NSString * rv = self.hostName;
+    NSString * suffix = [NSString stringWithFormat:@".%@", self.service.domain];
+    if( [rv hasSuffix:suffix]){
+        rv = [rv substringToIndex:(rv.length-suffix.length)];
+    }
+    return rv;
+}
+
 
 -(BOOL)isReady{
     return self.addresses.count > 0;
@@ -83,15 +98,11 @@ NSString * kNotificationNewServiceDiscovered = @"kNotificationNewServiceDiscover
             [found addObject:holder];
         }
     }
-    self.hostname = sender.hostName;
     self.addresses = found;
-    NSString * suffix = [NSString stringWithFormat:@".%@", [sender domain]];
-    if( [self.hostname hasSuffix:suffix]){
-        self.hostname = [self.hostname substringToIndex:(self.hostname.length-suffix.length)];
-    }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNewServiceDiscovered object:self];
 }
+
 -(void)netService:(NSNetService *)sender didNotResolve:(NSDictionary<NSString *,NSNumber *> *)errorDict{
 }
 
@@ -99,8 +110,29 @@ NSString * kNotificationNewServiceDiscovered = @"kNotificationNewServiceDiscover
 -(NSMutableURLRequest*)mutableRequest:(NSString*)path{
     if( self.addresses.count > 0){
         
-        RemoteAddressAndPort * addressAndPort = self.addresses.firstObject;
-        NSString * url = [NSString stringWithFormat:@"https://%@:%@/%@", addressAndPort.ip, @(addressAndPort.port), path];
+        RemoteAddressAndPort * ipv4 = nil;
+        RemoteAddressAndPort * ipv6 = nil;
+        
+        for (RemoteAddressAndPort * ap in self.addresses) {
+            if( ipv4 == nil && ap.family == AF_INET){
+                ipv4 = ap;
+            }
+            if( ipv6 == nil && ap.family == AF_INET6){
+                ipv6 = ap;
+            }
+            if( ipv4 && ipv6){
+                break;
+            }
+        }
+        
+        NSString * useHost = ipv4.ip;
+        int port = ipv4.port;
+        if( useHost == nil){
+            useHost = [NSString stringWithFormat:@"[%@]", ipv6.ip];
+            port = ipv6.port;
+        }
+        
+        NSString * url = [NSString stringWithFormat:@"https://%@:%@/%@", useHost, @(port), path];
         NSMutableURLRequest * request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
         return request;
     }
