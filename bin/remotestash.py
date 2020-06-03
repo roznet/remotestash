@@ -597,22 +597,29 @@ class Driver :
         print( 'Failed to find a stash on the local network'  )
 
     def cmd_serve(self):
+        '''
+        Will start a local server that will advertise over ZeroConf the service
+        and start a web server to enable remote access to the local stash
+        '''
         zeroconf = Zeroconf()
         advertiser = Advertiser(int(self.args.port) if self.args.port else None)
         if self.args.name:
             name = self.args.name
         else:
-            name = f'{advertiser.get_name()} remote stash'
+            name = f'{advertiser.get_name()} RemoteStash'
         advertiser.start_advertisement(name)
         port = advertiser.port
         server = HTTPServer((advertiser.ip, port), RequestHandler)
-        if os.path.isfile( os.path.expanduser( '~/.remotestash/remotestash.key' ) ):
-            print( 'setup ssl' )
+        proto = 'http'
+        if os.path.isfile( os.path.expanduser( '~/.remotestash/remotestash-key.pem' ) ):
+            proto = 'https'
+            # certificated created with
+            #  openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout remotestash-key.pem -out remotestash-cert.pem
             server.socket = ssl.wrap_socket( server.socket,
-                                             keyfile = os.path.expanduser( '~/.remotestash/remotestash.key' ),
-                                             certfile = os.path.expanduser( '~/.remotestash/remotestash.crt' ),
+                                             keyfile = os.path.expanduser( '~/.remotestash/remotestash-key.pem' ),
+                                             certfile = os.path.expanduser( '~/.remotestash/remotestash-cert.pem' ),
                                              server_side = True )
-        print(f'Starting server as {name} on {advertiser.ip}:{port}, use <Ctrl-C> to stop')
+        print(f"Starting server as '{name}' on {proto}://{advertiser.ip}:{port}, use <Ctrl-C> to stop")
         try:
             while True:
                 server.handle_request()

@@ -31,7 +31,6 @@
 +(RemoteStashServer*)server:(NSObject<RemoteStashServerDelegate>*)delegate{
     RemoteStashServer * rv =[[RemoteStashServer alloc] init];
     if( rv ){
-        rv.delegate = delegate;
         [rv startBroadCast];
     }
     return rv;
@@ -41,8 +40,10 @@
     self.httpServer = [[CRHTTPServer alloc] init];
     self.httpServer.isSecure = YES;
     
-    self.httpServer.certificatePath = [NSBundle.mainBundle pathForResource:@"remotestash-ios-cert" ofType:@"pem"];
-    self.httpServer.certificateKeyPath = [NSBundle.mainBundle pathForResource:@"remotestash-ios-key" ofType:@"pem"];
+    // Certificate created with
+    // openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout remotestash-key.pem -out remotestash-cert.pem
+    self.httpServer.certificatePath = [NSBundle.mainBundle pathForResource:@"remotestash-cert" ofType:@"pem"];
+    self.httpServer.certificateKeyPath = [NSBundle.mainBundle pathForResource:@"remotestash-key" ofType:@"pem"];
 
     [self.httpServer get:@"/status" block:^(CRRequest*req, CRResponse * res, CRRouteCompletionBlock next){
         NSData * data = [NSJSONSerialization dataWithJSONObject:@{@"items_count":@0} options:NSJSONWritingSortedKeys error:nil];
