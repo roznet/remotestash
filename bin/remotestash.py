@@ -28,6 +28,7 @@ import hashlib
 import mimetypes
 import urllib3
 import ssl
+import uuid
 import socket
 import os
 from contextlib import closing
@@ -333,13 +334,25 @@ class Listener:
             print( f'Service {name} removed' )
 
     def add_service(self, zeroconf, type, name):
-        info = zeroconf.get_service_info(type, name)
-        self.ip = socket.inet_ntoa(info.addresses[0])
-        self.port = info.port
-        self.info = info
-        if self.verbose:
-            print( f'Found Service {info.name} added, running {self.cmd} on {self.ip}:{self.port} {info.properties}')
-        getattr(self,self.cmd)()
+        if not self.args.name or self.args.name in name:
+            info = zeroconf.get_service_info(type, name)
+            self.ip = socket.inet_ntoa(info.addresses[0])
+            self.port = info.port
+            self.info = info
+            self.properties = {}
+            for (k,v) in info.properties.items():
+                self.properties[k.decode('utf-8')] = v.decode('utf-8')
+            if self.verbose:
+                print( f'Found Service {info.name} added, running {self.cmd} on {self.ip}:{self.port} {self.properties}')
+            getattr(self,self.cmd)()
+        else:
+            if self.verbose:
+                info = zeroconf.get_service_info(type, name)
+                self.ip = socket.inet_ntoa(info.addresses[0])
+                self.port = info.port
+                self.info = info
+                print( f'Skipping Service {name} on {self.ip}:{self.port}')
+            
 
     def get(self,path):
         self.session = Session()
@@ -439,7 +452,7 @@ class Advertiser:
             addresses=[socket.inet_aton(self.ip)],
             port=self.port,
             server=socket.gethostname() + '.local.',
-            properties={"type": "remotestash_device","temporary":"no"},
+            properties={"temporary":"no", "uuid":str(uuid.uuid4())},
         )
 
         zeroconf = Zeroconf()

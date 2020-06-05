@@ -123,10 +123,9 @@
     }];
 }
 
--(void)processResponseFromService:(RemoteStashService*)service{
-    RemoteStashItem * got = service.lastItem;
-    self.lastItem = got;
-    NSString * asString = got.asString;
+-(void)processNewItem:(RemoteStashItem*)item{
+    self.lastItem = item;
+    NSString * asString = item.asString;
     if( asString ){
         dispatch_async(dispatch_get_main_queue(), ^(){
             self.textView.text = asString;
@@ -134,7 +133,7 @@
             [self update];
         });
     }
-    UIImage * asImage = got.asImage;
+    UIImage * asImage = item.asImage;
     if( asImage ){
         dispatch_async(dispatch_get_main_queue(), ^(){
             self.textView.text = nil;
@@ -165,13 +164,13 @@
 
 - (IBAction)last:(id)sender {
     [[self.client currentService] lastWithCompletion:^(RemoteStashService*service){
-        [self processResponseFromService:service];
+        [self processNewItem:service.lastItem];
     }];
 }
 
 - (IBAction)pull:(id)sender {
     [[self.client currentService] pullWithCompletion:^(RemoteStashService*service){
-        [self processResponseFromService:service];
+        [self processNewItem:service.lastItem];
         [self.client.currentService updateRemoteStatus:^(RemoteStashService*service){
             [self update];
         }];
@@ -181,5 +180,13 @@
 
 -(void)remoteStashServerStarted:(RemoteStashServer*)server{
     
+}
+
+-(void)remoteStashServer:(RemoteStashServer *)server receivedItem:(RemoteStashItem *)item{
+    [self processNewItem:item];
+}
+
+-(RemoteStashItem*)lastItemForRemoteStashServer:(RemoteStashServer *)server{
+    return self.lastItem;
 }
 @end

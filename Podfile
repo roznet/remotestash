@@ -4,3 +4,8 @@ target 'remotestash' do
   pod 'CocoaAsyncSocket'
   pod 'Criollo', '~> 0.5'
 end
+
+target 'share' do
+  use_frameworks!
+  pod 'Criollo', '~> 0.5'
+end

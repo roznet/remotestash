@@ -7,6 +7,7 @@
 //
 
 #import "RemoteStashItem.h"
+@import Criollo;
 
 @interface RemoteStashItem ()
 @property (nonatomic,retain) NSData * data;
@@ -24,6 +25,22 @@
         rv.contentType = response.MIMEType;
         if( rv.textEncodingName == nil && [rv.contentType hasPrefix:@"text/"] ){
             rv.textEncodingName = @"utf-8";
+        }
+    }
+    return rv;
+}
++(instancetype)itemFromRequest:(CRRequest*)req andResponse:(CRResponse*)response{
+    RemoteStashItem * rv = nil;
+    if( req.files.count == 1 ){
+        CRUploadedFile * file = req.files.allValues.firstObject;
+        rv = [[RemoteStashItem alloc] init];
+        if( rv ){
+            rv.data = [NSData dataWithContentsOfURL:file.temporaryFileURL];
+            rv.contentType = file.mimeType;
+            rv.textEncodingName = file.attributes[@"charset"];
+            if( rv.textEncodingName == nil && [rv.contentType hasPrefix:@"text/"] ){
+                rv.textEncodingName = @"utf-8";
+            }
         }
     }
     return rv;
@@ -117,13 +134,25 @@
 
 #pragma mark - url request
 
--(void)prepareURLRequest:(NSMutableURLRequest*)request{
-    request.HTTPBody = self.data;
+-(NSString*)contentTypeWithEncoding{
     NSString * type = self.contentType;
     if( self.textEncodingName ){
         type = [NSString stringWithFormat:@"%@; charset=%@", type, self.textEncodingName];
     }
-    
+    return type;
+}
+
+-(void)prepareURLRequest:(NSMutableURLRequest*)request{
+    request.HTTPBody = self.data;
+    NSString * type = [self contentTypeWithEncoding];
     [request addValue:type forHTTPHeaderField:@"Content-type"];
 }
+
+#pragma mark - server response
+
+-(void)prepareFor:(CRRequest*)req intoResponse:(CRResponse *)res{
+    [res setValue:[self contentTypeWithEncoding] forHTTPHeaderField:@"Content-Type"];
+    [res sendData:self.data];
+}
+
 @end

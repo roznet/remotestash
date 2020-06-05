@@ -28,6 +28,7 @@
 		42DB00C124866733008CD97F /* remotestash-cert.pem in Resources */ = {isa = PBXBuildFile; fileRef = 42DB00BF24866733008CD97F /* remotestash-cert.pem */; };
 		42DB00C224866733008CD97F /* remotestash-key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 42DB00C024866733008CD97F /* remotestash-key.pem */; };
 		D7A4DC040D055668D23A7A86 /* Pods_remotestash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16F273AE5217395CDFA37CA1 /* Pods_remotestash.framework */; };
+		F033F6957EB778F3AF03531B /* Pods_share.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D793ABDAF6ED51999D1FAAB /* Pods_share.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +63,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0B96F1FCE7DAF8480A49CD14 /* Pods-share.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-share.release.xcconfig"; path = "Target Support Files/Pods-share/Pods-share.release.xcconfig"; sourceTree = "<group>"; };
 		16F273AE5217395CDFA37CA1 /* Pods_remotestash.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_remotestash.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		171254AFA872CDF0841670DC /* Pods-remotestash.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-remotestash.debug.xcconfig"; path = "Target Support Files/Pods-remotestash/Pods-remotestash.debug.xcconfig"; sourceTree = "<group>"; };
 		422A24D824719EF600D6C2FB /* share.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = share.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -96,8 +98,10 @@
 		42DB00C024866733008CD97F /* remotestash-key.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "remotestash-key.pem"; sourceTree = "<group>"; };
 		42DB00C62488E53C008CD97F /* RemoteStash.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RemoteStash.entitlements; sourceTree = "<group>"; };
 		42DB00C72488E53C008CD97F /* share.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = share.entitlements; sourceTree = "<group>"; };
+		5D793ABDAF6ED51999D1FAAB /* Pods_share.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_share.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6052B14A4FB8859A5DFAC90B /* Pods-remotestash.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-remotestash.release.xcconfig"; path = "Target Support Files/Pods-remotestash/Pods-remotestash.release.xcconfig"; sourceTree = "<group>"; };
 		7D2663AE0C799B8406F438A7 /* Pods-remotecopypaste.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-remotecopypaste.debug.xcconfig"; path = "Target Support Files/Pods-remotecopypaste/Pods-remotecopypaste.debug.xcconfig"; sourceTree = "<group>"; };
+		90899324441432E82DFCB509 /* Pods-share.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-share.debug.xcconfig"; path = "Target Support Files/Pods-share/Pods-share.debug.xcconfig"; sourceTree = "<group>"; };
 		E058E765D4F7EFD330B88913 /* Pods-remotecopypaste.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-remotecopypaste.release.xcconfig"; path = "Target Support Files/Pods-remotecopypaste/Pods-remotecopypaste.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -106,6 +110,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F033F6957EB778F3AF03531B /* Pods_share.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,6 +227,8 @@
 				E058E765D4F7EFD330B88913 /* Pods-remotecopypaste.release.xcconfig */,
 				171254AFA872CDF0841670DC /* Pods-remotestash.debug.xcconfig */,
 				6052B14A4FB8859A5DFAC90B /* Pods-remotestash.release.xcconfig */,
+				90899324441432E82DFCB509 /* Pods-share.debug.xcconfig */,
+				0B96F1FCE7DAF8480A49CD14 /* Pods-share.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -230,6 +237,7 @@
 			isa = PBXGroup;
 			children = (
 				16F273AE5217395CDFA37CA1 /* Pods_remotestash.framework */,
+				5D793ABDAF6ED51999D1FAAB /* Pods_share.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -241,6 +249,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 422A24E424719EF600D6C2FB /* Build configuration list for PBXNativeTarget "share" */;
 			buildPhases = (
+				11D862D2367F6EDCEAC89140 /* [CP] Check Pods Manifest.lock */,
 				422A24D424719EF600D6C2FB /* Sources */,
 				422A24D524719EF600D6C2FB /* Frameworks */,
 				422A24D624719EF600D6C2FB /* Resources */,
@@ -382,6 +391,28 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-remotestash/Pods-remotestash-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		11D862D2367F6EDCEAC89140 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-share-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		6E08BB08CB98D4DDD2326DFA /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -486,6 +517,7 @@
 /* Begin XCBuildConfiguration section */
 		422A24E524719EF600D6C2FB /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 90899324441432E82DFCB509 /* Pods-share.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = share/share.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -506,6 +538,7 @@
 		};
 		422A24E624719EF600D6C2FB /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0B96F1FCE7DAF8480A49CD14 /* Pods-share.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = share/share.entitlements;
 				CODE_SIGN_STYLE = Automatic;

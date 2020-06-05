@@ -11,13 +11,16 @@
 
 NS_ASSUME_NONNULL_BEGIN
 @class RemoteStashServer;
+@class RemoteStashItem;
 
 @protocol RemoteStashServerDelegate <NSObject>
 -(void)remoteStashServerStarted:(RemoteStashServer*)server;
+-(void)remoteStashServer:(RemoteStashServer*)server receivedItem:(RemoteStashItem*)item;
+-(RemoteStashItem*)lastItemForRemoteStashServer:(RemoteStashServer*)server;
 @end
 
 @interface RemoteStashServer : NSObject<NSNetServiceDelegate,NSNetServiceBrowserDelegate,GCDAsyncSocketDelegate>
-//@property (nonatomic,retain,nullable) NSObject<RemoteStashServerDelegate>*delegate;
+@property (nonatomic,retain,nullable) NSObject<RemoteStashServerDelegate>*delegate;
 
 +(RemoteStashServer*)server:(NSObject<RemoteStashServerDelegate>*)delegate;
 

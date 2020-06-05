@@ -7,6 +7,8 @@
 //
 
 #import "RemoteStashServer.h"
+#import "RemoteStashItem.h"
+
 #include <arpa/inet.h>
 #include <ifaddrs.h>
 #if TARGET_IPHONE_SIMULATOR
@@ -14,7 +16,6 @@
 #else
 #define TypeEN    "en0"
 #endif
-
 
 @import Criollo;
 
@@ -24,6 +25,7 @@
 @property (nonatomic,retain) dispatch_queue_t worker;
 @property (nonatomic,retain) CRHTTPServer * httpServer;
 @property (nonatomic,assign) int port;
+@property (nonatomic,retain) NSUUID * serverUUID;
 @end
 
 @implementation RemoteStashServer
@@ -31,6 +33,7 @@
 +(RemoteStashServer*)server:(NSObject<RemoteStashServerDelegate>*)delegate{
     RemoteStashServer * rv =[[RemoteStashServer alloc] init];
     if( rv ){
+        rv.delegate = delegate;
         [rv startBroadCast];
     }
     return rv;
@@ -52,6 +55,30 @@
             [res sendData:data];
         }
     }];
+    
+    [self.httpServer get:@"/pull" block:^(CRRequest*req, CRResponse*res, CRRouteCompletionBlock next){
+        RemoteStashItem * item = [self.delegate lastItemForRemoteStashServer:self];
+        if( item ){
+            [item prepareFor:req intoResponse:res];
+        }
+    }];
+    
+    [self.httpServer post:@"/push" block:^(CRRequest*req, CRResponse*res, CRRouteCompletionBlock next){
+        RemoteStashItem * item = [RemoteStashItem itemFromRequest:req andResponse:res];
+        if( item ){
+            [self.delegate remoteStashServer:self receivedItem:item];
+        }
+        [res send:@{@"success":@1 }];
+    }];
+
+    [self.httpServer get:@"/push" block:^(CRRequest*req, CRResponse*res, CRRouteCompletionBlock next){
+        RemoteStashItem * item = [RemoteStashItem itemFromRequest:req andResponse:res];
+        if( item ){
+            [self.delegate remoteStashServer:self receivedItem:item];
+        }
+        [res send:@{@"success":@1 }];
+    }];
+
     [self.httpServer startListening:nil portNumber:self.port];
     if( [self getIPAddresses].count > 0){
         NSLog(@"https://%@:%@", [self getIPAddresses].firstObject, @(self.port));
@@ -114,6 +141,9 @@
     
     NSString * name = [NSString stringWithFormat:@"%@ RemoteStash", [[UIDevice currentDevice] name]];
     self.service = [[NSNetService alloc] initWithDomain:@"local." type:@"_remotestash._tcp" name:name port:self.port];
+    self.serverUUID = [NSUUID UUID];
+    self.service.TXTRecordData = [NSNetService dataFromTXTRecordDictionary:@{ @"temporary":[@"yes" dataUsingEncoding:NSUTF8StringEncoding],
+                                                                              @"uuid": [self.serverUUID.UUIDString dataUsingEncoding:NSUTF8StringEncoding]}];
     [self.service publish];
     [self startHttpServer];
 }

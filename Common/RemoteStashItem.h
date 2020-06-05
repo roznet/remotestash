@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 @import UIKit;
+@class CRRequest;
+@class CRResponse;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,12 +20,14 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,readonly,nullable) NSDictionary * asJson;
 
 +(instancetype)itemFromData:(NSData*)data andResponse:(NSHTTPURLResponse*)response;
++(instancetype)itemFromRequest:(CRRequest*)req andResponse:(CRResponse*)response;
 +(instancetype)itemWithImage:(UIImage*)image;
 +(instancetype)itemWithString:(NSString*)str;
 +(instancetype)itemFromPasteBoard:(UIPasteboard*)pasteboard;
 +(void)itemFromExtensionContext:(NSExtensionContext*)extensionContext completion:(void(^)(RemoteStashItem*))completion;
 
 -(void)prepareURLRequest:(NSMutableURLRequest*)request;
+-(void)prepareFor:(CRRequest*)req intoResponse:(CRResponse *)res;
 
 @end
 
