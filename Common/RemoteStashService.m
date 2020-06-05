@@ -31,7 +31,6 @@ NSString * kNotificationNewServiceDiscovered = @"kNotificationNewServiceDiscover
 @property (nonatomic,retain) NSURLSessionDataTask * task;
 @property (nonatomic,retain,nullable) RemoteStashItem * lastItem;
 @property (nonatomic,retain) NSHTTPURLResponse * response;
-
 @end
 
 @implementation RemoteStashService
@@ -46,7 +45,9 @@ NSString * kNotificationNewServiceDiscovered = @"kNotificationNewServiceDiscover
     }
     return rv;
 }
-
+-(NSString*)description{
+    return [NSString stringWithFormat:@"<%@: %@ %@>", NSStringFromClass([self class]), self.service.name, self.hostName ?: @"Not Resolved" ];
+}
 -(NSString*)name{
     return self.service.name;
 }
@@ -106,7 +107,6 @@ NSString * kNotificationNewServiceDiscovered = @"kNotificationNewServiceDiscover
 
 -(void)netService:(NSNetService *)sender didNotResolve:(NSDictionary<NSString *,NSNumber *> *)errorDict{
 }
-
 
 -(NSMutableURLRequest*)mutableRequest:(NSString*)path{
     if( self.addresses.count > 0){

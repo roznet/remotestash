@@ -94,6 +94,8 @@
 		42C7C193247970E200D1796B /* RemoteStashService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RemoteStashService.m; sourceTree = "<group>"; };
 		42DB00BF24866733008CD97F /* remotestash-cert.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "remotestash-cert.pem"; sourceTree = "<group>"; };
 		42DB00C024866733008CD97F /* remotestash-key.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "remotestash-key.pem"; sourceTree = "<group>"; };
+		42DB00C62488E53C008CD97F /* RemoteStash.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RemoteStash.entitlements; sourceTree = "<group>"; };
+		42DB00C72488E53C008CD97F /* share.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = share.entitlements; sourceTree = "<group>"; };
 		6052B14A4FB8859A5DFAC90B /* Pods-remotestash.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-remotestash.release.xcconfig"; path = "Target Support Files/Pods-remotestash/Pods-remotestash.release.xcconfig"; sourceTree = "<group>"; };
 		7D2663AE0C799B8406F438A7 /* Pods-remotecopypaste.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-remotecopypaste.debug.xcconfig"; path = "Target Support Files/Pods-remotecopypaste/Pods-remotecopypaste.debug.xcconfig"; sourceTree = "<group>"; };
 		E058E765D4F7EFD330B88913 /* Pods-remotecopypaste.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-remotecopypaste.release.xcconfig"; path = "Target Support Files/Pods-remotecopypaste/Pods-remotecopypaste.release.xcconfig"; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 		422A24D924719EF600D6C2FB /* share */ = {
 			isa = PBXGroup;
 			children = (
+				42DB00C72488E53C008CD97F /* share.entitlements */,
 				422A24DA24719EF600D6C2FB /* ShareViewController.h */,
 				422A24DB24719EF600D6C2FB /* ShareViewController.m */,
 				422A24DD24719EF600D6C2FB /* MainInterface.storyboard */,
@@ -178,6 +181,7 @@
 		427B79E8246DD7DC005EDEAD /* remotestash */ = {
 			isa = PBXGroup;
 			children = (
+				42DB00C62488E53C008CD97F /* RemoteStash.entitlements */,
 				427B79E9246DD7DC005EDEAD /* AppDelegate.h */,
 				427B79EA246DD7DC005EDEAD /* AppDelegate.m */,
 				427B79EC246DD7DC005EDEAD /* SceneDelegate.h */,
@@ -483,6 +487,7 @@
 		422A24E524719EF600D6C2FB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = share/share.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				INFOPLIST_FILE = share/Info.plist;
@@ -494,6 +499,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.remotecopypaste.share";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -501,6 +507,7 @@
 		422A24E624719EF600D6C2FB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = share/share.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				INFOPLIST_FILE = share/Info.plist;
@@ -512,6 +519,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.remotecopypaste.share";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -631,6 +639,7 @@
 			baseConfigurationReference = 171254AFA872CDF0841670DC /* Pods-remotestash.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = remotestash/RemoteStash.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				INFOPLIST_FILE = "$(SRCROOT)/remotestash/Info.plist";
@@ -640,6 +649,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.remotecopypaste";
 				PRODUCT_NAME = RemoteStash;
+				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -649,6 +659,7 @@
 			baseConfigurationReference = 6052B14A4FB8859A5DFAC90B /* Pods-remotestash.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = remotestash/RemoteStash.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				INFOPLIST_FILE = "$(SRCROOT)/remotestash/Info.plist";
@@ -658,6 +669,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.remotecopypaste";
 				PRODUCT_NAME = RemoteStash;
+				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

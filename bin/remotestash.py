@@ -64,7 +64,6 @@ class Item:
         self.data = None
         self.text = None
 
-
     def __repr__(self):
         return f'Item({self.info})'
     
@@ -339,7 +338,7 @@ class Listener:
         self.port = info.port
         self.info = info
         if self.verbose:
-            print( f'Found Service {info.name} added, running {self.cmd} on {self.ip}:{self.port}')
+            print( f'Found Service {info.name} added, running {self.cmd} on {self.ip}:{self.port} {info.properties}')
         getattr(self,self.cmd)()
 
     def get(self,path):
@@ -354,8 +353,11 @@ class Listener:
         return response
 
     def item_from_response(self,response):
-        ctype = response.headers['Content-Type']
-        return Item.from_data( response.content, { 'content-type': ctype } )
+        try:
+            ctype = response.headers['Content-Type']
+            return Item.from_data( response.content, { 'content-type': ctype } )
+        except:
+            return None
     
     def post(self,path,data):
         self.session = Session()
@@ -386,7 +388,8 @@ class Listener:
         response = self.get('last')
         # if binary use response.content
         item = self.item_from_response( response )
-        item.output(self.outfile)
+        if item:
+            item.output(self.outfile)
         self.exit()
         
     def status(self):
@@ -436,7 +439,7 @@ class Advertiser:
             addresses=[socket.inet_aton(self.ip)],
             port=self.port,
             server=socket.gethostname() + '.local.',
-            properties={"type": "remotestash_device"},
+            properties={"type": "remotestash_device","temporary":"no"},
         )
 
         zeroconf = Zeroconf()
@@ -552,11 +555,14 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.respond( 200, { 'Content-type' : 'text/plain; charset=utf-8' }, message )
 
     def respond_item(self,item):
-        headers = { 'content-type' : item.info['content-type'] }
-        message = item.as_data()
+        if item:
+            headers = { 'content-type' : item.info['content-type'] }
+            message = item.as_data()
 
-        self.respond( 200, headers, message )
-        
+            self.respond( 200, headers, message )
+        else:
+            self.respond( 200, {}, None )
+            
     def respond(self,response_value, headers, content ):
         self.send_response(response_value)
         ctype = None
