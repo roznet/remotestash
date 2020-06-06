@@ -41,7 +41,7 @@ The iphone app can behave as a client to a remotestash server or as a server its
 
 The app will present a text field or an image view depending on what is in the clipboard when it starts. The user interface is split into the *Local* and the *Remote* area. The local area represent what is in the phone and remote the server. You can use the `push` button to send the current content to the server. And `pull` or get the `last` item from the server onto your phone.
 
-The current item on your phone can also be shared on your phone by clicking on the icon ![](https://raw.githubusercontent.com/roznet/remotestash/master/remotestash/Assets.xcassets/702-share.imageset/702-share%402x.png), which can be useful if you pull an image from the server for example to save it in your Photos app.
+The current item on your phone can also be shared on your phone by clicking on the icon ![](https://raw.githubusercontent.com/roznet/remotestash/master/remotestash/Assets.xcassets/702-share.imageset/702-share.png), which can be useful if you pull an image from the server for example to save it in your Photos app.
 
 The app also provide a share extension, so if you have a safari page opened or a photo display the standard sharing menu from iOS will give you the option to use RemoteStash and share it to a running server on a computer or another phone.
 
