@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,readonly) NSUUID * serverUUID;
 
 +(RemoteStashServer*)server:(NSObject<RemoteStashServerDelegate>*)delegate;
+-(void)start;
+-(void)stop;
 
 @end
 

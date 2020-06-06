@@ -67,6 +67,11 @@
     }];
     [[NSNotificationCenter defaultCenter] addObserverForName:kNotificationApplicationEnteredForeground object:nil queue:nil usingBlock:^(NSNotification*notification){
         [self update];
+        [self.server start];
+    }];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:kNotificationApplicationEnteredBackground object:nil queue:nil usingBlock:^(NSNotification*notification){
+        [self.server stop];
     }];
     
     [self update];

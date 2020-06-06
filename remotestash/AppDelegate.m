@@ -10,7 +10,7 @@
 #import "RemoteStashServer.h"
 
 NSString * kNotificationApplicationEnteredForeground = @"kNotificationApplicationEnteredForeground";
-
+NSString * kNotificationApplicationEnteredBackground = @"kNotificationApplicationEnteredBackground";
 
 @interface AppDelegate ()
 @end

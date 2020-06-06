@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,readonly) BOOL hasImage;
 @property (nonatomic,readonly) BOOL hasString;
 @property (nonatomic,readonly) BOOL hasJson;
+@property (nonatomic,readonly) NSDictionary * statusDictionary;
 
 +(instancetype)itemFromData:(NSData*)data andResponse:(NSHTTPURLResponse*)response;
 +(instancetype)itemFromRequest:(CRRequest*)req andResponse:(CRResponse*)response;

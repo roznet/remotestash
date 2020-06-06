@@ -129,6 +129,9 @@
     return @[];
 }
 
+-(NSDictionary * )statusDictionary{
+    return @{ @"bytes": @(self.data.length), @"content-type":self.contentType};
+}
 -(UIImage*)image{
     if( [self.contentType hasPrefix:@"image/"] ){
         return [UIImage imageWithData:self.data];

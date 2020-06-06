@@ -34,7 +34,17 @@
     RemoteStashServer * rv =[[RemoteStashServer alloc] init];
     if( rv ){
         rv.delegate = delegate;
-        [rv startBroadCast];
+        dispatch_queue_t queue = dispatch_queue_create("net.ro-z.worker", DISPATCH_QUEUE_SERIAL);
+        rv.worker = queue;
+
+        // Find a free port number
+        rv.socket = [[GCDAsyncSocket alloc] initWithDelegate:rv delegateQueue:rv.worker];
+        [rv.socket acceptOnPort:0 error:nil];
+        rv.port = rv.socket.localPort;
+        [rv.socket disconnect];
+        rv.socket = nil;
+
+        rv.serverUUID = [NSUUID UUID];
     }
     return rv;
 }
@@ -50,7 +60,14 @@
     self.httpServer.certificateKeyPath = [NSBundle.mainBundle pathForResource:@"remotestash-key" ofType:@"pem"];
 
     [self.httpServer get:@"/status" block:^(CRRequest*req, CRResponse * res, CRRouteCompletionBlock next){
-        NSData * data = [NSJSONSerialization dataWithJSONObject:@{@"items_count":@0} options:NSJSONWritingSortedKeys error:nil];
+        RemoteStashItem * item = [self.delegate lastItemForRemoteStashServer:self];
+        NSDictionary * status = nil;
+        if( item ){
+            status = @{ @"items_count":@1, @"last": item.statusDictionary};
+        }else{
+            status = @{ @"items_count":@0 };
+        }
+        NSData * data = [NSJSONSerialization dataWithJSONObject:status options:NSJSONWritingSortedKeys error:nil];
         if( data ){
             [res setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
             [res sendData:data];
@@ -89,7 +106,7 @@
 
     [self.httpServer startListening:nil portNumber:self.port];
     if( [self getIPAddresses].count > 0){
-        NSLog(@"https://%@:%@", [self getIPAddresses].firstObject, @(self.port));
+        NSLog(@"https://%@:%@ %@", [self getIPAddresses].firstObject, @(self.port),self.serverUUID);
     }
 }
 
@@ -137,28 +154,32 @@
 }
 
 -(void)startBroadCast{
-    dispatch_queue_t queue = dispatch_queue_create("net.ro-z.worker", DISPATCH_QUEUE_SERIAL);
-    self.worker = queue;
 
-    // Find a free port number
-    self.socket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:self.worker];
-    [self.socket acceptOnPort:0 error:nil];
-    self.port = self.socket.localPort;
-    [self.socket disconnect];
-    self.socket = nil;
-    
     NSString * name = [NSString stringWithFormat:@"%@ RemoteStash", [[UIDevice currentDevice] name]];
     self.service = [[NSNetService alloc] initWithDomain:@"local." type:@"_remotestash._tcp" name:name port:self.port];
-    self.serverUUID = [NSUUID UUID];
+    self.service.delegate = self;
     self.service.TXTRecordData = [NSNetService dataFromTXTRecordDictionary:@{ @"temporary":[@"yes" dataUsingEncoding:NSUTF8StringEncoding],
                                                                               @"uuid": [self.serverUUID.UUIDString dataUsingEncoding:NSUTF8StringEncoding]}];
     [self.service publish];
+    
     [self startHttpServer];
 }
 
+-(void)start{
+    [self startBroadCast];
+}
+-(void)stop{
+    [self.service stop];
+    [self.httpServer stopListening];
+}
 #pragma mark - NetService
 
 -(void)netServiceDidPublish:(NSNetService *)sender{
+    NSLog(@"Publish %@", sender);
+}
+
+-(void)netServiceDidStop:(NSNetService *)sender{
+    NSLog(@"Stop %@", sender);
 }
 
 #pragma mark - Socket

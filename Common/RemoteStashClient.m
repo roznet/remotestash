@@ -39,6 +39,12 @@
 -(void)resolvedRemoteStashService:(RemoteStashService *)service{
     BOOL shouldAdd = true;
     
+    for (RemoteStashService * rservice in self.services) {
+        if( [rservice.serverUUID isEqual:service.serverUUID] ){
+            shouldAdd = false;
+        }
+    }
+    
     if( [self.delegate respondsToSelector:@selector(remoteStashClient:shouldAddService:)]){
         shouldAdd = [self.delegate remoteStashClient:self shouldAddService:service];
     }
