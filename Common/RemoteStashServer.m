@@ -45,6 +45,7 @@
         rv.socket = nil;
 
         rv.serverUUID = [NSUUID UUID];
+        NSLog(@"%@", rv.serverUUID);
     }
     return rv;
 }
@@ -158,6 +159,7 @@
     NSString * name = [NSString stringWithFormat:@"%@ RemoteStash", [[UIDevice currentDevice] name]];
     self.service = [[NSNetService alloc] initWithDomain:@"local." type:@"_remotestash._tcp" name:name port:self.port];
     self.service.delegate = self;
+    NSLog(@"%@", self.serverUUID);
     self.service.TXTRecordData = [NSNetService dataFromTXTRecordDictionary:@{ @"temporary":[@"yes" dataUsingEncoding:NSUTF8StringEncoding],
                                                                               @"uuid": [self.serverUUID.UUIDString dataUsingEncoding:NSUTF8StringEncoding]}];
     [self.service publish];

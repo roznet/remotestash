@@ -682,6 +682,10 @@ class Driver :
             if self.verbose:
                 print( f'Saving to {self.args.output}' )
             return open( self.args.output, 'wb' )
+        elif 'file' in self.args and self.args.file:
+            if self.verbose:
+                print( f'Saving to {self.args.file}' )
+            return open( self.args.file, 'wb' )
         else:
             return sys.stdout
             
