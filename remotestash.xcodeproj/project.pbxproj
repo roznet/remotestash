@@ -22,6 +22,8 @@
 		427B79FC246DD7DF005EDEAD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 427B79FB246DD7DF005EDEAD /* main.m */; };
 		427B7A06246DD7DF005EDEAD /* remotestashTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 427B7A05246DD7DF005EDEAD /* remotestashTests.m */; };
 		427B7A12246DD85D005EDEAD /* RemoteStashServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 427B7A11246DD85D005EDEAD /* RemoteStashServer.m */; };
+		42B94369248BF91D00A4BD4C /* remotestash-cert.pem in Resources */ = {isa = PBXBuildFile; fileRef = 42DB00BF24866733008CD97F /* remotestash-cert.pem */; };
+		42B9436A248BF91D00A4BD4C /* remotestash-key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 42DB00C024866733008CD97F /* remotestash-key.pem */; };
 		42C7C191247829C400D1796B /* RemoteStashClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C7C190247829C400D1796B /* RemoteStashClient.m */; };
 		42C7C194247970E200D1796B /* RemoteStashService.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C7C193247970E200D1796B /* RemoteStashService.m */; };
 		42C7C195247970E200D1796B /* RemoteStashService.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C7C193247970E200D1796B /* RemoteStashService.m */; };
@@ -348,6 +350,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42B9436A248BF91D00A4BD4C /* remotestash-key.pem in Resources */,
+				42B94369248BF91D00A4BD4C /* remotestash-cert.pem in Resources */,
 				422A24DF24719EF600D6C2FB /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

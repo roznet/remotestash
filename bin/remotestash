@@ -386,6 +386,13 @@ class Listener:
         response = self.session.get( url, verify=False, data = data, headers = headers )
         return response
 
+    def list(self):
+        name = self.info.name
+        if name.endswith( '._remotestash._tcp.local.' ):
+            name = name[:len('._remotestash._tcp.local.')]
+        print( f'Found "{name}" from {self.info.server} on {self.ip}:{self.port}')
+        # don't exit to find more services
+    
     def push(self):
         response = self.post('push',self.content)
         print( response.content )
@@ -612,8 +619,9 @@ class Driver :
         
         listener.content_type = self.get_content_type()
         browser = ServiceBrowser(zeroconf, "_remotestash._tcp.local.", listener)
-        time.sleep(5.0)
-        print( 'Failed to find a stash on the local network'  )
+        time.sleep(self.args.timeout)
+        if path != 'list':
+            print( 'Failed to find a stash on the local network'  )
 
     def cmd_serve(self):
         '''
@@ -718,6 +726,11 @@ class Driver :
             item.output( self.get_output_file() )
         else:
             self.cmd_listen('status')
+
+    def cmd_list(self):
+        if not self.args.local:
+            self.cmd_listen('list')
+            
             
     def cmd_clear(self):
         if self.args.local:
@@ -756,6 +769,7 @@ if __name__ == "__main__":
     parser.add_argument( '-v', '--verbose', action='store_true', help='verbose output' )
     parser.add_argument( '-p', '--port', help='port to use if not set will use a free port' )
     parser.add_argument( '-o', '--output', help='output file if not set save to stdout' )
+    parser.add_argument( '-t', '--timeout', help='timeout for searching for a RemoteStash on the network', default=5.0, type=float )
     parser.add_argument( 'file',    metavar='FILE', nargs='?' )
     args = parser.parse_args()
 

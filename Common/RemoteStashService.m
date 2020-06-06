@@ -227,7 +227,7 @@ NSString * kNotificationNewServiceDiscovered = @"kNotificationNewServiceDiscover
 
 -(void)updateRemoteStatus:(RemoteStashCompletionHandler)completion{
     [self statusWithCompletion:^(RemoteStashService*service){
-        NSDictionary * last = service.lastItem.asJson;
+        NSDictionary * last = service.lastItem.json;
         self.availableContentType = last[@"last"][@"content-type"];
         self.availableItemsCount = [last[@"items_count"] doubleValue];
         completion(self);
@@ -237,6 +237,11 @@ NSString * kNotificationNewServiceDiscovered = @"kNotificationNewServiceDiscover
 -(NSString*)contentType{
     return self.response.allHeaderFields[@"Content-Type"];
 }
+
+-(void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler{
+    completionHandler(NSURLSessionAuthChallengeUseCredential, [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]);
+}
+
 -(void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler{
     completionHandler(NSURLSessionAuthChallengeUseCredential, [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]);
 }

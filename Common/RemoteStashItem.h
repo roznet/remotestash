@@ -15,9 +15,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface RemoteStashItem : NSObject
 
-@property (nonatomic,readonly,nullable) UIImage * asImage;
-@property (nonatomic,readonly,nullable) NSString * asString;
-@property (nonatomic,readonly,nullable) NSDictionary * asJson;
+@property (nonatomic,readonly,nullable) UIImage * image;
+@property (nonatomic,readonly,nullable) NSString * string;
+@property (nonatomic,readonly,nullable) NSDictionary * json;
+
+@property (nonatomic,readonly) NSArray * activiyItems;
+
+@property (nonatomic,readonly) BOOL hasImage;
+@property (nonatomic,readonly) BOOL hasString;
+@property (nonatomic,readonly) BOOL hasJson;
 
 +(instancetype)itemFromData:(NSData*)data andResponse:(NSHTTPURLResponse*)response;
 +(instancetype)itemFromRequest:(CRRequest*)req andResponse:(CRResponse*)response;

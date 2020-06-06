@@ -55,6 +55,10 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    self.textView.delegate = self;
+    
+    self.lastItem = [RemoteStashItem itemFromPasteBoard:[UIPasteboard generalPasteboard]];
+
     [[NSNotificationCenter defaultCenter] addObserverForName:kNotificationNewServiceDiscovered object:nil queue:nil usingBlock:^(NSNotification * notification){
         [self.client.currentService updateRemoteStatus:^(RemoteStashService*service){
             [self update];
@@ -70,23 +74,15 @@
 
 -(void)update{
     dispatch_async(dispatch_get_main_queue(), ^(){
-        UIPasteboard * pasteboard = [UIPasteboard generalPasteboard];
-        if ([pasteboard hasStrings]){
-            self.textView.text = pasteboard.string;
+        if ([self.lastItem hasString]){
+            self.textView.text = self.lastItem.string;
             self.imagePreview.image = nil;
             self.textView.hidden = false;
             self.imagePreview.hidden = true;
             self.received.text = NSLocalizedString(@"Text", @"Received Text");
-        }else if( [pasteboard hasURLs] ){
-            NSURL * url = pasteboard.URL;
-            self.textView.text = url.description;
-            self.imagePreview.image = nil;
-            self.textView.hidden = false;
-            self.imagePreview.hidden = true;
-            self.received.text = NSLocalizedString(@"URL", @"Received Text");
-        }else if( [pasteboard hasImages] ){
+        }else if( [self.lastItem hasImage] ){
             self.textView.text = nil;
-            self.imagePreview.image = pasteboard.image;
+            self.imagePreview.image = self.lastItem.image;
             self.textView.hidden = true;
             self.imagePreview.hidden = false;
             self.received.text = NSLocalizedString(@"Image", @"Received Text");
@@ -112,12 +108,11 @@
        
 -(void)viewWillDisappear:(BOOL)animated{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
     [super viewWillDisappear:animated];
 }
 - (IBAction)push:(id)sender {
     [self update];
-    RemoteStashItem * item = [RemoteStashItem itemFromPasteBoard:[UIPasteboard generalPasteboard]];
+    RemoteStashItem * item = self.lastItem;
     [[self.client currentService] pushItem:item completion:^(RemoteStashService*service){
         NSLog(@"Done with %@", service);
     }];
@@ -125,7 +120,7 @@
 
 -(void)processNewItem:(RemoteStashItem*)item{
     self.lastItem = item;
-    NSString * asString = item.asString;
+    NSString * asString = item.string;
     if( asString ){
         dispatch_async(dispatch_get_main_queue(), ^(){
             self.textView.text = asString;
@@ -133,7 +128,7 @@
             [self update];
         });
     }
-    UIImage * asImage = item.asImage;
+    UIImage * asImage = item.image;
     if( asImage ){
         dispatch_async(dispatch_get_main_queue(), ^(){
             self.textView.text = nil;
@@ -144,17 +139,11 @@
     }
 }
 
+#pragma mark - UI Buttons
+
 - (IBAction)share:(id)sender {
-    NSArray * items = nil;
-    NSString * asString = self.lastItem.asString;
-    if( asString ){
-        items = @[ asString ];
-    }else{
-        UIImage * asImage = self.lastItem.asImage;
-        if( asImage ){
-            items = @[ asImage ];
-        }
-    }
+    NSArray * items = self.lastItem.activiyItems;
+    
     if( items ){
         UIActivityViewController * avc = [[UIActivityViewController alloc] initWithActivityItems:items applicationActivities:nil];
         [self presentViewController:avc animated:YES completion:^(){
@@ -175,6 +164,12 @@
             [self update];
         }];
     }];
+}
+
+#pragma mark - UITextViewdelegate
+
+-(void)textViewDidChange:(UITextView *)textView{
+    self.lastItem = [RemoteStashItem itemWithString:textView.text];
 }
 #pragma mark - remote server
 

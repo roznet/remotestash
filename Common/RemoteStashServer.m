@@ -45,6 +45,7 @@
     
     // Certificate created with
     // openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout remotestash-key.pem -out remotestash-cert.pem
+    
     self.httpServer.certificatePath = [NSBundle.mainBundle pathForResource:@"remotestash-cert" ofType:@"pem"];
     self.httpServer.certificateKeyPath = [NSBundle.mainBundle pathForResource:@"remotestash-key" ofType:@"pem"];
 
@@ -62,7 +63,14 @@
             [item prepareFor:req intoResponse:res];
         }
     }];
-    
+
+    [self.httpServer get:@"/last" block:^(CRRequest*req, CRResponse*res, CRRouteCompletionBlock next){
+        RemoteStashItem * item = [self.delegate lastItemForRemoteStashServer:self];
+        if( item ){
+            [item prepareFor:req intoResponse:res];
+        }
+    }];
+
     [self.httpServer post:@"/push" block:^(CRRequest*req, CRResponse*res, CRRouteCompletionBlock next){
         RemoteStashItem * item = [RemoteStashItem itemFromRequest:req andResponse:res];
         if( item ){

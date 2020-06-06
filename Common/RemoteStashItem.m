@@ -108,13 +108,34 @@
 }
 #pragma mark - getter
 
--(UIImage*)asImage{
+-(BOOL)hasImage{
+    return [self.contentType hasPrefix:@"image/"];
+}
+
+-(BOOL)hasJson{
+    return [self.contentType hasPrefix:@"application/json"];
+}
+
+-(BOOL)hasString{
+    return ![self.contentType hasPrefix:@"image/"] && self.textEncodingName;
+}
+
+-(NSArray*)activiyItems{
+    if( self.hasString ){
+        return @[ self.string ];
+    }else if ( self.hasImage ){
+        return  @[ self.image ];
+    }
+    return @[];
+}
+
+-(UIImage*)image{
     if( [self.contentType hasPrefix:@"image/"] ){
         return [UIImage imageWithData:self.data];
     }
     return nil;
 }
--(NSString * )asString{
+-(NSString * )string{
     if( [self.contentType hasPrefix:@"image/"] ){
         return nil;
     }
@@ -124,7 +145,7 @@
     }
     return nil;
 }
--(NSDictionary*)asJson{
+-(NSDictionary*)json{
     if( [self.contentType hasPrefix:@"application/json"] && self.data ){
         NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:self.data options:NSJSONReadingAllowFragments error:nil];
         return [dict isKindOfClass:[NSDictionary class]]?dict:nil;

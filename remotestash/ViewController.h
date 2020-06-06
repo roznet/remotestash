@@ -10,7 +10,7 @@
 #import "RemoteStashServer.h"
 #import "RemoteStashClient.h"
 
-@interface ViewController : UIViewController<RemoteStashServerDelegate,RemoteStashClientDelegate>
+@interface ViewController : UIViewController<RemoteStashServerDelegate,RemoteStashClientDelegate,UITextViewDelegate>
 
 
 @end

@@ -22,7 +22,7 @@ typedef void(^RemoteStashCompletionHandler)(RemoteStashService*service);
 -(void)resolvedRemoteStashService:(RemoteStashService*)service;
 @end
 
-@interface RemoteStashService : NSObject<NSNetServiceDelegate,NSURLSessionDelegate>
+@interface RemoteStashService : NSObject<NSNetServiceDelegate,NSURLSessionDelegate,NSURLSessionTaskDelegate>
 
 @property (nonatomic,retain) NSNetService * service;
 @property (nonatomic,readonly) NSString * name;
