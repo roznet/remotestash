@@ -35,19 +35,38 @@ NSString * kNotificationNewServiceDiscovered = @"kNotificationNewServiceDiscover
 
 @implementation RemoteStashService
 
-+(RemoteStashService*)serviceFor:(NSNetService*)service{
++(RemoteStashService*)serviceFor:(NSNetService*)service withDelegate:(NSObject<RemoteStashServiceDelegate>*)delegate{
     RemoteStashService * rv = [[RemoteStashService alloc] init];
     if( rv ){
         rv.service = service;
         service.delegate = rv;        
         [service resolveWithTimeout:5.0];
-
+        rv.properties = @{};
+        rv.delegate = delegate;
     }
     return rv;
 }
 -(NSString*)description{
     return [NSString stringWithFormat:@"<%@: %@ %@>", NSStringFromClass([self class]), self.service.name, self.hostName ?: @"Not Resolved" ];
 }
+
+-(NSUUID*)serverUUID{
+    NSUUID * rv = nil;
+    NSString * existing = self.properties[@"uuid"];
+    if( existing == nil){
+        rv = [NSUUID UUID];
+        NSMutableDictionary * prop = [NSMutableDictionary dictionaryWithDictionary:self.properties?:@{}];
+        prop[@"uuid"]=rv.UUIDString;
+        self.properties = prop;
+    }else{
+        rv = [[NSUUID alloc] initWithUUIDString:existing];
+    }
+    return rv;
+}
+-(BOOL)temporary{
+    return self.properties[@"temporary"] && [self.properties[@"temporary"] hasPrefix:@"yes"];
+}
+
 -(NSString*)name{
     return self.service.name;
 }
@@ -70,6 +89,15 @@ NSString * kNotificationNewServiceDiscovered = @"kNotificationNewServiceDiscover
 
 -(void)netServiceDidResolveAddress:(NSNetService *)sender{
     
+    NSDictionary * txtRecord = [NSNetService dictionaryFromTXTRecordData:[sender TXTRecordData]];
+    NSMutableDictionary * properties = [NSMutableDictionary dictionary];
+    for (NSString * key in txtRecord) {
+        NSData * data = txtRecord[key];
+        NSString * val = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        properties[key] = val;
+    }
+    self.properties = [NSDictionary dictionaryWithDictionary:properties];
+
     NSMutableArray * found = [NSMutableArray array];
     
     char addressBuffer[INET6_ADDRSTRLEN];
@@ -97,10 +125,13 @@ NSString * kNotificationNewServiceDiscovered = @"kNotificationNewServiceDiscover
             holder.ip = address;
             holder.port = port;
             holder.family = socketAddress->sa.sa_family;
+            
             [found addObject:holder];
         }
     }
     self.addresses = found;
+    
+    [self.delegate resolvedRemoteStashService:self];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNewServiceDiscovered object:self];
 }

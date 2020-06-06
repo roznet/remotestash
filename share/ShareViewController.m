@@ -24,12 +24,11 @@
 
 -(void)viewDidLoad{
     [super viewDidLoad];
-    self.client = [[RemoteStashClient alloc] init];
+    self.client = [RemoteStashClient clientWithDelegate:self];
     [[NSNotificationCenter defaultCenter] addObserverForName:kNotificationNewServiceDiscovered
                                                       object:nil
                                                        queue:nil
                                                   usingBlock:^(NSNotification*notification){
-        NSLog(@"Got services");
         dispatch_async(dispatch_get_main_queue(), ^(){
             [self reloadConfigurationItems];
         });
@@ -47,22 +46,40 @@
     }];
 }
 
+-(void)remoteStashClient:(RemoteStashClient *)client didAddService:(RemoteStashService *)service{
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self reloadConfigurationItems];
+    });
+}
+
 - (NSArray *)configurationItems {
     // To add configuration options via table cells at the bottom of the sheet, return an array of SLComposeSheetConfigurationItem here.
     NSMutableArray * rv = [NSMutableArray array];
-    if( self.client.services.count){
-        for (RemoteStashService * service in self.client.services) {
-            SLComposeSheetConfigurationItem * item = [[SLComposeSheetConfigurationItem alloc] init];
-            item.title = service.name;
-            item.value = service.name;
-            item.tapHandler = ^(){
-                NSLog(@"select %@", service.name);
-            };
-            [rv addObject:item];
-
-        }
+    if( self.client.pendingServices.count){
+        RemoteStashService * service = self.client.currentService;
+        SLComposeSheetConfigurationItem * item = [[SLComposeSheetConfigurationItem alloc] init];
+        item.title = @"RemoteStash";
+        item.value = service.name;
+        item.tapHandler = ^(){
+            [self pushServiceSelectionController];
+        };
+        [rv addObject:item];
     }
     return rv;
+}
+
+-(void)pushServiceSelectionController{
+    UITableViewController * tvc = [[UITableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    tvc.tableView.dataSource = self.client;
+    tvc.tableView.delegate = self.client;
+    [self.navigationController pushViewController:tvc animated:YES];
+}
+
+#pragma mark - RemoteStashClient
+
+-(void)remoteStashClient:(RemoteStashClient *)client selectedRemoteService:(RemoteStashService *)service{
+    [self.navigationController popViewControllerAnimated:YES];
+    [self reloadConfigurationItems];
 }
 
 @end

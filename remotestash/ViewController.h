@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "RemoteStashServer.h"
+#import "RemoteStashClient.h"
 
-@interface ViewController : UIViewController<RemoteStashServerDelegate>
+@interface ViewController : UIViewController<RemoteStashServerDelegate,RemoteStashClientDelegate>
 
 
 @end

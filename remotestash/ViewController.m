@@ -30,7 +30,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.client = [[RemoteStashClient alloc] init];
+    self.client = [RemoteStashClient clientWithDelegate:self];
     self.server = [RemoteStashServer server:self];
     self.serviceTableView.dataSource = self.client;
     self.serviceTableView.delegate = self.client;
@@ -188,5 +188,15 @@
 
 -(RemoteStashItem*)lastItemForRemoteStashServer:(RemoteStashServer *)server{
     return self.lastItem;
+}
+
+#pragma mark - remote client
+
+-(BOOL)remoteStashClient:(RemoteStashClient *)client shouldAddService:(RemoteStashService *)service{
+    return ![self.server.serverUUID isEqual:service.serverUUID];
+}
+
+-(void)remoteStashClient:(RemoteStashClient *)client selectedRemoteService:(RemoteStashService *)service{
+    [self update];
 }
 @end

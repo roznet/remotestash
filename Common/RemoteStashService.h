@@ -18,6 +18,10 @@ extern NSString * kNotificationNewServiceDiscovered;
 
 typedef void(^RemoteStashCompletionHandler)(RemoteStashService*service);
 
+@protocol RemoteStashServiceDelegate <NSObject>
+-(void)resolvedRemoteStashService:(RemoteStashService*)service;
+@end
+
 @interface RemoteStashService : NSObject<NSNetServiceDelegate,NSURLSessionDelegate>
 
 @property (nonatomic,retain) NSNetService * service;
@@ -26,13 +30,17 @@ typedef void(^RemoteStashCompletionHandler)(RemoteStashService*service);
 @property (nonatomic,readonly) NSString * domain;
 @property (nonatomic,readonly) NSString * shortHostName;
 @property (nonatomic,readonly) BOOL isReady;
-
+@property (nonatomic,retain) NSDictionary<NSString*,NSString*>*properties;
+@property (nonatomic,readonly) NSUUID * serverUUID;
 @property (nonatomic,readonly,nullable) RemoteStashItem * lastItem;
+@property (nonatomic,readonly) BOOL temporary;
 
 @property (nonatomic,retain,nullable) NSString * availableContentType;
 @property (nonatomic,assign) NSUInteger availableItemsCount;
 
-+(RemoteStashService*)serviceFor:(NSNetService*)service;
+@property (nonatomic,retain) NSObject<RemoteStashServiceDelegate>*delegate;
+
++(RemoteStashService*)serviceFor:(NSNetService*)service withDelegate:(NSObject<RemoteStashServiceDelegate>*)delegate;
 
 -(void)pushItem:(RemoteStashItem*)str completion:(nullable RemoteStashCompletionHandler)completion;
 -(void)pullWithCompletion:(RemoteStashCompletionHandler)completion;

@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface RemoteStashServer : NSObject<NSNetServiceDelegate,NSNetServiceBrowserDelegate,GCDAsyncSocketDelegate>
 @property (nonatomic,retain,nullable) NSObject<RemoteStashServerDelegate>*delegate;
+@property (nonatomic,readonly) NSUUID * serverUUID;
 
 +(RemoteStashServer*)server:(NSObject<RemoteStashServerDelegate>*)delegate;
 

@@ -11,57 +11,94 @@
 
 @interface RemoteStashClient ()
 @property (nonatomic,retain) NSNetServiceBrowser * browser;
+@property (nonatomic,retain) NSArray<RemoteStashService*>*pendingServices;
 @property (nonatomic,retain) NSArray<RemoteStashService*>*services;
 @property (nonatomic,assign) NSInteger currentServiceIndex;
 @end
 
 @implementation RemoteStashClient
 
--(RemoteStashClient*)init{
-    self = [super init];
-    if( self ){
-        self.browser = [[NSNetServiceBrowser alloc] init];
-        self.browser.delegate = self;
-        self.services = @[];
-        [self.browser searchForServicesOfType:@"_remotestash._tcp" inDomain:@""];
-        self.currentServiceIndex = -1;
++(RemoteStashClient*)clientWithDelegate:(NSObject<RemoteStashClientDelegate>*)delegate{
+    RemoteStashClient* rv = [[RemoteStashClient alloc] init];
+    if( rv ){
+        rv.delegate = delegate;
+        rv.browser = [[NSNetServiceBrowser alloc] init];
+        rv.browser.delegate = rv;
+        rv.pendingServices = @[];
+        rv.services = @[];
+        [rv.browser searchForServicesOfType:@"_remotestash._tcp" inDomain:@""];
+        rv.currentServiceIndex = -1;
     }
-    return self;
+    return rv;
 }
 
 -(void)dealloc{
     [self.browser stop];
 }
 
--(void)netServiceBrowser:(NSNetServiceBrowser*)browser didRemoveService:(nonnull NSNetService *)service moreComing:(BOOL)moreComing{
-    NSMutableArray * newServices = [NSMutableArray array];
-
-    // build new array without removed service
-    for (RemoteStashService * rservice in self.services) {
-        if( ![rservice.service isEqual:service] ){
-            [newServices addObject:rservice];
+-(void)resolvedRemoteStashService:(RemoteStashService *)service{
+    BOOL shouldAdd = true;
+    
+    if( [self.delegate respondsToSelector:@selector(remoteStashClient:shouldAddService:)]){
+        shouldAdd = [self.delegate remoteStashClient:self shouldAddService:service];
+    }
+    if( shouldAdd ){
+        self.services = [self.services arrayByAddingObject:service];
+        if( self.currentServiceIndex == -1 && self.pendingServices.count > 0){
+            self.currentServiceIndex = 0;
+        }
+        if( self.services[self.currentServiceIndex].temporary ){
+            for( NSUInteger i=0;i<self.services.count;++i){
+                if( !self.services[i].temporary ){
+                    self.currentServiceIndex = i;
+                    break;
+                }
+            }
+        }
+        
+        if( [self.delegate respondsToSelector:@selector(remoteStashClient:didAddService:)]){
+            [self.delegate remoteStashClient:self didAddService:service];
         }
     }
-    self.services = newServices;
-    if( self.currentServiceIndex < 0 || self.currentServiceIndex >= self.services.count){
-        self.currentServiceIndex = 0;
-    }
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNewServiceDiscovered object:self.currentService];
-    
-    
 }
 
 -(void)netServiceBrowser:(NSNetServiceBrowser *)browser
           didFindService:(NSNetService *)service
               moreComing:(BOOL)moreComing{
-    self.services = [self.services arrayByAddingObject:[RemoteStashService serviceFor:service]];
-    if( self.currentServiceIndex == -1 && self.services.count > 0){
+    RemoteStashService * toAdd = [RemoteStashService serviceFor:service withDelegate:self];
+    self.pendingServices = [self.pendingServices arrayByAddingObject:toAdd];
+}
+
+-(void)netServiceBrowser:(NSNetServiceBrowser*)browser
+        didRemoveService:(nonnull NSNetService *)service
+              moreComing:(BOOL)moreComing{
+    NSMutableArray * newServices = [NSMutableArray array];
+
+    RemoteStashService * removed = nil;
+    
+    // build new array without removed service
+    for (RemoteStashService * rservice in self.pendingServices) {
+        if( ![rservice.service isEqual:service] ){
+            [newServices addObject:rservice];
+        }else{
+            removed = rservice;
+        }
+    }
+    self.services = newServices;
+    if( self.currentServiceIndex < 0 || self.currentServiceIndex >= self.pendingServices.count){
         self.currentServiceIndex = 0;
     }
+
+    if( removed != nil && [self.delegate respondsToSelector:@selector(remoteStashClient:didRemoteService:)]){
+        [self.delegate remoteStashClient:self didRemoteService:removed];
+    }
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNewServiceDiscovered object:self.currentService];
 }
+
 -(void)selectServiceWithName:(NSString*)name{
-    for (NSUInteger current=0; current<self.services.count; current++) {
-        if( [self.services[current].name isEqualToString:name] ){
+    for (NSUInteger current=0; current<self.pendingServices.count; current++) {
+        if( [self.pendingServices[current].name isEqualToString:name] ){
             self.currentServiceIndex = current;
             break;
         }
@@ -102,7 +139,8 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     self.currentServiceIndex = indexPath.row;
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNewServiceDiscovered object:self];
-    [tableView reloadData];
+    if( [self.delegate respondsToSelector:@selector(remoteStashClient:selectedRemoteService:)]){
+        [self.delegate remoteStashClient:self selectedRemoteService:self.currentService];
+    }
 }
 @end

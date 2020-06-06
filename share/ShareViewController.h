@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <Social/Social.h>
+#import "RemoteStashClient.h"
 
-@interface ShareViewController : SLComposeServiceViewController
+@interface ShareViewController : SLComposeServiceViewController<RemoteStashClientDelegate>
 
 @end
