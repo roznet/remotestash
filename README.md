@@ -70,7 +70,7 @@ The `remotestash` command can run in two mode: a client mode to push or pull inf
 
 You can run `remotestash serve` and this will start a server which will advertise itself on the network. By default it will name itself 'USERNAME RemoteStash', but you can use the option `-n myname` to specify the name to use. You could run the command as a service on your machine or manually from a terminal.
 
-The server will behave like a stack, each item you push will move on top of the previous ones. You cam then `pull` them out, in that case each pull yields the next item until the stack is empty. Or you can ask for the `last` one, in which case each query for `last` returns the same item.
+The server will behave like a stack, each item you push will move on top of the previous ones. You can then `pull` them out, in that case each pull yields the next item until the stack is empty. Or you can ask for the `last` one, in which case each query for `last` returns the same item.
 
 ## Client mode
 
