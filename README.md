@@ -1,4 +1,3 @@
-
 # ![](https://raw.githubusercontent.com/roznet/remotestash/master/remotestash/Assets.xcassets/AppIcon.appiconset/App%20Icon%20-%2060x60%402x.png) RemoteStash
 
 
@@ -10,11 +9,24 @@ It is a simple tool, it is not intended to be fancy and it is open source so hop
 
 It contains a python script to run on the shell and a companion iPhone app. 
 
-# The python script
+# Installation
 
-## Installation
+## remotestash utility
 
-the python script is self contains and can be run from anywhere. It requires python 3 and has a dependency on the zeroconf package which you'll need to install typically using `pip3 install zeroconf`.
+You will need to have a linux or macos computer with [python3](https://www.python.org/) installed and with [zeroconf](https://pypi.org/project/zeroconf/) module available.
+
+On a debian system, it is likely that you will only need to do the following to install both python3, pip3 and zeroconf
+
+```
+sudo apt install python3 python3-pip
+sudo pip3 install zeroconf
+```
+
+
+
+# The Command Line utility
+
+RemoteStash on a computer is used via the command line tool `remotestash`. It is a single python script can be run from anywhere. It requires python 3 and has a dependency on the zeroconf package which you'll need to install typically using `pip3 install zeroconf`.
 
 The `remotestash` command can run in two mode: a client mode to push or pull information to a stash and a server mode that provide a service for clients to pull or push information to
 

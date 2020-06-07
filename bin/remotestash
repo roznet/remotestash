@@ -646,6 +646,10 @@ class Driver :
                                              keyfile = os.path.expanduser( '~/.remotestash/remotestash-key.pem' ),
                                              certfile = os.path.expanduser( '~/.remotestash/remotestash-cert.pem' ),
                                              server_side = True )
+        else:
+            print( f"Couldn't find certificate and key files, please copy the files in the certs directory into ~/.remotestash to continue")
+            exit(0)
+            
         print(f"Starting server as '{name}' on {proto}://{advertiser.ip}:{port}, use <Ctrl-C> to stop")
         try:
             while True:
