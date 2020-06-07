@@ -45,7 +45,7 @@
         }
     }
     
-    if( [self.delegate respondsToSelector:@selector(remoteStashClient:shouldAddService:)]){
+    if( shouldAdd && [self.delegate respondsToSelector:@selector(remoteStashClient:shouldAddService:)]){
         shouldAdd = [self.delegate remoteStashClient:self shouldAddService:service];
     }
     if( shouldAdd ){

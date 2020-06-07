@@ -15,7 +15,9 @@ It contains a python script to run on the shell and a companion iPhone app.
 
 You will need to have a linux or macos computer with [python3](https://www.python.org/) installed and with [zeroconf](https://pypi.org/project/zeroconf/) module available.
 
-On a debian system, it is likely that you will only need to do the following to install both python3, pip3 and zeroconf
+### Linux/Debian
+
+On a debian system, it is you can [install python3](https://docs.python-guide.org/starting/install3/linux/), pip3 and zeroconf as follows:
 
 ```
 sudo apt install python3 python3-pip
@@ -23,6 +25,40 @@ sudo pip3 install zeroconf
 ```
 
 
+You can then also if you want setup your system to automatically have a server running by editing the remotestash.service appriopriately, copying it into `/etc/systemd/system` and running the following
+
+```
+sudo systemctl enable remotestash
+sudo systemctl start remotestash
+```
+
+### Macos
+
+You can [install python3](https://docs.python-guide.org/starting/install3/osx/) using [brew](https://brew.sh) as follows
+
+```
+brew install python3
+pip3 install zeroconf
+```
+
+### Certificate files
+
+In order for the server to work, you will need to copy a certificate and key file to the `~/.remotestash` directory.
+You can also create new ones with the command, assuming the directory `~/.remotestash` exists already:
+
+```
+cd ~/.remotestash
+openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout remotestash-key.pem -out remotestash-cert.pem
+```
+
+## The iOS App
+
+You will need to install the requires pods with [cocoapods](https://cocoapods.org) and open with xcode
+
+```
+pod install
+open remotestash.xcworkspace
+```
 
 # The Command Line utility
 
