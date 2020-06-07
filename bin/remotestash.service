@@ -1,0 +1,22 @@
+#
+# make sure you have setup remotestash once
+# Replace USERNAME as appropriate
+#
+# cp into /etc/systemd/system
+# sudo systemctl enable remotestash.service
+# sudo systemctl restart remotestash.service
+
+[Unit]
+Description=RemoteStash Service
+[Service]
+Type=simple
+PIDFile=/run/remotestash.pid
+ExecStart=/home/USERNAME/bin/remotestash -n 'Server RemoteStash' serve
+User=USERNAME
+Group=USERNAME
+WorkingDirectory=/home/USERNAME/.remotestash
+Restart=always
+RestartSec=10
+#KillMode=mixed
+[Install]
+WantedBy=multi-user.target

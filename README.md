@@ -1,4 +1,6 @@
-# RemoteStash
+
+# ![](https://raw.githubusercontent.com/roznet/remotestash/master/remotestash/Assets.xcassets/AppIcon.appiconset/App%20Icon%20-%2060x60%402x.png) RemoteStash
+
 
 This implement a simple tool to enable sharing of picture or text between a phone and a computer with a shell. It is intended to substitute for AirDrop on a non apple computer, typically linux.
 
