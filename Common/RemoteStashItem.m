@@ -79,15 +79,19 @@
 
 +(void)itemFromExtensionContext:(NSExtensionContext*)extensionContext completion:(void(^)(RemoteStashItem*))completion{
     NSItemProvider * urlProvider = nil;
-    NSItemProvider * jpegProvider = nil;
+    NSItemProvider * imgProvider = nil;
+    NSString * imgType = nil;
     
     for (NSExtensionItem * item in extensionContext.inputItems) {
         for (NSItemProvider * provider in item.attachments) {
             if ([provider hasItemConformingToTypeIdentifier:@"public.url"]) {
                 urlProvider = provider;
             }
-            if( [provider hasItemConformingToTypeIdentifier:@"public.jpeg"]){
-                jpegProvider = provider;
+            for (NSString * typ in @[ @"public.jpeg", @"public.png" ]) {
+                if( [provider hasItemConformingToTypeIdentifier:typ]){
+                    imgProvider = provider;
+                    imgType = typ;
+                }
             }
         }
     }
@@ -96,8 +100,8 @@
         [urlProvider loadItemForTypeIdentifier:@"public.url" options:nil completionHandler:^(NSURL *url, NSError *error) {
             completion([RemoteStashItem itemWithString:url.description]);
         }];
-    }else if (jpegProvider){
-        [jpegProvider loadItemForTypeIdentifier:@"public.jpeg" options:nil completionHandler:^(NSURL * url, NSError * error){
+    }else if (imgProvider){
+        [imgProvider loadItemForTypeIdentifier:imgType options:nil completionHandler:^(NSURL * url, NSError * error){
             UIImage * image = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
             RemoteStashItem * item = [RemoteStashItem itemWithImage:image];
             completion(item);

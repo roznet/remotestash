@@ -153,14 +153,18 @@ class Item:
             self.info[ 'file'] =  filename
         else:
             data = self.as_data()
-            hash = hashlib.sha1(data)
-            self.info[ 'file'] =  hash.hexdigest()
+            if data:
+                hash = hashlib.sha1(data)
+                self.info[ 'file'] =  hash.hexdigest()
 
     def json_dict(self):
         return self.info
     
     def save_to_file(self,location=None):
         self.ensure_filename()
+        if 'file' not in self.info:
+            print( f'No file name' )
+            return
         filename = self.info['file']
         path = filename
         if location:

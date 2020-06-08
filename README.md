@@ -3,7 +3,7 @@
 
 This implement a simple tool to enable sharing of picture or text between a phone and a computer with a shell. It is intended to substitute for AirDrop on a non apple computer, typically linux.
 
-You can read the [background on the tool here](https://ro-z.net/blog/connectstats/how-to-airdrop-to-linux-part-1).
+You can read the [background on the tool here](https://ro-z.net/blog/connectstats/how-to-airdrop-to-linux-part-1) and see a video [demo here](https://www.youtube.com/watch?v=HmIlISPwmMs).
 
 It is a simple tool, it is not intended to be fancy and it is open source so hopefully people can enhance it if needed or it may provide some help about how to put such a simple utility together.
 
