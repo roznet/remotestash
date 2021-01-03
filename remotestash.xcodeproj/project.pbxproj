@@ -29,6 +29,8 @@
 		42C7C195247970E200D1796B /* RemoteStashService.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C7C193247970E200D1796B /* RemoteStashService.m */; };
 		42DB00C124866733008CD97F /* remotestash-cert.pem in Resources */ = {isa = PBXBuildFile; fileRef = 42DB00BF24866733008CD97F /* remotestash-cert.pem */; };
 		42DB00C224866733008CD97F /* remotestash-key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 42DB00C024866733008CD97F /* remotestash-key.pem */; };
+		42EAD31B2520C74200762E38 /* RemoteStashMimeTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EAD31A2520C74200762E38 /* RemoteStashMimeTypes.m */; };
+		42EAD31C2520C74200762E38 /* RemoteStashMimeTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EAD31A2520C74200762E38 /* RemoteStashMimeTypes.m */; };
 		D7A4DC040D055668D23A7A86 /* Pods_remotestash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16F273AE5217395CDFA37CA1 /* Pods_remotestash.framework */; };
 		F033F6957EB778F3AF03531B /* Pods_share.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D793ABDAF6ED51999D1FAAB /* Pods_share.framework */; };
 /* End PBXBuildFile section */
@@ -100,6 +102,8 @@
 		42DB00C024866733008CD97F /* remotestash-key.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "remotestash-key.pem"; sourceTree = "<group>"; };
 		42DB00C62488E53C008CD97F /* RemoteStash.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RemoteStash.entitlements; sourceTree = "<group>"; };
 		42DB00C72488E53C008CD97F /* share.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = share.entitlements; sourceTree = "<group>"; };
+		42EAD3192520C74200762E38 /* RemoteStashMimeTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemoteStashMimeTypes.h; sourceTree = "<group>"; };
+		42EAD31A2520C74200762E38 /* RemoteStashMimeTypes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RemoteStashMimeTypes.m; sourceTree = "<group>"; };
 		5D793ABDAF6ED51999D1FAAB /* Pods_share.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_share.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6052B14A4FB8859A5DFAC90B /* Pods-remotestash.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-remotestash.release.xcconfig"; path = "Target Support Files/Pods-remotestash/Pods-remotestash.release.xcconfig"; sourceTree = "<group>"; };
 		7D2663AE0C799B8406F438A7 /* Pods-remotecopypaste.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-remotecopypaste.debug.xcconfig"; path = "Target Support Files/Pods-remotecopypaste/Pods-remotecopypaste.debug.xcconfig"; sourceTree = "<group>"; };
@@ -157,6 +161,8 @@
 				42C7C193247970E200D1796B /* RemoteStashService.m */,
 				427AA0E22486F1CD00A1ED43 /* RemoteStashItem.h */,
 				427AA0E32486F1CD00A1ED43 /* RemoteStashItem.m */,
+				42EAD3192520C74200762E38 /* RemoteStashMimeTypes.h */,
+				42EAD31A2520C74200762E38 /* RemoteStashMimeTypes.m */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -450,6 +456,7 @@
 				42C7C195247970E200D1796B /* RemoteStashService.m in Sources */,
 				427AA0E52486F1CD00A1ED43 /* RemoteStashItem.m in Sources */,
 				4272F3B9247A610200F9ACC5 /* RemoteStashClient.m in Sources */,
+				42EAD31C2520C74200762E38 /* RemoteStashMimeTypes.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -460,6 +467,7 @@
 				427B79F1246DD7DC005EDEAD /* ViewController.m in Sources */,
 				427B79EB246DD7DC005EDEAD /* AppDelegate.m in Sources */,
 				427AA0E42486F1CD00A1ED43 /* RemoteStashItem.m in Sources */,
+				42EAD31B2520C74200762E38 /* RemoteStashMimeTypes.m in Sources */,
 				42C7C191247829C400D1796B /* RemoteStashClient.m in Sources */,
 				427B79FC246DD7DF005EDEAD /* main.m in Sources */,
 				427B7A12246DD85D005EDEAD /* RemoteStashServer.m in Sources */,

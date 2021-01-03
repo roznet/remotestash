@@ -30,6 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(instancetype)itemFromRequest:(CRRequest*)req andResponse:(CRResponse*)response;
 +(instancetype)itemWithImage:(UIImage*)image;
 +(instancetype)itemWithString:(NSString*)str;
++(instancetype)itemWithFileURL:(NSURL*)url;
 +(instancetype)itemFromPasteBoard:(UIPasteboard*)pasteboard;
 +(void)itemFromExtensionContext:(NSExtensionContext*)extensionContext completion:(void(^)(RemoteStashItem*))completion;
 

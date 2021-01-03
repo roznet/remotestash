@@ -7,6 +7,8 @@
 //
 
 #import "RemoteStashItem.h"
+#import "RemoteStashMimeTypes.h"
+
 @import Criollo;
 
 @interface RemoteStashItem ()
@@ -65,6 +67,20 @@
     return rv;
 }
 
++(instancetype)itemWithFileURL:(NSURL*)url{
+    RemoteStashItem * rv = [[RemoteStashItem alloc] init];
+    if( rv ){
+        NSString * extension = url.pathExtension;
+        NSString * mimetype = [RemoteStashMimeTypes mimeTypeForExtension:extension];
+        if( mimetype ){
+            rv.contentType = mimetype;
+            rv.data = [NSData dataWithContentsOfURL:url];
+        }
+    }
+    return rv;
+    
+}
+
 +(instancetype)itemFromPasteBoard:(UIPasteboard*)pasteboard{
     if ([pasteboard hasStrings]){
         return [RemoteStashItem itemWithString:pasteboard.string];
@@ -80,12 +96,16 @@
 +(void)itemFromExtensionContext:(NSExtensionContext*)extensionContext completion:(void(^)(RemoteStashItem*))completion{
     NSItemProvider * urlProvider = nil;
     NSItemProvider * imgProvider = nil;
+    NSItemProvider * fileProvider = nil;
     NSString * imgType = nil;
     
     for (NSExtensionItem * item in extensionContext.inputItems) {
         for (NSItemProvider * provider in item.attachments) {
             if ([provider hasItemConformingToTypeIdentifier:@"public.url"]) {
                 urlProvider = provider;
+            }
+            if([provider hasItemConformingToTypeIdentifier:@"public.file-url"]){
+                fileProvider = provider;
             }
             for (NSString * typ in @[ @"public.jpeg", @"public.png" ]) {
                 if( [provider hasItemConformingToTypeIdentifier:typ]){
@@ -96,7 +116,7 @@
         }
     }
     
-    if (urlProvider) {
+    if (urlProvider && !fileProvider) {
         [urlProvider loadItemForTypeIdentifier:@"public.url" options:nil completionHandler:^(NSURL *url, NSError *error) {
             completion([RemoteStashItem itemWithString:url.description]);
         }];
@@ -104,6 +124,11 @@
         [imgProvider loadItemForTypeIdentifier:imgType options:nil completionHandler:^(NSURL * url, NSError * error){
             UIImage * image = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
             RemoteStashItem * item = [RemoteStashItem itemWithImage:image];
+            completion(item);
+        }];
+    }else if(fileProvider){
+        [fileProvider loadItemForTypeIdentifier:@"public.file-url" options:nil completionHandler:^(NSURL*url, NSError*error){
+            RemoteStashItem * item = [RemoteStashItem itemWithFileURL:url];
             completion(item);
         }];
     }else{
