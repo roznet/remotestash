@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1150"
+   LastUpgradeVersion = "1240"
    wasCreatedForAppExtension = "YES"
    version = "2.0">
    <BuildAction
@@ -15,7 +15,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "422A24D724719EF600D6C2FB"
+               BlueprintIdentifier = "42E53D3725C80920003AF0D1"
                BuildableName = "share.appex"
                BlueprintName = "share"
                ReferencedContainer = "container:remotestash.xcodeproj">
@@ -29,8 +29,8 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "427B79E5246DD7DC005EDEAD"
-               BuildableName = "RemoteStash.app"
+               BlueprintIdentifier = "42E53CF625C8088C003AF0D1"
+               BuildableName = "remotestash.app"
                BlueprintName = "remotestash"
                ReferencedContainer = "container:remotestash.xcodeproj">
             </BuildableReference>
@@ -61,8 +61,8 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "427B79E5246DD7DC005EDEAD"
-            BuildableName = "RemoteStash.app"
+            BlueprintIdentifier = "42E53CF625C8088C003AF0D1"
+            BuildableName = "remotestash.app"
             BlueprintName = "remotestash"
             ReferencedContainer = "container:remotestash.xcodeproj">
          </BuildableReference>
@@ -79,8 +79,8 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "427B79E5246DD7DC005EDEAD"
-            BuildableName = "RemoteStash.app"
+            BlueprintIdentifier = "42E53CF625C8088C003AF0D1"
+            BuildableName = "remotestash.app"
             BlueprintName = "remotestash"
             ReferencedContainer = "container:remotestash.xcodeproj">
          </BuildableReference>

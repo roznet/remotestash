@@ -7,57 +7,71 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		422A24DC24719EF600D6C2FB /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 422A24DB24719EF600D6C2FB /* ShareViewController.m */; };
-		422A24DF24719EF600D6C2FB /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 422A24DD24719EF600D6C2FB /* MainInterface.storyboard */; };
-		422A24E324719EF600D6C2FB /* share.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 422A24D824719EF600D6C2FB /* share.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		4272F3B9247A610200F9ACC5 /* RemoteStashClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C7C190247829C400D1796B /* RemoteStashClient.m */; };
-		427AA0E42486F1CD00A1ED43 /* RemoteStashItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 427AA0E32486F1CD00A1ED43 /* RemoteStashItem.m */; };
-		427AA0E52486F1CD00A1ED43 /* RemoteStashItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 427AA0E32486F1CD00A1ED43 /* RemoteStashItem.m */; };
-		427B79EB246DD7DC005EDEAD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 427B79EA246DD7DC005EDEAD /* AppDelegate.m */; };
-		427B79EE246DD7DC005EDEAD /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 427B79ED246DD7DC005EDEAD /* SceneDelegate.m */; };
-		427B79F1246DD7DC005EDEAD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 427B79F0246DD7DC005EDEAD /* ViewController.m */; };
-		427B79F4246DD7DC005EDEAD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 427B79F2246DD7DC005EDEAD /* Main.storyboard */; };
-		427B79F6246DD7DF005EDEAD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 427B79F5246DD7DF005EDEAD /* Assets.xcassets */; };
-		427B79F9246DD7DF005EDEAD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 427B79F7246DD7DF005EDEAD /* LaunchScreen.storyboard */; };
-		427B79FC246DD7DF005EDEAD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 427B79FB246DD7DF005EDEAD /* main.m */; };
-		427B7A06246DD7DF005EDEAD /* remotestashTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 427B7A05246DD7DF005EDEAD /* remotestashTests.m */; };
-		427B7A12246DD85D005EDEAD /* RemoteStashServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 427B7A11246DD85D005EDEAD /* RemoteStashServer.m */; };
-		42B94369248BF91D00A4BD4C /* remotestash-cert.pem in Resources */ = {isa = PBXBuildFile; fileRef = 42DB00BF24866733008CD97F /* remotestash-cert.pem */; };
-		42B9436A248BF91D00A4BD4C /* remotestash-key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 42DB00C024866733008CD97F /* remotestash-key.pem */; };
-		42C7C191247829C400D1796B /* RemoteStashClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C7C190247829C400D1796B /* RemoteStashClient.m */; };
-		42C7C194247970E200D1796B /* RemoteStashService.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C7C193247970E200D1796B /* RemoteStashService.m */; };
-		42C7C195247970E200D1796B /* RemoteStashService.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C7C193247970E200D1796B /* RemoteStashService.m */; };
-		42DB00C124866733008CD97F /* remotestash-cert.pem in Resources */ = {isa = PBXBuildFile; fileRef = 42DB00BF24866733008CD97F /* remotestash-cert.pem */; };
-		42DB00C224866733008CD97F /* remotestash-key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 42DB00C024866733008CD97F /* remotestash-key.pem */; };
-		D7A4DC040D055668D23A7A86 /* Pods_remotestash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16F273AE5217395CDFA37CA1 /* Pods_remotestash.framework */; };
-		F033F6957EB778F3AF03531B /* Pods_share.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D793ABDAF6ED51999D1FAAB /* Pods_share.framework */; };
+		42E53CFB25C8088C003AF0D1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53CFA25C8088C003AF0D1 /* AppDelegate.swift */; };
+		42E53CFD25C8088C003AF0D1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53CFC25C8088C003AF0D1 /* SceneDelegate.swift */; };
+		42E53CFF25C8088C003AF0D1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53CFE25C8088C003AF0D1 /* ViewController.swift */; };
+		42E53D0225C8088C003AF0D1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42E53D0025C8088C003AF0D1 /* Main.storyboard */; };
+		42E53D0425C8088C003AF0D1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42E53D0325C8088C003AF0D1 /* Assets.xcassets */; };
+		42E53D0725C8088C003AF0D1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42E53D0525C8088C003AF0D1 /* LaunchScreen.storyboard */; };
+		42E53D1225C8088C003AF0D1 /* remotestashTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53D1125C8088C003AF0D1 /* remotestashTests.swift */; };
+		42E53D1D25C8088D003AF0D1 /* remotestashUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53D1C25C8088D003AF0D1 /* remotestashUITests.swift */; };
+		42E53D3B25C80920003AF0D1 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53D3A25C80920003AF0D1 /* ShareViewController.swift */; };
+		42E53D3E25C80920003AF0D1 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42E53D3C25C80920003AF0D1 /* MainInterface.storyboard */; };
+		42E53D4225C80920003AF0D1 /* share.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 42E53D3825C80920003AF0D1 /* share.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		42E53DB525C8104C003AF0D1 /* RemoteStashClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53DAF25C8104C003AF0D1 /* RemoteStashClient.swift */; };
+		42E53DB625C8104C003AF0D1 /* RemoteStashClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53DAF25C8104C003AF0D1 /* RemoteStashClient.swift */; };
+		42E53DB725C8104C003AF0D1 /* RemoteStashItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53DB025C8104C003AF0D1 /* RemoteStashItem.swift */; };
+		42E53DB825C8104C003AF0D1 /* RemoteStashItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53DB025C8104C003AF0D1 /* RemoteStashItem.swift */; };
+		42E53DB925C8104C003AF0D1 /* RemoteStashMimeTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53DB125C8104C003AF0D1 /* RemoteStashMimeTypes.swift */; };
+		42E53DBA25C8104C003AF0D1 /* RemoteStashMimeTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53DB125C8104C003AF0D1 /* RemoteStashMimeTypes.swift */; };
+		42E53DBB25C8104C003AF0D1 /* RemoteStashService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53DB225C8104C003AF0D1 /* RemoteStashService.swift */; };
+		42E53DBC25C8104C003AF0D1 /* RemoteStashService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53DB225C8104C003AF0D1 /* RemoteStashService.swift */; };
+		42E53DBD25C8104C003AF0D1 /* AddressAndPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53DB325C8104C003AF0D1 /* AddressAndPort.swift */; };
+		42E53DBE25C8104C003AF0D1 /* AddressAndPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53DB325C8104C003AF0D1 /* AddressAndPort.swift */; };
+		42E53DBF25C8104C003AF0D1 /* RemoteStashServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53DB425C8104C003AF0D1 /* RemoteStashServer.swift */; };
+		42E53DC025C8104C003AF0D1 /* RemoteStashServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53DB425C8104C003AF0D1 /* RemoteStashServer.swift */; };
+		42E53DCC25C81B7E003AF0D1 /* remotestash-cert.pem in Resources */ = {isa = PBXBuildFile; fileRef = 42E53DCA25C81B7E003AF0D1 /* remotestash-cert.pem */; };
+		42E53DCD25C81B7E003AF0D1 /* remotestash-cert.pem in Resources */ = {isa = PBXBuildFile; fileRef = 42E53DCA25C81B7E003AF0D1 /* remotestash-cert.pem */; };
+		42E53DCE25C81B7E003AF0D1 /* remotestash-key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 42E53DCB25C81B7E003AF0D1 /* remotestash-key.pem */; };
+		42E53DCF25C81B7E003AF0D1 /* remotestash-key.pem in Resources */ = {isa = PBXBuildFile; fileRef = 42E53DCB25C81B7E003AF0D1 /* remotestash-key.pem */; };
+		42E53DD925C8412F003AF0D1 /* remotestash-cert.der in Resources */ = {isa = PBXBuildFile; fileRef = 42E53DD825C8412F003AF0D1 /* remotestash-cert.der */; };
+		42E53DDA25C8412F003AF0D1 /* remotestash-cert.der in Resources */ = {isa = PBXBuildFile; fileRef = 42E53DD825C8412F003AF0D1 /* remotestash-cert.der */; };
+		89E3F8EBE096C9DD84C37A56 /* Pods_share.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B5B8016BBD25A95999EAE51 /* Pods_share.framework */; };
+		F6DFA1699D93B4AFE6FBDC02 /* Pods_remotestash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6A8FDDC05A29B75E81C925B /* Pods_remotestash.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		422A24E124719EF600D6C2FB /* PBXContainerItemProxy */ = {
+		42E53D0E25C8088C003AF0D1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 427B79DE246DD7DC005EDEAD /* Project object */;
+			containerPortal = 42E53CEF25C8088C003AF0D1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 422A24D724719EF600D6C2FB;
-			remoteInfo = share;
+			remoteGlobalIDString = 42E53CF625C8088C003AF0D1;
+			remoteInfo = remotestash;
 		};
-		427B7A02246DD7DF005EDEAD /* PBXContainerItemProxy */ = {
+		42E53D1925C8088D003AF0D1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 427B79DE246DD7DC005EDEAD /* Project object */;
+			containerPortal = 42E53CEF25C8088C003AF0D1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 427B79E5246DD7DC005EDEAD;
-			remoteInfo = remotecopypaste;
+			remoteGlobalIDString = 42E53CF625C8088C003AF0D1;
+			remoteInfo = remotestash;
+		};
+		42E53D4025C80920003AF0D1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 42E53CEF25C8088C003AF0D1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 42E53D3725C80920003AF0D1;
+			remoteInfo = share;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		422A24E724719EF600D6C2FB /* Embed App Extensions */ = {
+		42E53D4325C80920003AF0D1 /* Embed App Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				422A24E324719EF600D6C2FB /* share.appex in Embed App Extensions */,
+				42E53D4225C80920003AF0D1 /* share.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -65,181 +79,183 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0B96F1FCE7DAF8480A49CD14 /* Pods-share.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-share.release.xcconfig"; path = "Target Support Files/Pods-share/Pods-share.release.xcconfig"; sourceTree = "<group>"; };
-		16F273AE5217395CDFA37CA1 /* Pods_remotestash.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_remotestash.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		171254AFA872CDF0841670DC /* Pods-remotestash.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-remotestash.debug.xcconfig"; path = "Target Support Files/Pods-remotestash/Pods-remotestash.debug.xcconfig"; sourceTree = "<group>"; };
-		422A24D824719EF600D6C2FB /* share.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = share.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		422A24DA24719EF600D6C2FB /* ShareViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareViewController.h; sourceTree = "<group>"; };
-		422A24DB24719EF600D6C2FB /* ShareViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareViewController.m; sourceTree = "<group>"; };
-		422A24DE24719EF600D6C2FB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
-		422A24E024719EF600D6C2FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		427AA0E22486F1CD00A1ED43 /* RemoteStashItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemoteStashItem.h; sourceTree = "<group>"; };
-		427AA0E32486F1CD00A1ED43 /* RemoteStashItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RemoteStashItem.m; sourceTree = "<group>"; };
-		427B79E6246DD7DC005EDEAD /* RemoteStash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RemoteStash.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		427B79E9246DD7DC005EDEAD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		427B79EA246DD7DC005EDEAD /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		427B79EC246DD7DC005EDEAD /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
-		427B79ED246DD7DC005EDEAD /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
-		427B79EF246DD7DC005EDEAD /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		427B79F0246DD7DC005EDEAD /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		427B79F3246DD7DC005EDEAD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		427B79F5246DD7DF005EDEAD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		427B79F8246DD7DF005EDEAD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		427B79FA246DD7DF005EDEAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		427B79FB246DD7DF005EDEAD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		427B7A01246DD7DF005EDEAD /* remotestashTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = remotestashTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		427B7A05246DD7DF005EDEAD /* remotestashTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = remotestashTests.m; sourceTree = "<group>"; };
-		427B7A07246DD7DF005EDEAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		427B7A10246DD85D005EDEAD /* RemoteStashServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemoteStashServer.h; sourceTree = "<group>"; };
-		427B7A11246DD85D005EDEAD /* RemoteStashServer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RemoteStashServer.m; sourceTree = "<group>"; };
-		42C7C18F247829C400D1796B /* RemoteStashClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemoteStashClient.h; sourceTree = "<group>"; };
-		42C7C190247829C400D1796B /* RemoteStashClient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RemoteStashClient.m; sourceTree = "<group>"; };
-		42C7C192247970E200D1796B /* RemoteStashService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemoteStashService.h; sourceTree = "<group>"; };
-		42C7C193247970E200D1796B /* RemoteStashService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RemoteStashService.m; sourceTree = "<group>"; };
-		42DB00BF24866733008CD97F /* remotestash-cert.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "remotestash-cert.pem"; sourceTree = "<group>"; };
-		42DB00C024866733008CD97F /* remotestash-key.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "remotestash-key.pem"; sourceTree = "<group>"; };
-		42DB00C62488E53C008CD97F /* RemoteStash.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RemoteStash.entitlements; sourceTree = "<group>"; };
-		42DB00C72488E53C008CD97F /* share.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = share.entitlements; sourceTree = "<group>"; };
-		5D793ABDAF6ED51999D1FAAB /* Pods_share.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_share.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6052B14A4FB8859A5DFAC90B /* Pods-remotestash.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-remotestash.release.xcconfig"; path = "Target Support Files/Pods-remotestash/Pods-remotestash.release.xcconfig"; sourceTree = "<group>"; };
-		7D2663AE0C799B8406F438A7 /* Pods-remotecopypaste.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-remotecopypaste.debug.xcconfig"; path = "Target Support Files/Pods-remotecopypaste/Pods-remotecopypaste.debug.xcconfig"; sourceTree = "<group>"; };
-		90899324441432E82DFCB509 /* Pods-share.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-share.debug.xcconfig"; path = "Target Support Files/Pods-share/Pods-share.debug.xcconfig"; sourceTree = "<group>"; };
-		E058E765D4F7EFD330B88913 /* Pods-remotecopypaste.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-remotecopypaste.release.xcconfig"; path = "Target Support Files/Pods-remotecopypaste/Pods-remotecopypaste.release.xcconfig"; sourceTree = "<group>"; };
+		0B5B8016BBD25A95999EAE51 /* Pods_share.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_share.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		335EC68A5EF1F2A030B7A2C3 /* Pods-remotestash.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-remotestash.debug.xcconfig"; path = "Target Support Files/Pods-remotestash/Pods-remotestash.debug.xcconfig"; sourceTree = "<group>"; };
+		42E53CF725C8088C003AF0D1 /* remotestash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = remotestash.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		42E53CFA25C8088C003AF0D1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		42E53CFC25C8088C003AF0D1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		42E53CFE25C8088C003AF0D1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		42E53D0125C8088C003AF0D1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		42E53D0325C8088C003AF0D1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		42E53D0625C8088C003AF0D1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		42E53D0825C8088C003AF0D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		42E53D0D25C8088C003AF0D1 /* remotestashTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = remotestashTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		42E53D1125C8088C003AF0D1 /* remotestashTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = remotestashTests.swift; sourceTree = "<group>"; };
+		42E53D1325C8088C003AF0D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		42E53D1825C8088C003AF0D1 /* remotestashUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = remotestashUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		42E53D1C25C8088D003AF0D1 /* remotestashUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = remotestashUITests.swift; sourceTree = "<group>"; };
+		42E53D1E25C8088D003AF0D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		42E53D3825C80920003AF0D1 /* share.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = share.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		42E53D3A25C80920003AF0D1 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		42E53D3D25C80920003AF0D1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		42E53D3F25C80920003AF0D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		42E53DAF25C8104C003AF0D1 /* RemoteStashClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteStashClient.swift; sourceTree = "<group>"; };
+		42E53DB025C8104C003AF0D1 /* RemoteStashItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteStashItem.swift; sourceTree = "<group>"; };
+		42E53DB125C8104C003AF0D1 /* RemoteStashMimeTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteStashMimeTypes.swift; sourceTree = "<group>"; };
+		42E53DB225C8104C003AF0D1 /* RemoteStashService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteStashService.swift; sourceTree = "<group>"; };
+		42E53DB325C8104C003AF0D1 /* AddressAndPort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressAndPort.swift; sourceTree = "<group>"; };
+		42E53DB425C8104C003AF0D1 /* RemoteStashServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteStashServer.swift; sourceTree = "<group>"; };
+		42E53DCA25C81B7E003AF0D1 /* remotestash-cert.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "remotestash-cert.pem"; sourceTree = "<group>"; };
+		42E53DCB25C81B7E003AF0D1 /* remotestash-key.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "remotestash-key.pem"; sourceTree = "<group>"; };
+		42E53DD825C8412F003AF0D1 /* remotestash-cert.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = "remotestash-cert.der"; sourceTree = "<group>"; };
+		78120DDAEE39F4F7B8D0BD2D /* Pods-remotestash.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-remotestash.release.xcconfig"; path = "Target Support Files/Pods-remotestash/Pods-remotestash.release.xcconfig"; sourceTree = "<group>"; };
+		7E9ADD8C9DEFA8ADF9030874 /* Pods-share.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-share.release.xcconfig"; path = "Target Support Files/Pods-share/Pods-share.release.xcconfig"; sourceTree = "<group>"; };
+		D9E02F13FC119D4B16320415 /* Pods-share.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-share.debug.xcconfig"; path = "Target Support Files/Pods-share/Pods-share.debug.xcconfig"; sourceTree = "<group>"; };
+		F6A8FDDC05A29B75E81C925B /* Pods_remotestash.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_remotestash.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		422A24D524719EF600D6C2FB /* Frameworks */ = {
+		42E53CF425C8088C003AF0D1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F033F6957EB778F3AF03531B /* Pods_share.framework in Frameworks */,
+				F6DFA1699D93B4AFE6FBDC02 /* Pods_remotestash.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		427B79E3246DD7DC005EDEAD /* Frameworks */ = {
+		42E53D0A25C8088C003AF0D1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D7A4DC040D055668D23A7A86 /* Pods_remotestash.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		427B79FE246DD7DF005EDEAD /* Frameworks */ = {
+		42E53D1525C8088C003AF0D1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42E53D3525C80920003AF0D1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89E3F8EBE096C9DD84C37A56 /* Pods_share.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		422A24D924719EF600D6C2FB /* share */ = {
+		42E53CEE25C8088C003AF0D1 = {
 			isa = PBXGroup;
 			children = (
-				42DB00C72488E53C008CD97F /* share.entitlements */,
-				422A24DA24719EF600D6C2FB /* ShareViewController.h */,
-				422A24DB24719EF600D6C2FB /* ShareViewController.m */,
-				422A24DD24719EF600D6C2FB /* MainInterface.storyboard */,
-				422A24E024719EF600D6C2FB /* Info.plist */,
-			);
-			path = share;
-			sourceTree = "<group>";
-		};
-		4272F3BA247A649600F9ACC5 /* Common */ = {
-			isa = PBXGroup;
-			children = (
-				427B7A10246DD85D005EDEAD /* RemoteStashServer.h */,
-				427B7A11246DD85D005EDEAD /* RemoteStashServer.m */,
-				42C7C18F247829C400D1796B /* RemoteStashClient.h */,
-				42C7C190247829C400D1796B /* RemoteStashClient.m */,
-				42C7C192247970E200D1796B /* RemoteStashService.h */,
-				42C7C193247970E200D1796B /* RemoteStashService.m */,
-				427AA0E22486F1CD00A1ED43 /* RemoteStashItem.h */,
-				427AA0E32486F1CD00A1ED43 /* RemoteStashItem.m */,
-			);
-			path = Common;
-			sourceTree = "<group>";
-		};
-		427B79DD246DD7DC005EDEAD = {
-			isa = PBXGroup;
-			children = (
-				42DB00BE24866733008CD97F /* certs */,
-				4272F3BA247A649600F9ACC5 /* Common */,
-				427B79E8246DD7DC005EDEAD /* remotestash */,
-				427B7A04246DD7DF005EDEAD /* remotestashTests */,
-				422A24D924719EF600D6C2FB /* share */,
-				427B79E7246DD7DC005EDEAD /* Products */,
-				462BCC907395DCAD5B535D80 /* Pods */,
-				98E5223D4951DFBE4799836D /* Frameworks */,
+				42E53DC925C81B7E003AF0D1 /* certs */,
+				42E53DAE25C8104C003AF0D1 /* Common */,
+				42E53CF925C8088C003AF0D1 /* remotestash */,
+				42E53D1025C8088C003AF0D1 /* remotestashTests */,
+				42E53D1B25C8088D003AF0D1 /* remotestashUITests */,
+				42E53D3925C80920003AF0D1 /* share */,
+				42E53CF825C8088C003AF0D1 /* Products */,
+				90A89DFDA19DAB24B4FD5B92 /* Pods */,
+				BDF8CFE6858FAAD5F83A09C4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
-		427B79E7246DD7DC005EDEAD /* Products */ = {
+		42E53CF825C8088C003AF0D1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				427B79E6246DD7DC005EDEAD /* RemoteStash.app */,
-				427B7A01246DD7DF005EDEAD /* remotestashTests.xctest */,
-				422A24D824719EF600D6C2FB /* share.appex */,
+				42E53CF725C8088C003AF0D1 /* remotestash.app */,
+				42E53D0D25C8088C003AF0D1 /* remotestashTests.xctest */,
+				42E53D1825C8088C003AF0D1 /* remotestashUITests.xctest */,
+				42E53D3825C80920003AF0D1 /* share.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		427B79E8246DD7DC005EDEAD /* remotestash */ = {
+		42E53CF925C8088C003AF0D1 /* remotestash */ = {
 			isa = PBXGroup;
 			children = (
-				42DB00C62488E53C008CD97F /* RemoteStash.entitlements */,
-				427B79E9246DD7DC005EDEAD /* AppDelegate.h */,
-				427B79EA246DD7DC005EDEAD /* AppDelegate.m */,
-				427B79EC246DD7DC005EDEAD /* SceneDelegate.h */,
-				427B79ED246DD7DC005EDEAD /* SceneDelegate.m */,
-				427B79EF246DD7DC005EDEAD /* ViewController.h */,
-				427B79F0246DD7DC005EDEAD /* ViewController.m */,
-				427B79F2246DD7DC005EDEAD /* Main.storyboard */,
-				427B79F5246DD7DF005EDEAD /* Assets.xcassets */,
-				427B79F7246DD7DF005EDEAD /* LaunchScreen.storyboard */,
-				427B79FA246DD7DF005EDEAD /* Info.plist */,
-				427B79FB246DD7DF005EDEAD /* main.m */,
+				42E53CFA25C8088C003AF0D1 /* AppDelegate.swift */,
+				42E53CFC25C8088C003AF0D1 /* SceneDelegate.swift */,
+				42E53CFE25C8088C003AF0D1 /* ViewController.swift */,
+				42E53D0025C8088C003AF0D1 /* Main.storyboard */,
+				42E53D0325C8088C003AF0D1 /* Assets.xcassets */,
+				42E53D0525C8088C003AF0D1 /* LaunchScreen.storyboard */,
+				42E53D0825C8088C003AF0D1 /* Info.plist */,
 			);
 			path = remotestash;
 			sourceTree = "<group>";
 		};
-		427B7A04246DD7DF005EDEAD /* remotestashTests */ = {
+		42E53D1025C8088C003AF0D1 /* remotestashTests */ = {
 			isa = PBXGroup;
 			children = (
-				427B7A05246DD7DF005EDEAD /* remotestashTests.m */,
-				427B7A07246DD7DF005EDEAD /* Info.plist */,
+				42E53D1125C8088C003AF0D1 /* remotestashTests.swift */,
+				42E53D1325C8088C003AF0D1 /* Info.plist */,
 			);
 			path = remotestashTests;
 			sourceTree = "<group>";
 		};
-		42DB00BE24866733008CD97F /* certs */ = {
+		42E53D1B25C8088D003AF0D1 /* remotestashUITests */ = {
 			isa = PBXGroup;
 			children = (
-				42DB00BF24866733008CD97F /* remotestash-cert.pem */,
-				42DB00C024866733008CD97F /* remotestash-key.pem */,
+				42E53D1C25C8088D003AF0D1 /* remotestashUITests.swift */,
+				42E53D1E25C8088D003AF0D1 /* Info.plist */,
+			);
+			path = remotestashUITests;
+			sourceTree = "<group>";
+		};
+		42E53D3925C80920003AF0D1 /* share */ = {
+			isa = PBXGroup;
+			children = (
+				42E53D3A25C80920003AF0D1 /* ShareViewController.swift */,
+				42E53D3C25C80920003AF0D1 /* MainInterface.storyboard */,
+				42E53D3F25C80920003AF0D1 /* Info.plist */,
+			);
+			path = share;
+			sourceTree = "<group>";
+		};
+		42E53DAE25C8104C003AF0D1 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				42E53DB025C8104C003AF0D1 /* RemoteStashItem.swift */,
+				42E53DB225C8104C003AF0D1 /* RemoteStashService.swift */,
+				42E53DAF25C8104C003AF0D1 /* RemoteStashClient.swift */,
+				42E53DB425C8104C003AF0D1 /* RemoteStashServer.swift */,
+				42E53DB125C8104C003AF0D1 /* RemoteStashMimeTypes.swift */,
+				42E53DB325C8104C003AF0D1 /* AddressAndPort.swift */,
+			);
+			name = Common;
+			path = Sources/Common;
+			sourceTree = "<group>";
+		};
+		42E53DC925C81B7E003AF0D1 /* certs */ = {
+			isa = PBXGroup;
+			children = (
+				42E53DD825C8412F003AF0D1 /* remotestash-cert.der */,
+				42E53DCA25C81B7E003AF0D1 /* remotestash-cert.pem */,
+				42E53DCB25C81B7E003AF0D1 /* remotestash-key.pem */,
 			);
 			path = certs;
 			sourceTree = "<group>";
 		};
-		462BCC907395DCAD5B535D80 /* Pods */ = {
+		90A89DFDA19DAB24B4FD5B92 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				7D2663AE0C799B8406F438A7 /* Pods-remotecopypaste.debug.xcconfig */,
-				E058E765D4F7EFD330B88913 /* Pods-remotecopypaste.release.xcconfig */,
-				171254AFA872CDF0841670DC /* Pods-remotestash.debug.xcconfig */,
-				6052B14A4FB8859A5DFAC90B /* Pods-remotestash.release.xcconfig */,
-				90899324441432E82DFCB509 /* Pods-share.debug.xcconfig */,
-				0B96F1FCE7DAF8480A49CD14 /* Pods-share.release.xcconfig */,
+				335EC68A5EF1F2A030B7A2C3 /* Pods-remotestash.debug.xcconfig */,
+				78120DDAEE39F4F7B8D0BD2D /* Pods-remotestash.release.xcconfig */,
+				D9E02F13FC119D4B16320415 /* Pods-share.debug.xcconfig */,
+				7E9ADD8C9DEFA8ADF9030874 /* Pods-share.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		98E5223D4951DFBE4799836D /* Frameworks */ = {
+		BDF8CFE6858FAAD5F83A09C4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				16F273AE5217395CDFA37CA1 /* Pods_remotestash.framework */,
-				5D793ABDAF6ED51999D1FAAB /* Pods_share.framework */,
+				F6A8FDDC05A29B75E81C925B /* Pods_remotestash.framework */,
+				0B5B8016BBD25A95999EAE51 /* Pods_share.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -247,14 +263,71 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		422A24D724719EF600D6C2FB /* share */ = {
+		42E53CF625C8088C003AF0D1 /* remotestash */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 422A24E424719EF600D6C2FB /* Build configuration list for PBXNativeTarget "share" */;
+			buildConfigurationList = 42E53D2125C8088D003AF0D1 /* Build configuration list for PBXNativeTarget "remotestash" */;
 			buildPhases = (
-				11D862D2367F6EDCEAC89140 /* [CP] Check Pods Manifest.lock */,
-				422A24D424719EF600D6C2FB /* Sources */,
-				422A24D524719EF600D6C2FB /* Frameworks */,
-				422A24D624719EF600D6C2FB /* Resources */,
+				6877690E71A8A4F91A3A95EF /* [CP] Check Pods Manifest.lock */,
+				42E53CF325C8088C003AF0D1 /* Sources */,
+				42E53CF425C8088C003AF0D1 /* Frameworks */,
+				42E53CF525C8088C003AF0D1 /* Resources */,
+				42E53D4325C80920003AF0D1 /* Embed App Extensions */,
+				6DFD637FE333E596FEF99CDF /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				42E53D4125C80920003AF0D1 /* PBXTargetDependency */,
+			);
+			name = remotestash;
+			productName = remotestash;
+			productReference = 42E53CF725C8088C003AF0D1 /* remotestash.app */;
+			productType = "com.apple.product-type.application";
+		};
+		42E53D0C25C8088C003AF0D1 /* remotestashTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 42E53D2425C8088D003AF0D1 /* Build configuration list for PBXNativeTarget "remotestashTests" */;
+			buildPhases = (
+				42E53D0925C8088C003AF0D1 /* Sources */,
+				42E53D0A25C8088C003AF0D1 /* Frameworks */,
+				42E53D0B25C8088C003AF0D1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				42E53D0F25C8088C003AF0D1 /* PBXTargetDependency */,
+			);
+			name = remotestashTests;
+			productName = remotestashTests;
+			productReference = 42E53D0D25C8088C003AF0D1 /* remotestashTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		42E53D1725C8088C003AF0D1 /* remotestashUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 42E53D2725C8088D003AF0D1 /* Build configuration list for PBXNativeTarget "remotestashUITests" */;
+			buildPhases = (
+				42E53D1425C8088C003AF0D1 /* Sources */,
+				42E53D1525C8088C003AF0D1 /* Frameworks */,
+				42E53D1625C8088C003AF0D1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				42E53D1A25C8088D003AF0D1 /* PBXTargetDependency */,
+			);
+			name = remotestashUITests;
+			productName = remotestashUITests;
+			productReference = 42E53D1825C8088C003AF0D1 /* remotestashUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		42E53D3725C80920003AF0D1 /* share */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 42E53D4625C80920003AF0D1 /* Build configuration list for PBXNativeTarget "share" */;
+			buildPhases = (
+				AC6BB6E8197EAE792978A4D3 /* [CP] Check Pods Manifest.lock */,
+				42E53D3425C80920003AF0D1 /* Sources */,
+				42E53D3525C80920003AF0D1 /* Frameworks */,
+				42E53D3625C80920003AF0D1 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -262,70 +335,35 @@
 			);
 			name = share;
 			productName = share;
-			productReference = 422A24D824719EF600D6C2FB /* share.appex */;
+			productReference = 42E53D3825C80920003AF0D1 /* share.appex */;
 			productType = "com.apple.product-type.app-extension";
-		};
-		427B79E5246DD7DC005EDEAD /* remotestash */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 427B7A0A246DD7DF005EDEAD /* Build configuration list for PBXNativeTarget "remotestash" */;
-			buildPhases = (
-				6E08BB08CB98D4DDD2326DFA /* [CP] Check Pods Manifest.lock */,
-				427B79E2246DD7DC005EDEAD /* Sources */,
-				427B79E3246DD7DC005EDEAD /* Frameworks */,
-				427B79E4246DD7DC005EDEAD /* Resources */,
-				08DEC9A919E220418674825E /* [CP] Embed Pods Frameworks */,
-				422A24E724719EF600D6C2FB /* Embed App Extensions */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				422A24E224719EF600D6C2FB /* PBXTargetDependency */,
-			);
-			name = remotestash;
-			productName = remotecopypaste;
-			productReference = 427B79E6246DD7DC005EDEAD /* RemoteStash.app */;
-			productType = "com.apple.product-type.application";
-		};
-		427B7A00246DD7DF005EDEAD /* remotestashTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 427B7A0D246DD7DF005EDEAD /* Build configuration list for PBXNativeTarget "remotestashTests" */;
-			buildPhases = (
-				427B79FD246DD7DF005EDEAD /* Sources */,
-				427B79FE246DD7DF005EDEAD /* Frameworks */,
-				427B79FF246DD7DF005EDEAD /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				427B7A03246DD7DF005EDEAD /* PBXTargetDependency */,
-			);
-			name = remotestashTests;
-			productName = remotecopypasteTests;
-			productReference = 427B7A01246DD7DF005EDEAD /* remotestashTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		427B79DE246DD7DC005EDEAD /* Project object */ = {
+		42E53CEF25C8088C003AF0D1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1140;
-				ORGANIZATIONNAME = "Brice Rosenzweig";
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
 				TargetAttributes = {
-					422A24D724719EF600D6C2FB = {
-						CreatedOnToolsVersion = 11.4.1;
+					42E53CF625C8088C003AF0D1 = {
+						CreatedOnToolsVersion = 12.4;
 					};
-					427B79E5246DD7DC005EDEAD = {
-						CreatedOnToolsVersion = 11.4.1;
+					42E53D0C25C8088C003AF0D1 = {
+						CreatedOnToolsVersion = 12.4;
+						TestTargetID = 42E53CF625C8088C003AF0D1;
 					};
-					427B7A00246DD7DF005EDEAD = {
-						CreatedOnToolsVersion = 11.4.1;
-						TestTargetID = 427B79E5246DD7DC005EDEAD;
+					42E53D1725C8088C003AF0D1 = {
+						CreatedOnToolsVersion = 12.4;
+						TestTargetID = 42E53CF625C8088C003AF0D1;
+					};
+					42E53D3725C80920003AF0D1 = {
+						CreatedOnToolsVersion = 12.4;
 					};
 				};
 			};
-			buildConfigurationList = 427B79E1246DD7DC005EDEAD /* Build configuration list for PBXProject "remotestash" */;
+			buildConfigurationList = 42E53CF225C8088C003AF0D1 /* Build configuration list for PBXProject "remotestash" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -333,91 +371,62 @@
 				en,
 				Base,
 			);
-			mainGroup = 427B79DD246DD7DC005EDEAD;
-			productRefGroup = 427B79E7246DD7DC005EDEAD /* Products */;
+			mainGroup = 42E53CEE25C8088C003AF0D1;
+			productRefGroup = 42E53CF825C8088C003AF0D1 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				427B79E5246DD7DC005EDEAD /* remotestash */,
-				427B7A00246DD7DF005EDEAD /* remotestashTests */,
-				422A24D724719EF600D6C2FB /* share */,
+				42E53CF625C8088C003AF0D1 /* remotestash */,
+				42E53D0C25C8088C003AF0D1 /* remotestashTests */,
+				42E53D1725C8088C003AF0D1 /* remotestashUITests */,
+				42E53D3725C80920003AF0D1 /* share */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		422A24D624719EF600D6C2FB /* Resources */ = {
+		42E53CF525C8088C003AF0D1 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42B9436A248BF91D00A4BD4C /* remotestash-key.pem in Resources */,
-				42B94369248BF91D00A4BD4C /* remotestash-cert.pem in Resources */,
-				422A24DF24719EF600D6C2FB /* MainInterface.storyboard in Resources */,
+				42E53D0725C8088C003AF0D1 /* LaunchScreen.storyboard in Resources */,
+				42E53DD925C8412F003AF0D1 /* remotestash-cert.der in Resources */,
+				42E53D0425C8088C003AF0D1 /* Assets.xcassets in Resources */,
+				42E53DCC25C81B7E003AF0D1 /* remotestash-cert.pem in Resources */,
+				42E53D0225C8088C003AF0D1 /* Main.storyboard in Resources */,
+				42E53DCE25C81B7E003AF0D1 /* remotestash-key.pem in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		427B79E4246DD7DC005EDEAD /* Resources */ = {
+		42E53D0B25C8088C003AF0D1 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				427B79F9246DD7DF005EDEAD /* LaunchScreen.storyboard in Resources */,
-				42DB00C224866733008CD97F /* remotestash-key.pem in Resources */,
-				427B79F6246DD7DF005EDEAD /* Assets.xcassets in Resources */,
-				42DB00C124866733008CD97F /* remotestash-cert.pem in Resources */,
-				427B79F4246DD7DC005EDEAD /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		427B79FF246DD7DF005EDEAD /* Resources */ = {
+		42E53D1625C8088C003AF0D1 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42E53D3625C80920003AF0D1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				42E53DCF25C81B7E003AF0D1 /* remotestash-key.pem in Resources */,
+				42E53DCD25C81B7E003AF0D1 /* remotestash-cert.pem in Resources */,
+				42E53D3E25C80920003AF0D1 /* MainInterface.storyboard in Resources */,
+				42E53DDA25C8412F003AF0D1 /* remotestash-cert.der in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		08DEC9A919E220418674825E /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-remotestash/Pods-remotestash-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-remotestash/Pods-remotestash-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-remotestash/Pods-remotestash-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		11D862D2367F6EDCEAC89140 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-share-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6E08BB08CB98D4DDD2326DFA /* [CP] Check Pods Manifest.lock */ = {
+		6877690E71A8A4F91A3A95EF /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -439,131 +448,143 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		6DFD637FE333E596FEF99CDF /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-remotestash/Pods-remotestash-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-remotestash/Pods-remotestash-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-remotestash/Pods-remotestash-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AC6BB6E8197EAE792978A4D3 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-share-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		422A24D424719EF600D6C2FB /* Sources */ = {
+		42E53CF325C8088C003AF0D1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				422A24DC24719EF600D6C2FB /* ShareViewController.m in Sources */,
-				42C7C195247970E200D1796B /* RemoteStashService.m in Sources */,
-				427AA0E52486F1CD00A1ED43 /* RemoteStashItem.m in Sources */,
-				4272F3B9247A610200F9ACC5 /* RemoteStashClient.m in Sources */,
+				42E53DBB25C8104C003AF0D1 /* RemoteStashService.swift in Sources */,
+				42E53DB525C8104C003AF0D1 /* RemoteStashClient.swift in Sources */,
+				42E53CFF25C8088C003AF0D1 /* ViewController.swift in Sources */,
+				42E53DBF25C8104C003AF0D1 /* RemoteStashServer.swift in Sources */,
+				42E53CFB25C8088C003AF0D1 /* AppDelegate.swift in Sources */,
+				42E53DB925C8104C003AF0D1 /* RemoteStashMimeTypes.swift in Sources */,
+				42E53DBD25C8104C003AF0D1 /* AddressAndPort.swift in Sources */,
+				42E53CFD25C8088C003AF0D1 /* SceneDelegate.swift in Sources */,
+				42E53DB725C8104C003AF0D1 /* RemoteStashItem.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		427B79E2246DD7DC005EDEAD /* Sources */ = {
+		42E53D0925C8088C003AF0D1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				427B79F1246DD7DC005EDEAD /* ViewController.m in Sources */,
-				427B79EB246DD7DC005EDEAD /* AppDelegate.m in Sources */,
-				427AA0E42486F1CD00A1ED43 /* RemoteStashItem.m in Sources */,
-				42C7C191247829C400D1796B /* RemoteStashClient.m in Sources */,
-				427B79FC246DD7DF005EDEAD /* main.m in Sources */,
-				427B7A12246DD85D005EDEAD /* RemoteStashServer.m in Sources */,
-				42C7C194247970E200D1796B /* RemoteStashService.m in Sources */,
-				427B79EE246DD7DC005EDEAD /* SceneDelegate.m in Sources */,
+				42E53D1225C8088C003AF0D1 /* remotestashTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		427B79FD246DD7DF005EDEAD /* Sources */ = {
+		42E53D1425C8088C003AF0D1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				427B7A06246DD7DF005EDEAD /* remotestashTests.m in Sources */,
+				42E53D1D25C8088D003AF0D1 /* remotestashUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42E53D3425C80920003AF0D1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				42E53DBC25C8104C003AF0D1 /* RemoteStashService.swift in Sources */,
+				42E53DB625C8104C003AF0D1 /* RemoteStashClient.swift in Sources */,
+				42E53DBA25C8104C003AF0D1 /* RemoteStashMimeTypes.swift in Sources */,
+				42E53DC025C8104C003AF0D1 /* RemoteStashServer.swift in Sources */,
+				42E53DBE25C8104C003AF0D1 /* AddressAndPort.swift in Sources */,
+				42E53D3B25C80920003AF0D1 /* ShareViewController.swift in Sources */,
+				42E53DB825C8104C003AF0D1 /* RemoteStashItem.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		422A24E224719EF600D6C2FB /* PBXTargetDependency */ = {
+		42E53D0F25C8088C003AF0D1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 422A24D724719EF600D6C2FB /* share */;
-			targetProxy = 422A24E124719EF600D6C2FB /* PBXContainerItemProxy */;
+			target = 42E53CF625C8088C003AF0D1 /* remotestash */;
+			targetProxy = 42E53D0E25C8088C003AF0D1 /* PBXContainerItemProxy */;
 		};
-		427B7A03246DD7DF005EDEAD /* PBXTargetDependency */ = {
+		42E53D1A25C8088D003AF0D1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 427B79E5246DD7DC005EDEAD /* remotestash */;
-			targetProxy = 427B7A02246DD7DF005EDEAD /* PBXContainerItemProxy */;
+			target = 42E53CF625C8088C003AF0D1 /* remotestash */;
+			targetProxy = 42E53D1925C8088D003AF0D1 /* PBXContainerItemProxy */;
+		};
+		42E53D4125C80920003AF0D1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 42E53D3725C80920003AF0D1 /* share */;
+			targetProxy = 42E53D4025C80920003AF0D1 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		422A24DD24719EF600D6C2FB /* MainInterface.storyboard */ = {
+		42E53D0025C8088C003AF0D1 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				422A24DE24719EF600D6C2FB /* Base */,
-			);
-			name = MainInterface.storyboard;
-			sourceTree = "<group>";
-		};
-		427B79F2246DD7DC005EDEAD /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				427B79F3246DD7DC005EDEAD /* Base */,
+				42E53D0125C8088C003AF0D1 /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
-		427B79F7246DD7DF005EDEAD /* LaunchScreen.storyboard */ = {
+		42E53D0525C8088C003AF0D1 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				427B79F8246DD7DF005EDEAD /* Base */,
+				42E53D0625C8088C003AF0D1 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		42E53D3C25C80920003AF0D1 /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				42E53D3D25C80920003AF0D1 /* Base */,
+			);
+			name = MainInterface.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		422A24E524719EF600D6C2FB /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 90899324441432E82DFCB509 /* Pods-share.debug.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = share/share.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.0.0.1;
-				DEVELOPMENT_TEAM = M7QSSF3624;
-				INFOPLIST_FILE = share/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.remotestash.share";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SUPPORTS_MACCATALYST = NO;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		422A24E624719EF600D6C2FB /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0B96F1FCE7DAF8480A49CD14 /* Pods-share.release.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = share/share.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.0.0.1;
-				DEVELOPMENT_TEAM = M7QSSF3624;
-				INFOPLIST_FILE = share/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.remotestash.share";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SUPPORTS_MACCATALYST = NO;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		427B7A08246DD7DF005EDEAD /* Debug */ = {
+		42E53D1F25C8088D003AF0D1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -589,6 +610,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -613,15 +635,17 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
-		427B7A09246DD7DF005EDEAD /* Release */ = {
+		42E53D2025C8088D003AF0D1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -647,6 +671,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -665,134 +690,231 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		427B7A0B246DD7DF005EDEAD /* Debug */ = {
+		42E53D2225C8088D003AF0D1 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 171254AFA872CDF0841670DC /* Pods-remotestash.debug.xcconfig */;
+			baseConfigurationReference = 335EC68A5EF1F2A030B7A2C3 /* Pods-remotestash.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = remotestash/RemoteStash.entitlements;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.0.0.1;
 				DEVELOPMENT_TEAM = M7QSSF3624;
-				INFOPLIST_FILE = "$(SRCROOT)/remotestash/Info.plist";
+				INFOPLIST_FILE = remotestash/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.remotestash";
-				PRODUCT_NAME = RemoteStash;
-				SUPPORTS_MACCATALYST = NO;
-				TARGETED_DEVICE_FAMILY = 1;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		427B7A0C246DD7DF005EDEAD /* Release */ = {
+		42E53D2325C8088D003AF0D1 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6052B14A4FB8859A5DFAC90B /* Pods-remotestash.release.xcconfig */;
+			baseConfigurationReference = 78120DDAEE39F4F7B8D0BD2D /* Pods-remotestash.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = remotestash/RemoteStash.entitlements;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.0.0.1;
 				DEVELOPMENT_TEAM = M7QSSF3624;
-				INFOPLIST_FILE = "$(SRCROOT)/remotestash/Info.plist";
+				INFOPLIST_FILE = remotestash/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.remotestash";
-				PRODUCT_NAME = RemoteStash;
-				SUPPORTS_MACCATALYST = NO;
-				TARGETED_DEVICE_FAMILY = 1;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
-		427B7A0E246DD7DF005EDEAD /* Debug */ = {
+		42E53D2525C8088D003AF0D1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = remotecopypasteTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				DEVELOPMENT_TEAM = M7QSSF3624;
+				INFOPLIST_FILE = remotestashTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.remotecopypasteTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.remotestashTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/remotestash.app/remotestash";
 			};
 			name = Debug;
 		};
-		427B7A0F246DD7DF005EDEAD /* Release */ = {
+		42E53D2625C8088D003AF0D1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = remotecopypasteTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				DEVELOPMENT_TEAM = M7QSSF3624;
+				INFOPLIST_FILE = remotestashTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.remotecopypasteTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.remotestashTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/remotestash.app/remotestash";
+			};
+			name = Release;
+		};
+		42E53D2825C8088D003AF0D1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = M7QSSF3624;
+				INFOPLIST_FILE = remotestashUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.remotestashUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = remotestash;
+			};
+			name = Debug;
+		};
+		42E53D2925C8088D003AF0D1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = M7QSSF3624;
+				INFOPLIST_FILE = remotestashUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.remotestashUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = remotestash;
+			};
+			name = Release;
+		};
+		42E53D4425C80920003AF0D1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D9E02F13FC119D4B16320415 /* Pods-share.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = M7QSSF3624;
+				INFOPLIST_FILE = share/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.remotestash.share";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		42E53D4525C80920003AF0D1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7E9ADD8C9DEFA8ADF9030874 /* Pods-share.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = M7QSSF3624;
+				INFOPLIST_FILE = share/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.remotestash.share";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		422A24E424719EF600D6C2FB /* Build configuration list for PBXNativeTarget "share" */ = {
+		42E53CF225C8088C003AF0D1 /* Build configuration list for PBXProject "remotestash" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				422A24E524719EF600D6C2FB /* Debug */,
-				422A24E624719EF600D6C2FB /* Release */,
+				42E53D1F25C8088D003AF0D1 /* Debug */,
+				42E53D2025C8088D003AF0D1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		427B79E1246DD7DC005EDEAD /* Build configuration list for PBXProject "remotestash" */ = {
+		42E53D2125C8088D003AF0D1 /* Build configuration list for PBXNativeTarget "remotestash" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				427B7A08246DD7DF005EDEAD /* Debug */,
-				427B7A09246DD7DF005EDEAD /* Release */,
+				42E53D2225C8088D003AF0D1 /* Debug */,
+				42E53D2325C8088D003AF0D1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		427B7A0A246DD7DF005EDEAD /* Build configuration list for PBXNativeTarget "remotestash" */ = {
+		42E53D2425C8088D003AF0D1 /* Build configuration list for PBXNativeTarget "remotestashTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				427B7A0B246DD7DF005EDEAD /* Debug */,
-				427B7A0C246DD7DF005EDEAD /* Release */,
+				42E53D2525C8088D003AF0D1 /* Debug */,
+				42E53D2625C8088D003AF0D1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		427B7A0D246DD7DF005EDEAD /* Build configuration list for PBXNativeTarget "remotestashTests" */ = {
+		42E53D2725C8088D003AF0D1 /* Build configuration list for PBXNativeTarget "remotestashUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				427B7A0E246DD7DF005EDEAD /* Debug */,
-				427B7A0F246DD7DF005EDEAD /* Release */,
+				42E53D2825C8088D003AF0D1 /* Debug */,
+				42E53D2925C8088D003AF0D1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		42E53D4625C80920003AF0D1 /* Build configuration list for PBXNativeTarget "share" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				42E53D4425C80920003AF0D1 /* Debug */,
+				42E53D4525C80920003AF0D1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 427B79DE246DD7DC005EDEAD /* Project object */;
+	rootObject = 42E53CEF25C8088C003AF0D1 /* Project object */;
 }
