@@ -22,8 +22,8 @@
 		42E53DB625C8104C003AF0D1 /* RemoteStashClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53DAF25C8104C003AF0D1 /* RemoteStashClient.swift */; };
 		42E53DB725C8104C003AF0D1 /* RemoteStashItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53DB025C8104C003AF0D1 /* RemoteStashItem.swift */; };
 		42E53DB825C8104C003AF0D1 /* RemoteStashItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53DB025C8104C003AF0D1 /* RemoteStashItem.swift */; };
-		42E53DB925C8104C003AF0D1 /* RemoteStashMimeTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53DB125C8104C003AF0D1 /* RemoteStashMimeTypes.swift */; };
-		42E53DBA25C8104C003AF0D1 /* RemoteStashMimeTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53DB125C8104C003AF0D1 /* RemoteStashMimeTypes.swift */; };
+		42E53DB925C8104C003AF0D1 /* MimeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53DB125C8104C003AF0D1 /* MimeType.swift */; };
+		42E53DBA25C8104C003AF0D1 /* MimeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53DB125C8104C003AF0D1 /* MimeType.swift */; };
 		42E53DBB25C8104C003AF0D1 /* RemoteStashService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53DB225C8104C003AF0D1 /* RemoteStashService.swift */; };
 		42E53DBC25C8104C003AF0D1 /* RemoteStashService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53DB225C8104C003AF0D1 /* RemoteStashService.swift */; };
 		42E53DBD25C8104C003AF0D1 /* AddressAndPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53DB325C8104C003AF0D1 /* AddressAndPort.swift */; };
@@ -101,7 +101,7 @@
 		42E53D3F25C80920003AF0D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		42E53DAF25C8104C003AF0D1 /* RemoteStashClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteStashClient.swift; sourceTree = "<group>"; };
 		42E53DB025C8104C003AF0D1 /* RemoteStashItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteStashItem.swift; sourceTree = "<group>"; };
-		42E53DB125C8104C003AF0D1 /* RemoteStashMimeTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteStashMimeTypes.swift; sourceTree = "<group>"; };
+		42E53DB125C8104C003AF0D1 /* MimeType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MimeType.swift; sourceTree = "<group>"; };
 		42E53DB225C8104C003AF0D1 /* RemoteStashService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteStashService.swift; sourceTree = "<group>"; };
 		42E53DB325C8104C003AF0D1 /* AddressAndPort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressAndPort.swift; sourceTree = "<group>"; };
 		42E53DB425C8104C003AF0D1 /* RemoteStashServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteStashServer.swift; sourceTree = "<group>"; };
@@ -223,7 +223,7 @@
 				42E53DB225C8104C003AF0D1 /* RemoteStashService.swift */,
 				42E53DAF25C8104C003AF0D1 /* RemoteStashClient.swift */,
 				42E53DB425C8104C003AF0D1 /* RemoteStashServer.swift */,
-				42E53DB125C8104C003AF0D1 /* RemoteStashMimeTypes.swift */,
+				42E53DB125C8104C003AF0D1 /* MimeType.swift */,
 				42E53DB325C8104C003AF0D1 /* AddressAndPort.swift */,
 			);
 			name = Common;
@@ -499,7 +499,7 @@
 				42E53CFF25C8088C003AF0D1 /* ViewController.swift in Sources */,
 				42E53DBF25C8104C003AF0D1 /* RemoteStashServer.swift in Sources */,
 				42E53CFB25C8088C003AF0D1 /* AppDelegate.swift in Sources */,
-				42E53DB925C8104C003AF0D1 /* RemoteStashMimeTypes.swift in Sources */,
+				42E53DB925C8104C003AF0D1 /* MimeType.swift in Sources */,
 				42E53DBD25C8104C003AF0D1 /* AddressAndPort.swift in Sources */,
 				42E53CFD25C8088C003AF0D1 /* SceneDelegate.swift in Sources */,
 				42E53DB725C8104C003AF0D1 /* RemoteStashItem.swift in Sources */,
@@ -528,7 +528,7 @@
 			files = (
 				42E53DBC25C8104C003AF0D1 /* RemoteStashService.swift in Sources */,
 				42E53DB625C8104C003AF0D1 /* RemoteStashClient.swift in Sources */,
-				42E53DBA25C8104C003AF0D1 /* RemoteStashMimeTypes.swift in Sources */,
+				42E53DBA25C8104C003AF0D1 /* MimeType.swift in Sources */,
 				42E53DC025C8104C003AF0D1 /* RemoteStashServer.swift in Sources */,
 				42E53DBE25C8104C003AF0D1 /* AddressAndPort.swift in Sources */,
 				42E53D3B25C80920003AF0D1 /* ShareViewController.swift in Sources */,

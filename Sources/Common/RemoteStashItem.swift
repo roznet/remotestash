@@ -10,14 +10,11 @@ import Foundation
 import MobileCoreServices
 import Criollo
 
-extension String.Encoding {
-    
-    init(inia: String){
-        self.init(rawValue: CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding(inia as CFString) ) )
-    }
-}
+
 
 class RemoteStashItem {
+
+
     struct Status : Codable, CustomStringConvertible {
         let size : Int
         let contentType : String
@@ -47,7 +44,6 @@ class RemoteStashItem {
                 return image.pngData()?.count ?? 0
             }
         }
-        
     }
     
     let contentType : String
@@ -62,7 +58,7 @@ class RemoteStashItem {
         case .data(let rv):
             return rv
         case .image(let img):
-            if self.contentType == "image/jpeg" {
+            if self.contentType == MimeType.imagejpeg {
                 return img.jpegData(compressionQuality: 1.0) ?? Data()
             }else {
                 return img.pngData() ?? Data()
@@ -80,18 +76,18 @@ class RemoteStashItem {
     
     init() {
         self.content = .empty
-        self.contentType = "text/plain"
+        self.contentType = MimeType.textplain
         self.encoding = nil
         self.filename = nil
     }
     
-    init(image : UIImage, type : String = "image/png", filename : String? = nil) {
+    init(image : UIImage, type : String = MimeType.imagepng, filename : String? = nil) {
         self.content = Content.image(image)
         self.contentType = type
         self.encoding = nil
         self.filename = filename
     }
-    init(string : String, type : String = "text/plain", encoding : String.Encoding = .utf8){
+    init(string : String, type : String = MimeType.textplain, encoding : String.Encoding = .utf8){
         self.content = Content.string(string)
         self.contentType = type
         self.encoding = encoding
@@ -120,9 +116,8 @@ class RemoteStashItem {
     }
     
     init(url : URL, type : String? = nil, encoding : String.Encoding = .utf8){
-        let ext = url.pathExtension
         self.filename = url.lastPathComponent
-        self.contentType = RemoteStashItem.mimeType(fileExtension: ext) ?? "application/octet"
+        self.contentType = MimeType.mimeType(file: url) ?? MimeType.applicationoctetstream
         let data = try? Data(contentsOf: url)
         self.content = .data( data ?? Data() )
         self.encoding = encoding
@@ -155,7 +150,7 @@ class RemoteStashItem {
     convenience init(request : CRRequest, response : CRResponse) {
         if let file : CRUploadedFile = request.files?.values.first,
            let data = try? Data( contentsOf: file.temporaryFileURL) {
-            self.init(data:data, type: file.mimeType ?? "application/octet",
+            self.init(data:data, type: file.mimeType ?? MimeType.applicationoctetstream,
                       encoding: String.Encoding.utf8,
                       filename: file.temporaryFileURL.lastPathComponent  )
         }else{
@@ -165,8 +160,8 @@ class RemoteStashItem {
     
     convenience init(data : Data, response : HTTPURLResponse) {
         self.init(data:data,
-                  type: response.mimeType ?? "application/octet",
-                  encoding: String.Encoding(inia: response.textEncodingName ?? "utf-8"),
+                  type: response.mimeType ?? MimeType.applicationoctetstream,
+                  encoding: String.Encoding(iana: response.textEncodingName ?? "utf-8"),
                   filename: response.suggestedFilename )
     }
     

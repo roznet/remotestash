@@ -8,10 +8,46 @@
 
 import Foundation
 
+typealias MimeType = String
 
-extension RemoteStashItem {
+extension String.Encoding {
+    init(iana: String){
+        self.init(rawValue: CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding(iana as CFString) ) )
+    }
     
-    static func mimeType(fileExtension : String) -> String? {
+    var iana : String {
+        return CFStringConvertEncodingToIANACharSetName(CFStringConvertNSStringEncodingToEncoding(self.rawValue)) as String
+    }
+}
+
+extension MimeType {
+    static let texturi = "text/uri-list"
+    static let textplain = "text/plain"
+    static let texthtml = "text/html"
+    static let imagejpeg = "image/jpeg"
+    static let imagepng = "image/png"
+    static let applicationoctetstream = "application/octet-stream"
+    static let applicationjson = "application/json"
+
+    func isText(type: String) -> Bool {
+        return self.starts(with: "text/")
+    }
+    
+    func isImage(type: String) -> Bool {
+        return self.starts(with: "image/")
+    }
+    
+    func contentType(encoding: String.Encoding? = nil) -> String{
+        if let encoding = encoding {
+            let iana = encoding.iana
+            return "\(self); charset=\(iana)"
+        }
+        return self
+    }
+    
+    static func mimeType(file: URL) -> MimeType? {
+        let fileExtension : String = file.pathExtension
+        
         let map = [
             "123"            : "application/vnd.lotus-1-2-3",
             "3dml"            : "text/vnd.in3d.3dml",
