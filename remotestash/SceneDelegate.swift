@@ -22,19 +22,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
-        NotificationCenter.default.post(name: AppDelegate.kNotificationApplicationEnteredForeground, object: nil)
+        NotificationCenter.default.post(name: Notification.Name.remoteStashApplicationEnteredForeground, object: nil)
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
-        NotificationCenter.default.post(name: AppDelegate.kNotificationApplicationEnteredBackground, object: nil)
+        NotificationCenter.default.post(name: Notification.Name.remoteStashApplicationEnteredBackground, object: nil)
     }
 
     func sceneWillEnterForeground(_ scene: UIScene) {
-        NotificationCenter.default.post(name: AppDelegate.kNotificationApplicationEnteredForeground, object: nil)
+        NotificationCenter.default.post(name: Notification.Name.remoteStashApplicationEnteredForeground, object: nil)
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
-        NotificationCenter.default.post(name: AppDelegate.kNotificationApplicationEnteredBackground, object: nil)
+        NotificationCenter.default.post(name: Notification.Name.remoteStashApplicationEnteredBackground, object: nil)
     }
 
 

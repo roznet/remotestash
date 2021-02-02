@@ -11,13 +11,16 @@ import os
 
 fileprivate let logger = Logger(subsystem: "net.ro-z.remotestash", category: "service")
 
+extension Notification.Name {
+    static let remoteStashNewServiceDiscovered = Notification.Name( "remoteStashNewServiceDiscovered" )
+}
+
 class RemoteStashService : NSObject,NetServiceDelegate,URLSessionTaskDelegate {
-    
-    static let kNotificationNewServiceDiscovered = Notification.Name("kNotificationNewServiceDiscovered")
-    
+      
     typealias ResolvedHandler = (RemoteStashService) -> Void
-    typealias CompletionHandler = (RemoteStashService,RemoteStashItem?) -> Void
-    
+    typealias ItemHandler = (RemoteStashService,RemoteStashItem?) -> Void
+    typealias StatusHandler = (RemoteStashService,RemoteStashServer.Status?) -> Void
+
     var addresses : [AddressAndPort] = []
     var items : [RemoteStashItem] = []
     
@@ -90,7 +93,7 @@ class RemoteStashService : NSObject,NetServiceDelegate,URLSessionTaskDelegate {
         if let handler = self.resolvedHandler {
             handler(self)
         }
-        NotificationCenter.default.post(name: RemoteStashService.kNotificationNewServiceDiscovered, object: self)
+        NotificationCenter.default.post(name: Notification.Name.remoteStashNewServiceDiscovered, object: self)
     }
 
     func netService(_ sender: NetService, didNotResolve errorDict: [String : NSNumber]) {
@@ -120,7 +123,7 @@ class RemoteStashService : NSObject,NetServiceDelegate,URLSessionTaskDelegate {
         return nil
     }
     
-    func startTask(request : URLRequest, completion : @escaping CompletionHandler){
+    func startTask(request : URLRequest, completion : @escaping ItemHandler){
         guard let session = self.session else { completion(self,nil); return }
         self.request = request
         
@@ -138,21 +141,36 @@ class RemoteStashService : NSObject,NetServiceDelegate,URLSessionTaskDelegate {
         self.task?.resume()
     }
     
-    func pushItem(item : RemoteStashItem, completion : @escaping CompletionHandler){
+    func pushItem(item : RemoteStashItem, completion : @escaping ItemHandler){
         guard var request = self.request(path: "push", method: "POST") else { return }
         request.httpBody = item.httpBody
         request.addValue(item.httpContentTypeHeader, forHTTPHeaderField: "Content-Type")
         self.startTask(request: request, completion: completion)
     }
     
-    func pullItem(completion: @escaping CompletionHandler){
+    func pullItem(completion: @escaping ItemHandler){
         guard let request = self.request(path: "pull") else { return }
         self.startTask(request: request, completion: completion)
     }
-    
-    func status(completion: @escaping CompletionHandler){
-        guard let request = self.request(path: "status") else { return }
+
+    func lastItem(completion: @escaping ItemHandler){
+        guard let request = self.request(path: "last") else { return }
         self.startTask(request: request, completion: completion)
+    }
+
+    func status(completion: @escaping StatusHandler){
+        guard let request = self.request(path: "status") else { return }
+        self.startTask(request: request){
+            (service,item) in
+            if  let content = item?.content,
+                case let RemoteStashItem.Content.data(data) = content,
+                let status = try? JSONDecoder().decode(RemoteStashServer.Status.self, from: data){
+                completion(self,status)
+            }else{
+                completion(self,nil)
+            }
+
+        }
     }
     
     //MARK: - URLSession Delegate

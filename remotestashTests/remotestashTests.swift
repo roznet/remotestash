@@ -14,6 +14,7 @@ fileprivate let logger = Logger(subsystem: "net.ro-z.remotestash", category: "te
 class remotestashTests: XCTestCase,RemoteStashServerDelegate,RemoteStashClientDelegate {
 
     let stringPayload : String = "Hello World en français"
+    let imagePayload : UIImage? = nil
     
     var server : RemoteStashServer? = nil
     var client : RemoteStashClient? = nil
@@ -45,6 +46,23 @@ class remotestashTests: XCTestCase,RemoteStashServerDelegate,RemoteStashClientDe
         XCTAssertNotEqual(avai?.port, 0)
     }
     
+    func testItem() throws {
+        if let image = UIImage(named: "702-share") {
+            let imageitem = RemoteStashItem(image: image, type: "image/png", filename: "702-share.png")
+            print( "\(imageitem.httpContentTypeHeader)" )
+            
+            let stringitem = RemoteStashItem(string: "hello world" )
+            print( "\(stringitem.httpContentTypeHeader)" )
+
+            
+        }else{
+            // failed to setup
+            XCTAssertTrue(false)
+        }
+        
+    }
+    
+    //MARK: - server test
     func testServer() throws {
         self.server  = RemoteStashServer(delegate: self, name: self.serverName)
         self.client = RemoteStashClient(delegate: self)

@@ -37,14 +37,26 @@ extension MimeType {
         return self.starts(with: "image/")
     }
     
-    func contentType(encoding: String.Encoding? = nil) -> String{
+    func httpContentType(encoding: String.Encoding? = nil) -> String{
         if let encoding = encoding {
             let iana = encoding.iana
             return "\(self); charset=\(iana)"
         }
         return self
     }
-    
+    func typeAndEncoding() -> (MimeType,String.Encoding?) {
+        let split = self.split(separator: ";")
+        guard let mime = split.first else { return (self,nil) }
+        var encoding : String.Encoding? = nil
+        if split.count > 1 {
+            let attr = split[1]
+            if attr.starts(with: " charset=") {
+                let charset = String(attr.dropFirst(" charset=".count))
+                encoding = String.Encoding(iana:charset)
+            }
+        }
+        return (MimeType(mime),encoding)
+    }
     static func mimeType(file: URL) -> MimeType? {
         let fileExtension : String = file.pathExtension
         

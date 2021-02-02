@@ -83,8 +83,7 @@ class RemoteStashServer : NSObject,NetServiceDelegate,NetServiceBrowserDelegate 
         // Certificate created with
         // openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout remotestash-key.pem -out remotestash-cert.pem
         httpServer.certificatePath = Bundle.main.path(forResource: "remotestash-cert", ofType: "pem")
-        httpServer.certificateKeyPath = Bundle.main.path(forResource: "remotestash-key", ofType: "pem")
-        
+        httpServer.privateKeyPath = Bundle.main.path(forResource: "remotestash-key", ofType: "pem")
         httpServer.get("/status") {
             (req, res, next) in
             let itemStatus : RemoteStashItem.Status? = self.delegate.serverLastItem(self)?.status
@@ -118,7 +117,8 @@ class RemoteStashServer : NSObject,NetServiceDelegate,NetServiceBrowserDelegate 
         }
         
         if httpServer.startListening(nil, portNumber: UInt(self.port)) {
-            logger.info("started listening on \(self.port)")
+            
+            logger.info("started listening on \(self.port), \(AddressAndPort.availableAddresses())")
         }else{
             logger.error("failed to started listening on \(self.port)")
         }

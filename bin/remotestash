@@ -44,7 +44,7 @@ import json
 import sys
 from pprint import pprint
 
-class Item:
+class RemoteStashItem:
     '''
     this class represent information about an item in the stash
     it contains functionality to load from file or other types, ability to output/save/format itself
@@ -58,7 +58,7 @@ class Item:
 
         Expected keys are:
            content-type: mime-type of the content of the item
-           file: filename for the item if applicable, without path
+           filename: filename for the item if applicable, without path
 
         '''
         self.info = { k.lower(): v for (k,v) in info.items() }
@@ -66,7 +66,7 @@ class Item:
         self.text = None
 
     def __repr__(self):
-        return f'Item({self.info})'
+        return f'RemoteStashItem({self.info})'
     
     def from_file(info,infile):
         '''
@@ -74,7 +74,7 @@ class Item:
         info should contains 'content-type' and 'file' with the name
         '''
         rv = None
-        rv = Item(info)
+        rv = RemoteStashItem(info)
         rv.data = infile.read()
         # If we read a string, (file open without 'b' mode), save in text
         if isinstance( rv.data,str ):
@@ -85,35 +85,35 @@ class Item:
 
     def from_json(jsondata):
         if isinstance( jsondata, bytes):
-            return Item.from_data( jsondata, { 'content-type':'application/json' }  )
+            return RemoteStashItem.from_data( jsondata, { 'content-type':'application/json' }  )
         else:
-            return Item.from_data( jsondata.encode( 'utf-8'), { 'content-type':'application/json' }  )
+            return RemoteStashItem.from_data( jsondata.encode( 'utf-8'), { 'content-type':'application/json' }  )
     
     def from_filename(info,location=None):
         '''
         info should contains 'Content-Type' and 'file'
         '''
-        filename = info['file']
+        filename = info['filename']
         if location:
             filename = os.path.join( location, filename )
         rv = None
         if os.path.isfile( filename ):
             with open(filename, 'rb') as readf:
-                rv = Item.from_file( info, readf )
+                rv = RemoteStashItem.from_file( info, readf )
         else:
-            rv = Item(info)
+            rv = RemoteStashItem(info)
             
         return rv
 
     
     def from_data(data,info):
-        rv = Item(info)
+        rv = RemoteStashItem(info)
         rv.data = data
         
         return rv
 
     def from_string(text,info):
-        rv = Item(info)
+        rv = RemoteStashItem(info)
         rv.text = text
         
         return rv
@@ -150,22 +150,22 @@ class Item:
         Ensures a file is present in the meta data or create a unique one by hash
         '''
         if filename:
-            self.info[ 'file'] =  filename
+            self.info[ 'filename'] =  filename
         else:
             data = self.as_data()
             if data:
                 hash = hashlib.sha1(data)
-                self.info[ 'file'] =  hash.hexdigest()
+                self.info[ 'filename'] =  hash.hexdigest()
 
     def json_dict(self):
         return self.info
     
     def save_to_file(self,location=None):
         self.ensure_filename()
-        if 'file' not in self.info:
+        if 'filename' not in self.info:
             print( f'No file name' )
             return
-        filename = self.info['file']
+        filename = self.info['filename']
         path = filename
         if location:
             path = os.path.join( location, filename )
@@ -179,8 +179,8 @@ class Item:
 
 
     def clear_file(self,location=None):
-        if 'file' in self.info:
-            path = self.info['file']
+        if 'filename' in self.info:
+            path = self.info['filename']
             if location:
                 path = os.path.join( location, path )
             if os.path.isfile(path ):
@@ -224,9 +224,9 @@ class Item:
                 t = self.info['content-type']
                 outfile.write( f'{len(data)} bytes of type {t}' )
 
-class Stash:
+class RemoteStashLocal:
     '''
-    this class implements a locally saved stash of Item
+    this class implements a locally saved stash of RemoteStashItem
     The stash will be saved by default in ~/.remotestah
     The information of the content of the stash will be saved as contents.json
     will support pull,push,last,status operations
@@ -260,7 +260,7 @@ class Stash:
     def pull(self):
         if len(self.contents['items']):
             info = self.contents['items'].pop()
-            item = Item.from_filename(info,self.location)
+            item = RemoteStashItem.from_filename(info,self.location)
             item.clear_file(self.location)
             self.save_content()
             if self.verbose:
@@ -277,7 +277,7 @@ class Stash:
 
     def clear(self):
         for c in self.contents['items']:
-            item = Item.from_filename(c,self.location)
+            item = RemoteStashItem.from_filename(c,self.location)
             item.clear_file()
         if self.verbose:
             size = len(self.contents['items'])
@@ -291,7 +291,7 @@ class Stash:
         rv = {'items_count':total}
         
         if total > 0:
-            item = Item.from_filename(self.contents['items'][-1],self.location)
+            item = RemoteStashItem.from_filename(self.contents['items'][-1],self.location)
             if self.verbose:
                 print( item.info )
                 print( item.as_data() )
@@ -305,7 +305,7 @@ class Stash:
             
     def last(self):
         if len(self.contents['items']):
-            item = Item.from_filename(self.contents['items'][-1],self.location)
+            item = RemoteStashItem.from_filename(self.contents['items'][-1],self.location)
             return item
 
         return None
@@ -324,7 +324,7 @@ class Stash:
             json.dump( self.contents, jf )
 
 
-class Listener:
+class RemoteStashClient:
     def __init__(self,cmd,args):
         self.cmd = cmd
         self.args = args
@@ -372,7 +372,7 @@ class Listener:
     def item_from_response(self,response):
         try:
             ctype = response.headers['Content-Type']
-            return Item.from_data( response.content, { 'content-type': ctype } )
+            return RemoteStashItem.from_data( response.content, { 'content-type': ctype } )
         except:
             return None
     
@@ -428,7 +428,7 @@ class Listener:
             self.outfile.flush()
         os._exit(0)
         
-class Advertiser:
+class RemoteStashServerAdvertiser:
     def __init__(self,port=None):
         self.ip = self.get_ip()
         self.port = port if port else self.get_port() 
@@ -474,31 +474,31 @@ class Advertiser:
         zeroconf.unregister_service(self.info)
         zeroconf.close() 
     
-class RequestHandler(BaseHTTPRequestHandler):
+class RemoteStashServer(BaseHTTPRequestHandler):
     def push(self):
         if self.body is None:
             pass
 
-        stash = Stash({})
-        item = Item.from_data( self.body, { 'content-type': self.headers['Content-Type'] } )
+        stash = RemoteStashLocal({})
+        item = RemoteStashItem.from_data( self.body, { 'content-type': self.headers['Content-Type'] } )
         stash.push( item )
-        rv = Item.from_json( json.dumps( {'success':1} ) )
+        rv = RemoteStashItem.from_json( json.dumps( {'success':1} ) )
         self.respond_item( rv )
 
     def pull(self):
-        stash = Stash({})
+        stash = RemoteStashLocal({})
         item = stash.pull()
         self.respond_item( item )
         
     def last(self):
-        stash = Stash({})
+        stash = RemoteStashLocal({})
         item = stash.last()
         self.respond_item( item )
 
     def status(self):
-        stash = Stash({})
+        stash = RemoteStashLocal({})
         val = stash.status()
-        rv = Item.from_json( json.dumps(val) )
+        rv = RemoteStashItem.from_json( json.dumps(val) )
         self.respond_item( rv )
         
     def do_POST(self):
@@ -605,14 +605,14 @@ class RequestHandler(BaseHTTPRequestHandler):
             
             
         
-class Driver :
+class RemoteStash:
     def __init__(self,args=None):
         self.args = args
         self.verbose = True;
 
     def cmd_listen(self,path = 'last'):
         zeroconf = Zeroconf()
-        listener = Listener(path,self.args)
+        listener = RemoteStashClient(path,self.args)
         if path == 'push':
             inputf = self.get_input_file()
             listener.content = inputf.read()
@@ -633,18 +633,19 @@ class Driver :
         and start a web server to enable remote access to the local stash
         '''
         zeroconf = Zeroconf()
-        advertiser = Advertiser(int(self.args.port) if self.args.port else None)
+        advertiser = RemoteStashServerAdvertiser(int(self.args.port) if self.args.port else None)
         if self.args.name:
             name = self.args.name
         else:
             name = f'{advertiser.get_name()} RemoteStash'
         advertiser.start_advertisement(name)
         port = advertiser.port
-        server = HTTPServer((advertiser.ip, port), RequestHandler)
+        server = HTTPServer((advertiser.ip, port), RemoteStashServer)
         proto = 'http'
         if os.path.isfile( os.path.expanduser( '~/.remotestash/remotestash-key.pem' ) ):
             proto = 'https'
             # certificated created with
+            # Will check consistency with the certificate used on other server/app
             #  openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout remotestash-key.pem -out remotestash-cert.pem
             server.socket = ssl.wrap_socket( server.socket,
                                              keyfile = os.path.expanduser( '~/.remotestash/remotestash-key.pem' ),
@@ -662,7 +663,7 @@ class Driver :
             advertiser.clean_advertisement()
 
     def get_input_file(self):
-        if 'file' in self.args and self.args.file:
+        if 'filename' in self.args and self.args.file:
             if os.path.isfile( self.args.file ):
                 return open( self.args.file, 'rb' )
             else:
@@ -674,7 +675,7 @@ class Driver :
         if self.args.content_type:
             return self.args.content_type
 
-        if 'file' in self.args and self.args.file:
+        if 'filename' in self.args and self.args.file:
             if os.path.isfile( self.args.file ):
                 ct = mimetypes.guess_type( self.args.file )
                 if ct[1]:
@@ -690,7 +691,7 @@ class Driver :
             if self.verbose:
                 print( f'Saving to {self.args.output}' )
             return open( self.args.output, 'wb' )
-        elif 'file' in self.args and self.args.file:
+        elif 'filename' in self.args and self.args.file:
             if self.verbose:
                 print( f'Saving to {self.args.file}' )
             return open( self.args.file, 'wb' )
@@ -702,8 +703,8 @@ class Driver :
             inputf = self.get_input_file()
             content_type = self.get_content_type()
             
-            item = Item.from_file( {'content-type': content_type}, inputf )
-            stash = Stash(self.args)
+            item = RemoteStashItem.from_file( {'content-type': content_type}, inputf )
+            stash = RemoteStashLocal(self.args)
             stash.push( item )
         else:
             self.cmd_listen('push')
@@ -711,7 +712,7 @@ class Driver :
 
     def cmd_pull(self):
         if self.args.local:
-            stash = Stash(self.args)
+            stash = RemoteStashLocal(self.args)
             item = stash.pull()
             if item:
                 item.output(self.get_output_file())
@@ -720,7 +721,7 @@ class Driver :
             
     def cmd_last(self):
         if self.args.local:
-            stash = Stash(self.args)
+            stash = RemoteStashLocal(self.args)
             item = stash.last()
             if item:
                 item.output(self.get_output_file())
@@ -732,9 +733,9 @@ class Driver :
             
     def cmd_status(self):
         if self.args.local:
-            stash = Stash(self.args)
+            stash = RemoteStashLocal(self.args)
             status = stash.status()
-            item = Item.from_json( json.dumps( status ) )
+            item = RemoteStashItem.from_json( json.dumps( status ) )
             item.output( self.get_output_file() )
         else:
             self.cmd_listen('status')
@@ -746,13 +747,13 @@ class Driver :
             
     def cmd_clear(self):
         if self.args.local:
-            stash = Stash(self.args)
+            stash = RemoteStashLocal(self.args)
             status = stash.clear()
         else:
             print( 'Clear not implemented for remote' )
 
     def cmd_test(self):
-        a = Item.from_string( 'hello', { 'content-type': 'text/plain; charset=utf-8' } )
+        a = RemoteStashItem.from_string( 'hello', { 'content-type': 'text/plain; charset=utf-8' } )
 
         print( a.as_data() )
         print( a.as_str() )
@@ -785,7 +786,7 @@ if __name__ == "__main__":
     parser.add_argument( 'file',    metavar='FILE', nargs='?' )
     args = parser.parse_args()
 
-    command = Driver(args)
+    command = RemoteStash(args)
 
     if args.command in commands:
         getattr(command,commands[args.command]['attr'])()

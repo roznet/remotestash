@@ -9,7 +9,9 @@
 import Foundation
 import MobileCoreServices
 import Criollo
+import os
 
+fileprivate let logger = Logger(subsystem: "net.ro-z.remotestash", category: "item")
 
 
 class RemoteStashItem {
@@ -51,6 +53,8 @@ class RemoteStashItem {
     let content : Content
     let encoding : String.Encoding?
     
+    //MARK: http output
+    
     var httpBody : Data {
         switch self.content {
         case .empty:
@@ -69,10 +73,25 @@ class RemoteStashItem {
     }
     
     var httpContentTypeHeader : String {
-        return self.contentType
+        return self.contentType.httpContentType(encoding: self.encoding)
+    }
+    
+    var activityItems : [Any] {
+        switch self.content {
+        case .empty:
+            return []
+        case .data(_):
+            return []
+        case .image(let img):
+            return [img]
+        case .string(let str):
+            return [str]
+        }
     }
     
     lazy var status : Status = Status(size: content.size(), contentType: contentType, filename: filename)
+    
+    //MARK: - Initializers
     
     init() {
         self.content = .empty
@@ -149,9 +168,16 @@ class RemoteStashItem {
     
     convenience init(request : CRRequest, response : CRResponse) {
         if let file : CRUploadedFile = request.files?.values.first,
-           let data = try? Data( contentsOf: file.temporaryFileURL) {
+           let data = try? Data( contentsOf: file.temporaryFileURL){
+            let encoding = String.Encoding.utf8
+            if let reqtype = request.env["HTTP_CONTENT_TYPE"],
+               let filetype = file.mimeType{
+                if reqtype != filetype {
+                    logger.info("different types received file \(filetype) and req \(reqtype)")
+                }
+            }
             self.init(data:data, type: file.mimeType ?? MimeType.applicationoctetstream,
-                      encoding: String.Encoding.utf8,
+                      encoding: encoding,
                       filename: file.temporaryFileURL.lastPathComponent  )
         }else{
             self.init()
