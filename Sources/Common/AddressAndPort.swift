@@ -7,6 +7,9 @@
 //
 
 import Foundation
+import os
+
+fileprivate let logger = Logger(subsystem: "net.ro-z.remotestash", category: "AddressAndPort")
 
 struct AddressAndPort : CustomStringConvertible{
     
@@ -21,30 +24,31 @@ struct AddressAndPort : CustomStringConvertible{
     let ip : String
     let port : Int
     let family : sa_family_t
-    
+        
     var ipv4 : Bool {
         return family == sa_family_t(AF_INET)
     }
     
     var description: String {
-        var familydesc = "\(family)"
         if self.ipv4 {
-            familydesc = "ipv4"
+            return "AddressAndPort(ipv4 \(ip):\(port))"
         }else {
-            familydesc = "ipv6"
+            return "AddressAndPort(ipv6 [\(ip)]:\(port))"
         }
-        return "\(ip):\(port) \(familydesc)"
     }
     
-    func url(path : String) -> URL? {
+    func url(path : String?) -> URL? {
+        
+        let route = (path != nil) ? "/\(path!)" : ""
+        
         if family == AF_INET6 {
-            return URL(string: "https://[\(ip)]:\(port)/\(path)" )
+            return URL(string: "https://[\(ip)]:\(port)\(route)" )
         }else {
-            return URL(string: "https://\(ip):\(port)/\(path)" )
+            return URL(string: "https://\(ip):\(port)\(route)" )
         }
     }
     
-    init( ptr : UnsafeBufferPointer<sockaddr> ){
+    init( ptr : UnsafeBufferPointer<sockaddr>, port: Int? = nil ){
         var hostname = [CChar](repeating: 0, count: Int(NI_MAXHOST))
         var service  = [CChar](repeating: 0, count: Int(NI_MAXSERV))
         
@@ -53,8 +57,13 @@ struct AddressAndPort : CustomStringConvertible{
                        &hostname, socklen_t(hostname.count),
                        &service, socklen_t(service.count),
                        NI_NUMERICHOST|NI_NUMERICSERV) == 0 {
-            self.port = (String(cString: service) as NSString).integerValue
-            self.ip = String(cString: hostname)
+            self.port = port ?? (String(cString: service) as NSString).integerValue
+            var ip = String(cString: hostname)
+            if ip.contains("%"),
+               let base = ip.split(separator: "%").first { // Remove %en0 and other interface tag
+                ip = String(base)
+            }
+            self.ip = ip
             self.family = ptr.baseAddress?.pointee.sa_family ?? sa_family_t(AF_INET)
         }else{
             self.port = 0
@@ -64,18 +73,37 @@ struct AddressAndPort : CustomStringConvertible{
     }
     
     static func availablePort() -> AddressAndPort? {
-        let socket = SocketPort()
         var rv : AddressAndPort? = nil
-        socket.address.withUnsafeBytes { (pointer: UnsafeRawBufferPointer) -> Void in
-            let sockaddrPtr = pointer.bindMemory(to: sockaddr.self)
-            rv = AddressAndPort(ptr: sockaddrPtr)
+        
+        var addr = sockaddr_in()
+        var size : socklen_t = socklen_t(MemoryLayout<sockaddr_in>.size)
+        
+        addr.sin_family = sa_family_t(AF_INET)
+        addr.sin_addr = in_addr(s_addr: INADDR_ANY)
+        addr.sin_port = 0
+        // Use UDP socket so it can close immediately and release the port
+        let sockfd = socket(AF_INET,SOCK_DGRAM,0)
+        var data = Data(bytes: &addr, count: Int(size))
+        data.withUnsafeMutableBytes { (pointer: UnsafeMutableRawBufferPointer) -> Void in
+            let ptr = pointer.bindMemory(to: sockaddr.self)
+            let bindrv = bind(sockfd, ptr.baseAddress, size)
+            if bindrv == 0 {
+                let namerv = getsockname(sockfd, ptr.baseAddress, &size)
+                if namerv == 0 {
+                    rv = AddressAndPort(ptr: UnsafeBufferPointer<sockaddr>(ptr) )
+                }else{
+                    logger.error("getsockname failed with error \(namerv)")
+                }
+            }else{
+                logger.error("bind socket failed with error \(bindrv)")
+            }
         }
-        socket.invalidate()
+        close(sockfd)
+        
         return rv
-
     }
     
-    static func availableAddresses() -> [AddressAndPort] {
+    static func availableAddresses(_ port : Int? = nil) -> [AddressAndPort] {
         var addresses : [AddressAndPort] = []
         
         var ifaddrPtr : UnsafeMutablePointer<ifaddrs>?
@@ -92,7 +120,7 @@ struct AddressAndPort : CustomStringConvertible{
                 let name = String(cString: interface.ifa_name)
                 if name == AddressAndPort.wifiInterface {
                     let sockaddrPtr = UnsafeBufferPointer<sockaddr>(start: interface.ifa_addr, count: Int(interface.ifa_addr.pointee.sa_len))
-                    addresses.append( AddressAndPort(ptr: sockaddrPtr) )
+                    addresses.append( AddressAndPort(ptr: sockaddrPtr, port: port) )
                 }
             }
         }

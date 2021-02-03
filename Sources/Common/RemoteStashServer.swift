@@ -118,7 +118,7 @@ class RemoteStashServer : NSObject,NetServiceDelegate,NetServiceBrowserDelegate 
         
         if httpServer.startListening(nil, portNumber: UInt(self.port)) {
             
-            logger.info("started listening on \(self.port), \(AddressAndPort.availableAddresses())")
+            logger.info("started listening on \(self.port), \(AddressAndPort.availableAddresses(self.port))")
         }else{
             logger.error("failed to started listening on \(self.port)")
         }

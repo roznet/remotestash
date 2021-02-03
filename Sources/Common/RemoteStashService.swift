@@ -37,13 +37,42 @@ class RemoteStashService : NSObject,NetServiceDelegate,URLSessionTaskDelegate {
     var name : String { return self.service.name }
     var hostName : String? { return self.service.hostName }
     
-    
     let resolvedHandler : ResolvedHandler?
     
     var request : URLRequest? = nil
     var session : URLSession? = nil
     var task : URLSessionDataTask? = nil
     
+    override var description: String{
+        var info : [String] = [ self.name ]
+        if let h = self.hostName {
+            info.append(h)
+        }
+        if let a = self.address,
+           let u = a.url(path: nil){
+            info.append(u.absoluteString)
+        }
+        let desc = info.joined(separator: ",")
+        return "RemoteStashService(\(desc))"
+    }
+    
+    var address : AddressAndPort? {
+        // first see if we have an ipv4 address
+        for address in self.addresses {
+            if address.ipv4 && address.url(path: nil) != nil{
+                return address
+            }
+        }
+        // if not ipv4 take the first one that works
+        for address in self.addresses {
+            if address.url(path: nil) != nil {
+                return address
+            }
+        }
+        return nil
+    }
+
+
     init(service : NetService, resolved : ResolvedHandler?) {
         self.service = service
         self.resolvedHandler = resolved
@@ -101,24 +130,14 @@ class RemoteStashService : NSObject,NetServiceDelegate,URLSessionTaskDelegate {
             handler(self)
         }
     }
+    
+    
     func request(path : String, method : String = "GET") -> URLRequest?{
-        // first see if we have an ipv4 address
-        for address in self.addresses {
-            if address.ipv4 {
-                if let url = address.url(path:path) {
-                    var rv = URLRequest(url: url)
-                    rv.httpMethod = method
-                    return rv
-                }
-            }
-        }
-        // if not ipv4 take the first one that works
-        for address in self.addresses {
-            if let url = address.url(path: path) {
-                var rv = URLRequest(url: url)
-                rv.httpMethod = method
-                return rv
-            }
+        if let address = self.address,
+           let url = address.url(path:path){
+            var rv = URLRequest(url: url)
+            rv.httpMethod = method
+            return rv
         }
         return nil
     }
@@ -135,14 +154,16 @@ class RemoteStashService : NSObject,NetServiceDelegate,URLSessionTaskDelegate {
                 self.items.append(item)
                 completion(self,item)
             }else{
+                let url = request.url?.absoluteString ?? "NoURL"
+                logger.error("task failed \(url)")
                 completion(self,nil)
             }
         }
         self.task?.resume()
     }
     
-    func pushItem(item : RemoteStashItem, completion : @escaping ItemHandler){
-        guard var request = self.request(path: "push", method: "POST") else { return }
+    func pushItem(item : RemoteStashItem?, completion : @escaping ItemHandler){
+        guard let item = item, var request = self.request(path: "push", method: "POST") else { return }
         request.httpBody = item.httpBody
         request.addValue(item.httpContentTypeHeader, forHTTPHeaderField: "Content-Type")
         self.startTask(request: request, completion: completion)
@@ -202,6 +223,5 @@ class RemoteStashService : NSObject,NetServiceDelegate,URLSessionTaskDelegate {
             completionHandler(.cancelAuthenticationChallenge,nil)
         }
     }
-
-    
 }
+

@@ -5,9 +5,11 @@
 //  Created by Brice Rosenzweig on 01/02/2021.
 //
 
+import Foundation
 import XCTest
 @testable import remotestash
 import os
+
 
 fileprivate let logger = Logger(subsystem: "net.ro-z.remotestash", category: "test")
 
@@ -80,15 +82,16 @@ class remotestashTests: XCTestCase,RemoteStashServerDelegate,RemoteStashClientDe
         if service.name == self.serverName {
             self.gotService?.fulfill()
             remoteStatus(service: service)
+        }else{
+            logger.info("Skipping other service \(service)")
         }
     }
     
     func remoteStatus(service : RemoteStashService){
         service.status {
-            _, item in
-            if  let content = item?.content,
-                case let RemoteStashItem.Content.data(data) = content,
-                let status = try? JSONDecoder().decode(RemoteStashServer.Status.self, from: data){
+            _, status in
+            XCTAssertNotNil(status)
+            if  let status = status {
                 XCTAssertEqual(status.itemsCount,0)
             }
             DispatchQueue.global(qos: .background).async {

@@ -229,7 +229,11 @@ class RemoteStashItem {
             }
         }else if let textProvider = textProviders.first {
             textProvider.loadItem(forTypeIdentifier: kUTTypeText as String){
-                item, _ in
+                item, error in
+                if let error = error {
+                    logger.error("Failed to convert text \(error as NSError)")
+                }
+                
                 if let text = item as? String{
                     completion(RemoteStashItem(string: text))
                 }else if let text = item as? URL{

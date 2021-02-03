@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4291887725CAF84200A28701 /* RemoteStashClient+TableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4291887625CAF84200A28701 /* RemoteStashClient+TableDataSource.swift */; };
+		4291887825CAF84200A28701 /* RemoteStashClient+TableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4291887625CAF84200A28701 /* RemoteStashClient+TableDataSource.swift */; };
 		42E53CFB25C8088C003AF0D1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53CFA25C8088C003AF0D1 /* AppDelegate.swift */; };
 		42E53CFD25C8088C003AF0D1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53CFC25C8088C003AF0D1 /* SceneDelegate.swift */; };
 		42E53CFF25C8088C003AF0D1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53CFE25C8088C003AF0D1 /* ViewController.swift */; };
@@ -81,6 +83,9 @@
 /* Begin PBXFileReference section */
 		0B5B8016BBD25A95999EAE51 /* Pods_share.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_share.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		335EC68A5EF1F2A030B7A2C3 /* Pods-remotestash.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-remotestash.debug.xcconfig"; path = "Target Support Files/Pods-remotestash/Pods-remotestash.debug.xcconfig"; sourceTree = "<group>"; };
+		4291886C25CAE92300A28701 /* RemoteStash.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = RemoteStash.entitlements; sourceTree = "<group>"; };
+		4291886D25CAE92F00A28701 /* share.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = share.entitlements; sourceTree = "<group>"; };
+		4291887625CAF84200A28701 /* RemoteStashClient+TableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RemoteStashClient+TableDataSource.swift"; sourceTree = "<group>"; };
 		42E53CF725C8088C003AF0D1 /* remotestash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = remotestash.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42E53CFA25C8088C003AF0D1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		42E53CFC25C8088C003AF0D1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -180,9 +185,11 @@
 				42E53CFA25C8088C003AF0D1 /* AppDelegate.swift */,
 				42E53CFC25C8088C003AF0D1 /* SceneDelegate.swift */,
 				42E53CFE25C8088C003AF0D1 /* ViewController.swift */,
+				4291887625CAF84200A28701 /* RemoteStashClient+TableDataSource.swift */,
 				42E53D0025C8088C003AF0D1 /* Main.storyboard */,
 				42E53D0325C8088C003AF0D1 /* Assets.xcassets */,
 				42E53D0525C8088C003AF0D1 /* LaunchScreen.storyboard */,
+				4291886C25CAE92300A28701 /* RemoteStash.entitlements */,
 				42E53D0825C8088C003AF0D1 /* Info.plist */,
 			);
 			path = remotestash;
@@ -211,6 +218,7 @@
 			children = (
 				42E53D3A25C80920003AF0D1 /* ShareViewController.swift */,
 				42E53D3C25C80920003AF0D1 /* MainInterface.storyboard */,
+				4291886D25CAE92F00A28701 /* share.entitlements */,
 				42E53D3F25C80920003AF0D1 /* Info.plist */,
 			);
 			path = share;
@@ -502,6 +510,7 @@
 				42E53DB925C8104C003AF0D1 /* MimeType.swift in Sources */,
 				42E53DBD25C8104C003AF0D1 /* AddressAndPort.swift in Sources */,
 				42E53CFD25C8088C003AF0D1 /* SceneDelegate.swift in Sources */,
+				4291887725CAF84200A28701 /* RemoteStashClient+TableDataSource.swift in Sources */,
 				42E53DB725C8104C003AF0D1 /* RemoteStashItem.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -532,6 +541,7 @@
 				42E53DC025C8104C003AF0D1 /* RemoteStashServer.swift in Sources */,
 				42E53DBE25C8104C003AF0D1 /* AddressAndPort.swift in Sources */,
 				42E53D3B25C80920003AF0D1 /* ShareViewController.swift in Sources */,
+				4291887825CAF84200A28701 /* RemoteStashClient+TableDataSource.swift in Sources */,
 				42E53DB825C8104C003AF0D1 /* RemoteStashItem.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -707,6 +717,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = remotestash/RemoteStash.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				INFOPLIST_FILE = remotestash/Info.plist;
@@ -728,6 +739,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = remotestash/RemoteStash.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				INFOPLIST_FILE = remotestash/Info.plist;
@@ -830,6 +842,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D9E02F13FC119D4B16320415 /* Pods-share.debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = share/share.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				INFOPLIST_FILE = share/Info.plist;
@@ -850,6 +863,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7E9ADD8C9DEFA8ADF9030874 /* Pods-share.release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = share/share.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				INFOPLIST_FILE = share/Info.plist;
