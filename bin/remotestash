@@ -34,8 +34,7 @@ import os
 from contextlib import closing
 import time
 import argparse
-from http.server import BaseHTTPRequestHandler
-from http.server import HTTPServer
+from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib import parse
 import cgi
 from requests import Session, Request
@@ -43,6 +42,7 @@ import pwd
 import json
 import sys
 from pprint import pprint
+
 
 class RemoteStashItem:
     '''
@@ -89,22 +89,6 @@ class RemoteStashItem:
         else:
             return RemoteStashItem.from_data( jsondata.encode( 'utf-8'), { 'content-type':'application/json' }  )
     
-    def from_filename(info,location=None):
-        '''
-        info should contains 'Content-Type' and 'file'
-        '''
-        filename = info['filename']
-        if location:
-            filename = os.path.join( location, filename )
-        rv = None
-        if os.path.isfile( filename ):
-            with open(filename, 'rb') as readf:
-                rv = RemoteStashItem.from_file( info, readf )
-        else:
-            rv = RemoteStashItem(info)
-            
-        return rv
-
     
     def from_data(data,info):
         rv = RemoteStashItem(info)
@@ -145,42 +129,39 @@ class RemoteStashItem:
     def content_type(self):
         return self.info['content-type']
     
-    def ensure_filename(self,filename=None):
-        '''
-        Ensures a file is present in the meta data or create a unique one by hash
-        '''
-        if filename:
-            self.info[ 'filename'] =  filename
-        else:
-            data = self.as_data()
-            if data:
-                hash = hashlib.sha1(data)
-                self.info[ 'filename'] =  hash.hexdigest()
-
     def json_dict(self):
         return self.info
-    
-    def save_to_file(self,location=None):
-        self.ensure_filename()
-        if 'filename' not in self.info:
-            print( f'No file name' )
-            return
-        filename = self.info['filename']
-        path = filename
+
+    def from_asset(info,location=None):
+        '''
+        info should contains 'Content-Type' and 'file'
+        '''
+        filename = info['filename']
         if location:
-            path = os.path.join( location, filename )
+            filename = os.path.join( location, filename )
+        rv = None
+        if os.path.isfile( filename ):
+            with open(filename, 'rb') as readf:
+                rv = RemoteStashItem.from_file( info, readf )
+        else:
+            rv = RemoteStashItem(info)
             
-        if self.data:
+        return rv
+
+    def save_asset(self,location):
+        data = self.as_data()
+        if data:
+            assetname = hashlib.sha1(data).hexdigest()
+            path = assetname
+            if location:
+                path = os.path.join( location, path )
+            self.info[ 'assetname'] =  assetname
             with open( path, 'wb' ) as of:
                 of.write( self.data )
-        elif self.text:
-            with open( path, 'w' ) as of:
-                of.write( self.text )
-
 
     def clear_file(self,location=None):
-        if 'filename' in self.info:
-            path = self.info['filename']
+        if 'assetnane' in self.info:
+            path = self.info['assetname']
             if location:
                 path = os.path.join( location, path )
             if os.path.isfile(path ):
@@ -260,7 +241,7 @@ class RemoteStashLocal:
     def pull(self):
         if len(self.contents['items']):
             info = self.contents['items'].pop()
-            item = RemoteStashItem.from_filename(info,self.location)
+            item = RemoteStashItem.from_asset(info,self.location)
             item.clear_file(self.location)
             self.save_content()
             if self.verbose:
@@ -277,7 +258,7 @@ class RemoteStashLocal:
 
     def clear(self):
         for c in self.contents['items']:
-            item = RemoteStashItem.from_filename(c,self.location)
+            item = RemoteStashItem.from_asset(c,self.location)
             item.clear_file()
         if self.verbose:
             size = len(self.contents['items'])
@@ -305,14 +286,13 @@ class RemoteStashLocal:
             
     def last(self):
         if len(self.contents['items']):
-            item = RemoteStashItem.from_filename(self.contents['items'][-1],self.location)
+            item = RemoteStashItem.from_asset(self.contents['items'][-1],self.location)
             return item
 
         return None
 
     def push(self,item):
-        item.ensure_filename()
-        item.save_to_file(self.location)
+        item.save_asset(self.location)
         self.contents['items'].append( item.json_dict() )
         if self.verbose:
             size = len(self.contents['items'])
@@ -357,6 +337,12 @@ class RemoteStashClient:
                 self.info = info
                 print( f'Skipping Service {name} on {self.ip}:{self.port}')
             
+    def item_from_response(self,response):
+        try:
+            ctype = response.headers['Content-Type']
+            return RemoteStashItem.from_data( response.content, { 'content-type': ctype } )
+        except:
+            return None
 
     def get(self,path):
         self.session = Session()
@@ -368,13 +354,6 @@ class RemoteStashClient:
             print( f'starting GET {url}' )
         response = self.session.get( url, verify=False )
         return response
-
-    def item_from_response(self,response):
-        try:
-            ctype = response.headers['Content-Type']
-            return RemoteStashItem.from_data( response.content, { 'content-type': ctype } )
-        except:
-            return None
     
     def post(self,path,data):
         self.session = Session()
@@ -382,12 +361,18 @@ class RemoteStashClient:
         port = self.port
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         url = f'https://{ip}:{port}/{path}'
-        if self.verbose:
-            print( f'starting POST {url}' )
         headers = {}
-        if self.content_type:
-            headers[ 'Content-Type'] =  self.content_type
-        response = self.session.get( url, verify=False, data = data, headers = headers )
+        if self.filename:
+            if self.verbose:
+                print( 'starting POST {} file {} {}'.format(url,self.filename,self.content_type) )
+            files = {'file':(self.filename, data, self.content_type) } 
+            response = self.session.post( url, verify=False, files = files, headers = headers )
+        else:
+            if self.content_type:
+                headers[ 'Content-Type'] =  self.content_type
+            if self.verbose:
+                print( 'starting POST {}  data {}'.format(url,self.filename,self.content_type) )
+            response = self.session.post( url, verify=False, data = data, headers = headers )
         return response
 
     def list(self):
@@ -480,7 +465,8 @@ class RemoteStashServer(BaseHTTPRequestHandler):
             pass
 
         stash = RemoteStashLocal({})
-        item = RemoteStashItem.from_data( self.body, { 'content-type': self.headers['Content-Type'] } )
+        info = { 'content-type': self.headers['Content-Type'] }
+        item = RemoteStashItem.from_data( self.body, info )
         stash.push( item )
         rv = RemoteStashItem.from_json( json.dumps( {'success':1} ) )
         self.respond_item( rv )
@@ -529,21 +515,39 @@ class RemoteStashServer(BaseHTTPRequestHandler):
         self.headers_dict = {}
         for (k,v) in self.headers.items():
             self.headers_dict[ k.lower() ] = v;
-            
-        if 'content-type' in self.headers_dict:
-            self.content_type = self.headers_dict['content-type']
+        self.filename = None
+
+        ctype, pdict = cgi.parse_header(self.headers['Content-Type'])
+        if ctype == 'multipart/form-data':
+            pdict['boundary'] = bytes(pdict['boundary'], 'utf-8')
+            pdict['content-length'] = int(self.headers['Content-Length'])
+            form = cgi.FieldStorage( fp=self.rfile, headers=self.headers, environ={'REQUEST_METHOD':'POST', 'CONTENT_TYPE':self.headers['Content-Type'], })
+            if 'file' in form:
+                record = form['file']
+                self.filename = record.filename
+                self.body = record.file.read()
+                self.content_length = len(self.body)
+                self.content_type = record.type
+            else:
+                self.body = None
+                self.content_length = 0
         else:
-            self.content_type = None
-            
-        if 'content-length' in self.headers_dict:
-            self.content_length = int( self.headers_dict.get('content-length') )
-            self.body = self.rfile.read(self.content_length)
-        else:
-            self.body = None
-            self.content_length = 0
+            if 'content-type' in self.headers_dict:
+                self.content_type = self.headers_dict['content-type']
+            else:
+                self.content_type = None
+            if 'content-length' in self.headers_dict:
+                self.content_length = int( self.headers_dict.get('content-length') )
+                self.body = self.rfile.read(self.content_length)
+            else:
+                self.body = None
+                self.content_length = 0
 
         if self.content_length > 0:
-            print( f'Received {self.content_length} bytes, content-type: {self.content_type}' )
+            if self.filename:
+                print( f'Received {self.content_length} bytes, content-type: {self.content_type} filename: {self.filename}' )
+            else:
+                print( f'Received {self.content_length} bytes, content-type: {self.content_type}' )
             
     def request_debug_info(self):
         parsed_path = self.parsed_path
@@ -614,10 +618,12 @@ class RemoteStash:
         zeroconf = Zeroconf()
         listener = RemoteStashClient(path,self.args)
         if path == 'push':
-            inputf = self.get_input_file()
+            (filename,inputf) = self.get_input_file()
+            listener.filename = filename
             listener.content = inputf.read()
             listener.outfile = None
         else:
+            listener.filename = None
             listener.content = None
             listener.outfile = self.get_output_file()
         
@@ -663,19 +669,19 @@ class RemoteStash:
             advertiser.clean_advertisement()
 
     def get_input_file(self):
-        if 'filename' in self.args and self.args.file:
+        if 'file' in self.args and self.args.file:
             if os.path.isfile( self.args.file ):
-                return open( self.args.file, 'rb' )
+                return (os.path.basename(self.args.file),  open( self.args.file, 'rb' ))
             else:
-                return None
+                return (None,None)
         else:
-            return sys.stdin
+            return (None,sys.stdin)
         
     def get_content_type(self):
         if self.args.content_type:
             return self.args.content_type
 
-        if 'filename' in self.args and self.args.file:
+        if 'file' in self.args and self.args.file:
             if os.path.isfile( self.args.file ):
                 ct = mimetypes.guess_type( self.args.file )
                 if ct[1]:
@@ -691,7 +697,7 @@ class RemoteStash:
             if self.verbose:
                 print( f'Saving to {self.args.output}' )
             return open( self.args.output, 'wb' )
-        elif 'filename' in self.args and self.args.file:
+        elif 'file' in self.args and self.args.file:
             if self.verbose:
                 print( f'Saving to {self.args.file}' )
             return open( self.args.file, 'wb' )
@@ -700,10 +706,14 @@ class RemoteStash:
             
     def cmd_push(self):
         if self.args.local:
-            inputf = self.get_input_file()
+            (filename,inputf) = self.get_input_file()
             content_type = self.get_content_type()
-            
-            item = RemoteStashItem.from_file( {'content-type': content_type}, inputf )
+
+            info = {'content-type': content_type }
+            if filename:
+                info['filename'] = filename
+                        
+            item = RemoteStashItem.from_file( info, inputf )
             stash = RemoteStashLocal(self.args)
             stash.push( item )
         else:
