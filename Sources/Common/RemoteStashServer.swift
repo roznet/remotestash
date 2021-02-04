@@ -22,7 +22,7 @@ class RemoteStashServer : NSObject,NetServiceDelegate,NetServiceBrowserDelegate 
     
     struct Status : Codable, CustomStringConvertible {
         enum CodingKeys : String, CodingKey {
-            case itemsCount = "items_count"
+            case itemsCount = "items-count"
             case last = "last"
         }
         
@@ -55,9 +55,11 @@ class RemoteStashServer : NSObject,NetServiceDelegate,NetServiceBrowserDelegate 
     //MARK: - start/stop
     
     func start() {
-        self.findPort()
-        self.startBroadcast()
-        self.startServer()
+        if self.httpServer == nil {
+            self.findPort()
+            self.startBroadcast()
+            self.startServer()
+        }
     }
     
     func stop(){
@@ -117,7 +119,6 @@ class RemoteStashServer : NSObject,NetServiceDelegate,NetServiceBrowserDelegate 
         }
         
         if httpServer.startListening(nil, portNumber: UInt(self.port)) {
-            
             logger.info("started listening on \(self.port), \(AddressAndPort.availableAddresses(self.port))")
         }else{
             logger.error("failed to started listening on \(self.port)")

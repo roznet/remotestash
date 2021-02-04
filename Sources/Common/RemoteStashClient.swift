@@ -11,6 +11,7 @@ import os
 
 @objc protocol RemoteStashClientDelegate {
     func remoteStashClient( _ client : RemoteStashClient, add service : RemoteStashService)
+    func remoteStashClient( _ client : RemoteStashClient, shouldAdd service : RemoteStashService) -> Bool
 }
 
 fileprivate let logger = Logger(subsystem: "net.ro-z.remotestash", category: "client")
@@ -50,14 +51,18 @@ class RemoteStashClient : NSObject,NetServiceBrowserDelegate{
         let pending = RemoteStashService(service: service ) { one in
             if one.ready {
                 let same = self.services.filter { $0.same(as:one) }
-                if same.count == 0 {
+                if same.count != 0 {
+                    logger.info("Discovered \(one), but already added")
+                }else if !self.delegate.remoteStashClient(self, shouldAdd: one){
+                    logger.info("Discovered \(one), but should not add")
+                }else{
+                    logger.info("Discovered \(one), added")
                     if self.currentServiceIndex < 0 {
                         self.currentServiceIndex = self.services.count
                     }
                     self.services.append(one)
+                    self.delegate.remoteStashClient(self, add: one)
                 }
-                self.pendingServices.removeAll { $0.same(as: one) }
-                self.delegate.remoteStashClient(self, add: one)
             }else {
                 logger.error("Failed to resolve \(service)")
             }

@@ -58,7 +58,7 @@ extension MimeType {
         return (MimeType(mime),encoding)
     }
     static func mimeType(file: URL) -> MimeType? {
-        let fileExtension : String = file.pathExtension
+        let fileExtension : String = file.pathExtension.lowercased()
         
         let map = [
             "123"            : "application/vnd.lotus-1-2-3",
@@ -879,6 +879,7 @@ extension MimeType {
             "zirz"            : "application/vnd.zul",
             "zmm"            : "application/vnd.handheld-entertainment+xml"
         ]
+        
         return map[fileExtension];
     }
 }

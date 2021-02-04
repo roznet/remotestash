@@ -132,18 +132,18 @@ class RemoteStashItem:
     def json_dict(self):
         return self.info
 
-    def from_asset(info,location=None):
+    def from_asset(info,location):
         '''
-        info should contains 'Content-Type' and 'file'
+        info should contains 'Content-Type' and 'assetname'
         '''
-        filename = info['filename']
-        if location:
-            filename = os.path.join( location, filename )
         rv = None
-        if os.path.isfile( filename ):
-            with open(filename, 'rb') as readf:
-                rv = RemoteStashItem.from_file( info, readf )
-        else:
+        if location and 'assetname' in info:
+            filename = os.path.join( location, info['assetname'] )
+            if os.path.isfile( filename ):
+                with open(filename, 'rb') as readf:
+                    rv = RemoteStashItem.from_file( info, readf )
+                    
+        if not rv:
             rv = RemoteStashItem(info)
             
         return rv
@@ -153,14 +153,13 @@ class RemoteStashItem:
         if data:
             assetname = hashlib.sha1(data).hexdigest()
             path = assetname
-            if location:
-                path = os.path.join( location, path )
+            path = os.path.join( location, path )
             self.info[ 'assetname'] =  assetname
             with open( path, 'wb' ) as of:
                 of.write( self.data )
 
-    def clear_file(self,location=None):
-        if 'assetnane' in self.info:
+    def clear_asset(self,location):
+        if 'assetname' in self.info:
             path = self.info['assetname']
             if location:
                 path = os.path.join( location, path )
@@ -223,10 +222,11 @@ class RemoteStashLocal:
             self.location = self.args['dir']
         else:
             self.location = os.path.expanduser("~/.remotestash")
-            if not os.path.isdir( self.location ):
+            self.location_assets = os.path.join(self.location, "assets")
+            if not os.path.isdir( self.location_assets ):
                 if self.verbose:
                     print( f'Creating {self.location}' )
-                os.makedirs( self.location )
+                os.makedirs( self.location_assets )
         self.content_file = os.path.join( self.location, 'contents.json' )
         if os.path.isfile( self.content_file ):
             with open( self.content_file ) as jf:
@@ -241,8 +241,8 @@ class RemoteStashLocal:
     def pull(self):
         if len(self.contents['items']):
             info = self.contents['items'].pop()
-            item = RemoteStashItem.from_asset(info,self.location)
-            item.clear_file(self.location)
+            item = RemoteStashItem.from_asset(info,self.location_assets)
+            item.clear_asset(self.location_assets)
             self.save_content()
             if self.verbose:
                 size = len(self.contents['items'])
@@ -256,43 +256,57 @@ class RemoteStashLocal:
 
         return None
 
+    def list(self):
+        pprint( self.contents )
+    
     def clear(self):
         for c in self.contents['items']:
-            item = RemoteStashItem.from_asset(c,self.location)
-            item.clear_file()
+            item = RemoteStashItem.from_asset(c,self.location_assets)
+            item.clear_asset(self.location_assets)
         if self.verbose:
             size = len(self.contents['items'])
             print( f'Cleared {size}' )
         self.contents['items'] = []
         self.save_content()
-            
+
+    def clean(self):
+        assets = os.listdir(self.location_assets)
+        for assetname in assets:
+            found = False
+            for c in self.contents['items']:
+                if c['assetname'] == assetname:
+                    found = True
+
+            if not found:
+                print( f'{assetname} not found' )
+            else:
+                print( f'{assetname} found' )
     
     def status(self):
         total = len( self.contents['items'] )
-        rv = {'items_count':total}
+        rv = {'items-count':total}
         
         if total > 0:
-            item = RemoteStashItem.from_filename(self.contents['items'][-1],self.location)
+            item = RemoteStashItem.from_asset(self.contents['items'][-1],self.location_assets)
             if self.verbose:
                 print( item.info )
-                print( item.as_data() )
             if item.as_data():
-                rv['last'] = {'bytes': len(item.as_data()), 'content-type':item.info['content-type'] }
+                rv['last'] = {'size': len(item.as_data()), 'content-type':item.info['content-type'] }
             else:
-                rv['last'] = {'bytes': 0, 'content-type':item.info['content-type'] }
+                rv['last'] = {'size': 0, 'content-type':item.info['content-type'] }
         else:                
-            rv['last'] = {'bytes': 0, 'content-type':'empty' }
+            rv['last'] = {'size': 0, 'content-type':'empty' }
         return rv
             
     def last(self):
         if len(self.contents['items']):
-            item = RemoteStashItem.from_asset(self.contents['items'][-1],self.location)
+            item = RemoteStashItem.from_asset(self.contents['items'][-1],self.location_assets)
             return item
 
         return None
 
     def push(self,item):
-        item.save_asset(self.location)
+        item.save_asset(self.location_assets)
         self.contents['items'].append( item.json_dict() )
         if self.verbose:
             size = len(self.contents['items'])
@@ -465,7 +479,9 @@ class RemoteStashServer(BaseHTTPRequestHandler):
             pass
 
         stash = RemoteStashLocal({})
-        info = { 'content-type': self.headers['Content-Type'] }
+        info = { 'content-type': self.content_type }
+        if self.filename:
+            info['filename'] = self.filename
         item = RemoteStashItem.from_data( self.body, info )
         stash.push( item )
         rv = RemoteStashItem.from_json( json.dumps( {'success':1} ) )
@@ -517,7 +533,16 @@ class RemoteStashServer(BaseHTTPRequestHandler):
             self.headers_dict[ k.lower() ] = v;
         self.filename = None
 
-        ctype, pdict = cgi.parse_header(self.headers['Content-Type'])
+        if 'Content-Type' in self.headers:
+            ctype, pdict = cgi.parse_header(self.headers['content-type'])
+        else:
+            ctype = 'application/octet-stream'
+
+        if 'content-disposition' in self.headers:
+            cdisp, ddict = cgi.parse_header(self.headers['content-disposition'] )
+            if 'filename' in ddict:
+                self.filename = ddict['filename']
+            
         if ctype == 'multipart/form-data':
             pdict['boundary'] = bytes(pdict['boundary'], 'utf-8')
             pdict['content-length'] = int(self.headers['Content-Length'])
@@ -751,9 +776,19 @@ class RemoteStash:
             self.cmd_listen('status')
 
     def cmd_list(self):
-        if not self.args.local:
+        if self.args.local:
+            stash = RemoteStashLocal(self.args)
+            status = stash.list()
+        else:
             self.cmd_listen('list')
             
+            
+    def cmd_clean(self):
+        if self.args.local:
+            stash = RemoteStashLocal(self.args)
+            stash.clean()
+        else:
+            print( 'Clean not implemented for remote' )
             
     def cmd_clear(self):
         if self.args.local:
@@ -777,6 +812,7 @@ if __name__ == "__main__":
         'last':{'attr':'cmd_last','help':'push content to stash'},
         'pull':{'attr':'cmd_pull','help':'pull content to stash'},
         'list':{'attr':'cmd_list','help':'list stash'},
+        'clean':{'attr':'cmd_clean','help':'clean stash from leftover assets'},
         'status':{'attr':'cmd_status','help':'status of stash'},
         'test':{'attr':'cmd_test','help':'random tests'},
         'clear':{'attr':'cmd_clear','help':'clear stash (local only)'},

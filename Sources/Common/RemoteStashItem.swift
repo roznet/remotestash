@@ -18,6 +18,13 @@ class RemoteStashItem {
 
 
     struct Status : Codable, CustomStringConvertible {
+        enum CodingKeys : String, CodingKey {
+            case contentType = "content-type"
+            case size = "size"
+            case filename = "filename"
+        }
+
+        
         let size : Int
         let contentType : String
         let filename : String?
@@ -104,7 +111,11 @@ class RemoteStashItem {
         self.content = Content.image(image)
         self.contentType = type
         self.encoding = nil
-        self.filename = filename
+        if let filename = filename {
+            self.filename = filename
+        }else{
+            self.filename =  type == MimeType.imagepng ? "remotestashitem.png" : "remotestashitem.jpeg"
+        }
     }
     init(string : String, type : String = MimeType.textplain, encoding : String.Encoding = .utf8){
         self.content = Content.string(string)
@@ -199,7 +210,7 @@ class RemoteStashItem {
         var imageProviders : [NSItemProvider] = []
         var textProviders : [NSItemProvider] = []
         var urlProviders : [NSItemProvider] = []
-        
+
         for extensionItem in extensionItems {
             if let itemProviders = extensionItem.attachments  {
                 for itemProvider in itemProviders {
@@ -220,10 +231,16 @@ class RemoteStashItem {
         }
         if let imageProvider = imageProviders.first {
             imageProvider.loadItem(forTypeIdentifier: kUTTypeImage as String){
-                item, _ in
-                if let image = item as? UIImage {
-                    completion(RemoteStashItem(image: image))
+                url, error in
+                if let url = url as? URL,
+                   let data = try? Data(contentsOf: url),
+                   let image = UIImage(data: data) {
+                    
+                    completion(RemoteStashItem(image: image, type: MimeType.mimeType(file: url) ?? MimeType.imagejpeg, filename: url.lastPathComponent))                    
                 }else{
+                    if let error = error {
+                        logger.error("Failed to convert image \(error as NSError)")
+                    }
                     completion(nil)
                 }
             }

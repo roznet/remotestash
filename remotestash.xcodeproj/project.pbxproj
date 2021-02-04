@@ -86,7 +86,7 @@
 		4291886C25CAE92300A28701 /* RemoteStash.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = RemoteStash.entitlements; sourceTree = "<group>"; };
 		4291886D25CAE92F00A28701 /* share.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = share.entitlements; sourceTree = "<group>"; };
 		4291887625CAF84200A28701 /* RemoteStashClient+TableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RemoteStashClient+TableDataSource.swift"; sourceTree = "<group>"; };
-		42E53CF725C8088C003AF0D1 /* remotestash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = remotestash.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		42E53CF725C8088C003AF0D1 /* RemoteStash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RemoteStash.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42E53CFA25C8088C003AF0D1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		42E53CFC25C8088C003AF0D1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		42E53CFE25C8088C003AF0D1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -171,7 +171,7 @@
 		42E53CF825C8088C003AF0D1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				42E53CF725C8088C003AF0D1 /* remotestash.app */,
+				42E53CF725C8088C003AF0D1 /* RemoteStash.app */,
 				42E53D0D25C8088C003AF0D1 /* remotestashTests.xctest */,
 				42E53D1825C8088C003AF0D1 /* remotestashUITests.xctest */,
 				42E53D3825C80920003AF0D1 /* share.appex */,
@@ -271,9 +271,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		42E53CF625C8088C003AF0D1 /* remotestash */ = {
+		42E53CF625C8088C003AF0D1 /* RemoteStash */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 42E53D2125C8088D003AF0D1 /* Build configuration list for PBXNativeTarget "remotestash" */;
+			buildConfigurationList = 42E53D2125C8088D003AF0D1 /* Build configuration list for PBXNativeTarget "RemoteStash" */;
 			buildPhases = (
 				6877690E71A8A4F91A3A95EF /* [CP] Check Pods Manifest.lock */,
 				42E53CF325C8088C003AF0D1 /* Sources */,
@@ -287,9 +287,9 @@
 			dependencies = (
 				42E53D4125C80920003AF0D1 /* PBXTargetDependency */,
 			);
-			name = remotestash;
+			name = RemoteStash;
 			productName = remotestash;
-			productReference = 42E53CF725C8088C003AF0D1 /* remotestash.app */;
+			productReference = 42E53CF725C8088C003AF0D1 /* RemoteStash.app */;
 			productType = "com.apple.product-type.application";
 		};
 		42E53D0C25C8088C003AF0D1 /* remotestashTests */ = {
@@ -384,7 +384,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				42E53CF625C8088C003AF0D1 /* remotestash */,
+				42E53CF625C8088C003AF0D1 /* RemoteStash */,
 				42E53D0C25C8088C003AF0D1 /* remotestashTests */,
 				42E53D1725C8088C003AF0D1 /* remotestashUITests */,
 				42E53D3725C80920003AF0D1 /* share */,
@@ -551,12 +551,12 @@
 /* Begin PBXTargetDependency section */
 		42E53D0F25C8088C003AF0D1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 42E53CF625C8088C003AF0D1 /* remotestash */;
+			target = 42E53CF625C8088C003AF0D1 /* RemoteStash */;
 			targetProxy = 42E53D0E25C8088C003AF0D1 /* PBXContainerItemProxy */;
 		};
 		42E53D1A25C8088D003AF0D1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 42E53CF625C8088C003AF0D1 /* remotestash */;
+			target = 42E53CF625C8088C003AF0D1 /* RemoteStash */;
 			targetProxy = 42E53D1925C8088D003AF0D1 /* PBXContainerItemProxy */;
 		};
 		42E53D4125C80920003AF0D1 /* PBXTargetDependency */ = {
@@ -892,7 +892,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		42E53D2125C8088D003AF0D1 /* Build configuration list for PBXNativeTarget "remotestash" */ = {
+		42E53D2125C8088D003AF0D1 /* Build configuration list for PBXNativeTarget "RemoteStash" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				42E53D2225C8088D003AF0D1 /* Debug */,

@@ -11,7 +11,7 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="remotestash" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="RemoteStash" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -29,14 +29,14 @@
                                         <rect key="frame" x="307" y="14.666666666666671" width="35" height="30"/>
                                         <state key="normal" title="Push"/>
                                         <connections>
-                                            <action selector="push:" destination="BYZ-38-t0r" eventType="touchUpInside" id="jrv-bi-8dc"/>
+                                            <action selector="actionPush:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gfi-9K-1BR"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Ur-4p-PM8">
                                         <rect key="frame" x="167" y="15" width="21" height="28"/>
                                         <state key="normal" image="702-share"/>
                                         <connections>
-                                            <action selector="share:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Zxy-ol-2C5"/>
+                                            <action selector="actionShare:" destination="BYZ-38-t0r" eventType="touchUpInside" id="CWx-gZ-uf8"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -103,14 +103,14 @@
                                         <rect key="frame" x="310" y="4" width="30" height="30"/>
                                         <state key="normal" title="Last"/>
                                         <connections>
-                                            <action selector="last:" destination="BYZ-38-t0r" eventType="touchUpInside" id="uLZ-4F-NDn"/>
+                                            <action selector="actionLast:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gkt-7w-nWJ"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sVO-uN-Z3d">
                                         <rect key="frame" x="162.66666666666666" y="4" width="30" height="30"/>
                                         <state key="normal" title="Pull"/>
                                         <connections>
-                                            <action selector="pull:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Ofl-TF-4sD"/>
+                                            <action selector="actionPull:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cfl-4M-8ew"/>
                                         </connections>
                                     </button>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="jOv-2K-kIX">

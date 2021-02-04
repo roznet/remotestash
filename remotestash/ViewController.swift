@@ -24,6 +24,7 @@ class ViewController: UIViewController,UITextViewDelegate,RemoteStashClientDeleg
     var last : RemoteStashItem? {
         return items.last ?? RemoteStashItem(pasteboard: UIPasteboard.general)
     }
+    var lastStatus : RemoteStashServer.Status? = nil
     
     var client : RemoteStashClient? = nil
     var server : RemoteStashServer? = nil
@@ -54,6 +55,8 @@ class ViewController: UIViewController,UITextViewDelegate,RemoteStashClientDeleg
         self.shareButton.tintColor = UIColor.systemBlue
         self.server = RemoteStashServer(delegate: self)
         self.client = RemoteStashClient(delegate: self)
+        self.serviceTableView.dataSource = self.client
+        self.serviceTableView.delegate = self.client
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -64,7 +67,8 @@ class ViewController: UIViewController,UITextViewDelegate,RemoteStashClientDeleg
         NotificationCenter.default.addObserver(forName: Notification.Name.remoteStashNewServiceDiscovered, object: nil, queue: nil) {
             notification in
             self.client?.service?.status() {
-                _,_ in
+                _,status in
+                self.lastStatus = status
                 self.update()
             }
         }
@@ -90,18 +94,58 @@ class ViewController: UIViewController,UITextViewDelegate,RemoteStashClientDeleg
     //MARK: - UI updates
     
     func update() {
-        
+        self.updateServiceStatus()
+        self.updateLastItem()
+        self.updateServiceTable()
     }
+
+    func updateServiceTable() {
+        DispatchQueue.main.async {
+            self.serviceTableView.reloadData()
+        }
+    }
+    
+    func updateLastItem() {
+        DispatchQueue.main.async {
+            if let item = self.last {
+                switch item.content{
+                case .image(let img):
+                    self.imagePreview.image = img
+                    self.textView.isHidden = true
+                    self.received.text = NSLocalizedString("String", comment: "Received")
+                case .string(let str):
+                    self.textView.text = str
+                    self.imagePreview.isHidden = true
+                    self.received.text = NSLocalizedString("Image", comment: "Received")
+                default:
+                    self.received.text = NSLocalizedString("Data", comment: "Received")
+                }
+            }
+        }
+    }
+    
+    func updateServiceStatus() {
+        if let status = self.lastStatus {
+            DispatchQueue.main.async {
+                var msg = [ "\(status.itemsCount) items"]
+                if let next = status.last?.contentType {
+                    msg.append("next: \(next)")
+                }
+                self.connectedTo.text = msg.joined(separator: ", ")
+            }
+        }
+    }
+    
     //MARK: - button and Actions
     
-    @IBAction func share(_ sender: Any) {
+    @IBAction func actionShare(_ sender: Any) {
         if let activityItems = self.last?.activityItems {
             let vc = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
             self.present(vc, animated: true, completion: nil)
         }
     }
     
-    @IBAction func push(_ sender: Any) {
+    @IBAction func actionPush(_ sender: Any) {
         guard let item = self.last else { return }
         self.client?.service?.pushItem(item: item){
             _,_ in
@@ -109,7 +153,7 @@ class ViewController: UIViewController,UITextViewDelegate,RemoteStashClientDeleg
         }
     }
     
-    @IBAction func last(_ sender: Any) {
+    @IBAction func actionLast(_ sender: Any) {
         self.client?.service?.lastItem() {
             _,item in
             guard let item = item else { return }
@@ -117,7 +161,7 @@ class ViewController: UIViewController,UITextViewDelegate,RemoteStashClientDeleg
             self.update()
         }
     }
-    @IBAction func pull(_ sender: Any) {
+    @IBAction func actionPull(_ sender: Any) {
         self.client?.service?.pullItem() {
             _,item in
             guard let item = item else { return }
@@ -137,8 +181,13 @@ class ViewController: UIViewController,UITextViewDelegate,RemoteStashClientDeleg
         
     }
     
+    //MARK: - remote Stash Client Delegate
     func remoteStashClient(_ client: RemoteStashClient, add service: RemoteStashService) {
         self.update()
+    }
+    
+    func remoteStashClient(_ client: RemoteStashClient, shouldAdd service: RemoteStashService) -> Bool {
+        return service.serverUUID != self.server?.serverUUID
     }
     
     func serverStarted(_ server: RemoteStashServer) {

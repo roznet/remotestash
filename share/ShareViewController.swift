@@ -80,6 +80,10 @@ class ShareViewController: SLComposeServiceViewController,RemoteStashClientDeleg
         }
     }
     
+    func remoteStashClient(_ client: RemoteStashClient, shouldAdd service: RemoteStashService) -> Bool {
+        return true
+    }
+    
     func pushServiceSelectionController() {
         let tvc = UITableViewController(style: .grouped)
         tvc.tableView.dataSource = self.client

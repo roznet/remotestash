@@ -166,6 +166,10 @@ class RemoteStashService : NSObject,NetServiceDelegate,URLSessionTaskDelegate {
         guard let item = item, var request = self.request(path: "push", method: "POST") else { return }
         request.httpBody = item.httpBody
         request.addValue(item.httpContentTypeHeader, forHTTPHeaderField: "Content-Type")
+        if let filename = item.filename {
+            request.addValue("attachment; filename=\"\(filename)\"", forHTTPHeaderField: "Content-Disposition")
+        }
+        request.addValue("myheader", forHTTPHeaderField: "x-remotestash")
         self.startTask(request: request, completion: completion)
     }
     
