@@ -229,3 +229,16 @@ class RemoteStashService : NSObject,NetServiceDelegate,URLSessionTaskDelegate {
     }
 }
 
+extension RemoteStashService  {
+    static func ==(lhs: RemoteStashService, rhs: RemoteStashService) -> Bool {
+        return lhs.serverUUID == rhs.serverUUID
+    }
+    
+    @objc override func isEqual(_ object: Any?) -> Bool {
+        guard let object = object as? RemoteStashService else {
+            return false
+        }
+        return self == object
+    }
+}
+

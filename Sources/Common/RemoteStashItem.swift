@@ -100,6 +100,7 @@ class RemoteStashItem {
     
     //MARK: - Initializers
     
+    
     init() {
         self.content = .empty
         self.contentType = MimeType.textplain
@@ -154,6 +155,7 @@ class RemoteStashItem {
     }
     
     convenience init(pasteboard : UIPasteboard) {
+        logger.info("\(pasteboard.itemProviders)")
         if pasteboard.hasStrings {
             self.init(string: pasteboard.string ?? "")
         }else if pasteboard.hasURLs {
@@ -202,33 +204,33 @@ class RemoteStashItem {
                   filename: response.suggestedFilename )
     }
     
-    static func item(from extensionContext : NSExtensionContext,  completion : @escaping (RemoteStashItem?) -> Void){
-        guard let extensionItems = extensionContext.inputItems as? [NSExtensionItem]
-        else {
-            return
-        }
+    func update( with other : RemoteStashItem){
+        self.content = other.content
+        self.contentType = other.contentType
+        self.encoding = other.encoding
+        self.filename = other.filename
+    }
+
+    static func item(itemProviders : [NSItemProvider], completion : @escaping (RemoteStashItem?) -> Void){
         var imageProviders : [NSItemProvider] = []
         var textProviders : [NSItemProvider] = []
         var urlProviders : [NSItemProvider] = []
 
-        for extensionItem in extensionItems {
-            if let itemProviders = extensionItem.attachments  {
-                for itemProvider in itemProviders {
-                    if itemProvider.hasItemConformingToTypeIdentifier(kUTTypeText as String) {
-                        textProviders.append(itemProvider)
-                    }
-                    if itemProvider.hasItemConformingToTypeIdentifier(kUTTypeImage as String){
-                        imageProviders.append(itemProvider)
-                    }
-                    if itemProvider.hasItemConformingToTypeIdentifier(kUTTypeFileURL as String){
-                        urlProviders.append(itemProvider)
-                    }
-                    if itemProvider.hasItemConformingToTypeIdentifier(kUTTypeURL as String){
-                        textProviders.append(itemProvider)
-                    }
-                }
+        for itemProvider in itemProviders {
+            if itemProvider.hasItemConformingToTypeIdentifier(kUTTypeText as String) {
+                textProviders.append(itemProvider)
+            }
+            if itemProvider.hasItemConformingToTypeIdentifier(kUTTypeImage as String){
+                imageProviders.append(itemProvider)
+            }
+            if itemProvider.hasItemConformingToTypeIdentifier(kUTTypeFileURL as String){
+                urlProviders.append(itemProvider)
+            }
+            if itemProvider.hasItemConformingToTypeIdentifier(kUTTypeURL as String){
+                textProviders.append(itemProvider)
             }
         }
+        
         if let imageProvider = imageProviders.first {
             imageProvider.loadItem(forTypeIdentifier: kUTTypeImage as String){
                 url, error in
@@ -236,7 +238,7 @@ class RemoteStashItem {
                    let data = try? Data(contentsOf: url),
                    let image = UIImage(data: data) {
                     
-                    completion(RemoteStashItem(image: image, type: MimeType.mimeType(file: url) ?? MimeType.imagejpeg, filename: url.lastPathComponent))                    
+                    completion(RemoteStashItem(image: image, type: MimeType.mimeType(file: url) ?? MimeType.imagejpeg, filename: url.lastPathComponent))
                 }else{
                     if let error = error {
                         logger.error("Failed to convert image \(error as NSError)")
@@ -262,6 +264,33 @@ class RemoteStashItem {
         }else{
             completion(nil)
         }
+
+    }
+    
+    static func item( pasteBoard : UIPasteboard, completion : @escaping (RemoteStashItem?) -> Void) {
+        if pasteBoard.itemProviders.count > 0 {
+            item(itemProviders: pasteBoard.itemProviders, completion: completion)
+        }else{
+            completion(RemoteStashItem(pasteboard: pasteBoard))
+        }
+    }
+    
+    static func item( extensionContext : NSExtensionContext,  completion : @escaping (RemoteStashItem?) -> Void){
+        guard let extensionItems = extensionContext.inputItems as? [NSExtensionItem]
+        else {
+            return
+        }
+        
+        var itemProviders : [NSItemProvider] = []
+        
+        for extensionItem in extensionItems {
+            if let attachmentsItemProviders = extensionItem.attachments  {
+                for itemProvider in attachmentsItemProviders {
+                    itemProviders.append(itemProvider)
+                }
+            }
+        }
+        return self.item(itemProviders: itemProviders, completion: completion)
     }
     
     func prepare(request : CRRequest, into response : CRResponse){

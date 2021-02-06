@@ -39,7 +39,7 @@ class ShareViewController: SLComposeServiceViewController,RemoteStashClientDeleg
             return
         }
         // This is called after the user selects Post. Do the upload of contentText and/or NSExtensionContext attachments.
-        RemoteStashItem.item(from: context){
+        RemoteStashItem.item(extensionContext: context){
             item in
             if let service = self.client?.service, let item = item {
                 logger.info("pushing \(item)")

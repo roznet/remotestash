@@ -21,8 +21,14 @@ class ViewController: UIViewController,UITextViewDelegate,RemoteStashClientDeleg
 
     //MARK: - stash management
     private var items : [RemoteStashItem] = []
-    var last : RemoteStashItem? {
-        return items.last ?? RemoteStashItem(pasteboard: UIPasteboard.general)
+    var last : RemoteStashItem {
+        if let rv = items.last {
+            return rv
+        }else{
+            let rv = RemoteStashItem()
+            self.items.append(rv)
+            return rv
+        }
     }
     var lastStatus : RemoteStashServer.Status? = nil
     
@@ -35,7 +41,7 @@ class ViewController: UIViewController,UITextViewDelegate,RemoteStashClientDeleg
     
     func pull() -> RemoteStashItem? {
         guard self.items.isEmpty else {
-            return RemoteStashItem(pasteboard: UIPasteboard.general)
+            return RemoteStashItem()
         }
         return self.items.removeLast()
     }
@@ -84,6 +90,15 @@ class ViewController: UIViewController,UITextViewDelegate,RemoteStashClientDeleg
             self.update()
             self.server?.stop()
         }
+        
+        // update with clipboard
+        RemoteStashItem.item(pasteBoard: UIPasteboard.general){
+            item in
+            if let item = item {
+                self.last.update(with: item)
+                self.update()
+            }
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -107,19 +122,20 @@ class ViewController: UIViewController,UITextViewDelegate,RemoteStashClientDeleg
     
     func updateLastItem() {
         DispatchQueue.main.async {
-            if let item = self.last {
-                switch item.content{
-                case .image(let img):
-                    self.imagePreview.image = img
-                    self.textView.isHidden = true
-                    self.received.text = NSLocalizedString("String", comment: "Received")
-                case .string(let str):
-                    self.textView.text = str
-                    self.imagePreview.isHidden = true
-                    self.received.text = NSLocalizedString("Image", comment: "Received")
-                default:
-                    self.received.text = NSLocalizedString("Data", comment: "Received")
-                }
+            let item = self.last
+            switch item.content{
+            case .image(let img):
+                self.imagePreview.image = img
+                self.textView.isHidden = true
+                self.imagePreview.isHidden = false
+                self.received.text = NSLocalizedString("Image", comment: "Received")
+            case .string(let str):
+                self.textView.text = str
+                self.textView.isHidden = false
+                self.imagePreview.isHidden = true
+                self.received.text = NSLocalizedString("String", comment: "Received")
+            default:
+                self.received.text = NSLocalizedString("Data", comment: "Received")
             }
         }
     }
@@ -139,14 +155,13 @@ class ViewController: UIViewController,UITextViewDelegate,RemoteStashClientDeleg
     //MARK: - button and Actions
     
     @IBAction func actionShare(_ sender: Any) {
-        if let activityItems = self.last?.activityItems {
-            let vc = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
-            self.present(vc, animated: true, completion: nil)
-        }
+        let activityItems = self.last.activityItems
+        let vc = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+        self.present(vc, animated: true, completion: nil)
     }
     
     @IBAction func actionPush(_ sender: Any) {
-        guard let item = self.last else { return }
+        let item = self.last
         self.client?.service?.pushItem(item: item){
             _,_ in
             self.update()
@@ -178,12 +193,8 @@ class ViewController: UIViewController,UITextViewDelegate,RemoteStashClientDeleg
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        if self.last == nil {
-            self.push(item: RemoteStashItem(string: textView.text))
-        }else{
-            self.last?.update(text: textView.text)
-        }
-        print( "update: \(self.last!.content)")
+        self.last.update(text: textView.text)
+        print( "update: \(self.last.content)")
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {

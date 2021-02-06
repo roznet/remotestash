@@ -19,7 +19,7 @@ extension RemoteStashClient : UITableViewDataSource,UITableViewDelegate {
             let one = self.services[indexPath.row]
             cell.textLabel?.text = one.name
             cell.detailTextLabel?.text = one.hostName
-            if let selected = self.service, selected.serverUUID == one.serverUUID {
+            if let selected = self.service, selected == one {
                 cell.textLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
             }else{
                 cell.textLabel?.font = UIFont.systemFont(ofSize: 16, weight: .regular)
@@ -33,7 +33,8 @@ extension RemoteStashClient : UITableViewDataSource,UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if self.services.indices.contains(indexPath.row) {
-            
+            self.service = self.services[indexPath.row]
+            tableView.reloadData()
         }
     }
     

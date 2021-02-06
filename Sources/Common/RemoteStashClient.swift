@@ -25,10 +25,27 @@ class RemoteStashClient : NSObject,NetServiceBrowserDelegate{
     var services : [RemoteStashService] = []
     
     var service : RemoteStashService? {
-        if self.currentServiceIndex < 0 || self.currentServiceIndex >= self.services.count {
-            return self.services.last
+        get {
+            if self.currentServiceIndex < 0 || self.currentServiceIndex >= self.services.count {
+                return self.services.last
+            }
+            return self.services[self.currentServiceIndex]
         }
-        return self.services[self.currentServiceIndex]
+        set {
+            guard let newValue = newValue else { return }
+            var newIndex : Int = -1
+            for (index,one) in self.services.enumerated(){
+                if one == newValue {
+                    newIndex = index
+                }
+            }
+            if newIndex < 0 {
+                self.currentServiceIndex = self.services.count
+                self.services.append(newValue)
+            }else{
+                self.currentServiceIndex = newIndex
+            }
+        }
     }
     
     private var pendingServices : [RemoteStashService] = []
