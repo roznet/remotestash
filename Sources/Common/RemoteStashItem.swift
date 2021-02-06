@@ -55,10 +55,10 @@ class RemoteStashItem {
         }
     }
     
-    let contentType : String
-    let filename : String?
-    let content : Content
-    let encoding : String.Encoding?
+    var contentType : String
+    var filename : String?
+    var content : Content
+    var encoding : String.Encoding?
     
     //MARK: http output
     
@@ -287,11 +287,22 @@ class RemoteStashItem {
         }
     }
     
+    func update(text : String){
+        self.content = .string(text)
+        self.contentType = "text/plain"
+        self.encoding = .utf8
+        self.filename = nil
+    }
     
 }
 
 extension RemoteStashItem : CustomStringConvertible {
     var description: String {
-        return "RemoteStashItem(\(self.contentType))"
+        var info = [ "\(self.contentType)", "\(self.content.size())" ]
+        if let file = self.filename {
+            info.append(file)
+        }
+        let desc = info.joined(separator: ", ")
+        return "RemoteStashItem(\(desc))"
     }
 }

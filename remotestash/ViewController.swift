@@ -178,7 +178,15 @@ class ViewController: UIViewController,UITextViewDelegate,RemoteStashClientDeleg
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        
+        if self.last == nil {
+            self.push(item: RemoteStashItem(string: textView.text))
+        }else{
+            self.last?.update(text: textView.text)
+        }
+        print( "update: \(self.last!.content)")
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
     }
     
     //MARK: - remote Stash Client Delegate
