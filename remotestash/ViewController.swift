@@ -81,7 +81,7 @@ class ViewController: UIViewController,UITextViewDelegate,RemoteStashClientDeleg
         
         NotificationCenter.default.addObserver(forName: Notification.Name.remoteStashApplicationEnteredForeground, object: nil, queue: nil){
             _ in
-            self.update()
+            self.updateFromPasteboard()
             self.server?.start()
         }
         
@@ -91,14 +91,7 @@ class ViewController: UIViewController,UITextViewDelegate,RemoteStashClientDeleg
             self.server?.stop()
         }
         
-        // update with clipboard
-        RemoteStashItem.item(pasteBoard: UIPasteboard.general){
-            item in
-            if let item = item {
-                self.last.update(with: item)
-                self.update()
-            }
-        }
+        self.updateFromPasteboard()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -114,6 +107,17 @@ class ViewController: UIViewController,UITextViewDelegate,RemoteStashClientDeleg
         self.updateServiceTable()
     }
 
+    func updateFromPasteboard(){
+        // update with clipboard
+        RemoteStashItem.item(pasteBoard: UIPasteboard.general){
+            item in
+            if let item = item {
+                self.last.update(with: item)
+            }
+            self.update()
+        }
+    }
+    
     func updateServiceTable() {
         DispatchQueue.main.async {
             self.serviceTableView.reloadData()

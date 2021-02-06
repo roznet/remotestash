@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
-        NotificationCenter.default.post(name: Notification.Name.remoteStashApplicationEnteredForeground, object: nil)
+        
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
