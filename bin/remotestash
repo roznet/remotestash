@@ -43,6 +43,85 @@ import json
 import sys
 from pprint import pprint
 
+# certificated created with
+#  openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout remotestash-key.pem -out remotestash-cert.pem
+# These need to be the same as the file remotestash-key and remotestash-cert that will be used by the ios app
+# This is not intended to be highly secure, as clearly the key is available freely, but just to ensure
+# ssl communication between the ios App, servers and/or cli commands
+
+cert_remotestash_key = '''-----BEGIN PRIVATE KEY-----
+MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDj8rYaHlAUCKME
+0df2U+PgMMMCjtNwo1seJZBl8U1q4RPfJNoguwVDBjfOb7WxQ/XzECvu3yDMzJ5+
++EzSBPSkIbaQbRLHNQ6mT7LU90ak3FYIComU2oPW0abtY2wHQ3kr/LqxiTgvgcb4
+yHuv+qYc2wTfIDwnca34fRUkEPRRuF0yqv/SqA7IdtDwPwkm31mdD2njbQdUDtGH
+7HVOMBRYcIZcOAsPp1Obu1/mHy+8SPpo9tiFwCGJynHM6LBUFEWvRtu26O52MH3I
++YdvainN/kQEISxrCSTNEPYuCLkpwZuUCBh7eldgjnYNYKIT3XkWfYRdTbhufsLo
+dMd9zbc1AgMBAAECggEBAMl+Q2AlCW4cEFXzVC5nC1iiYc8CB39atvGYDONAAMoI
+OXOXdMVX7BfKCEyPzJDsXR1FX0BgtfKysSvVOrqvLL1lG6bg86dpjBCRBKhiCG00
+Y0vqXKFa4w1h92eB6f0ltJegaDsE68h6tDI3rbXqHyoEpHLDYMkRINI1ZxmhbwZI
+AaZIuBBxP1kYAXb1ocuQXLDUXW44hEQIwMSxSwa+n6p3dl/5yflM23PN3VDjzPwI
+0rhCGCsTeHH7Yu1/OmEtof/+6H1qHIu/zpAt9DjtAv1qbwQ2obuiVwsiAk0LRleX
+8rPzb0bLAeCF4makY0I6DisUVOr8ZlXK0/XdfWMPWyUCgYEA+pv8oO5n8/Qht3N/
+LkmRdAQ5Ii7VOp/M1OQ6t+GwBK1fcT99k74Hf4LnTedDkXoS5tz2fx/MnGXYt3nO
+5Moy0dmZE9KoMIx+XTMSy5CHkwMgZhY3i/O+gYk/ArltBcEeEcCpaGxZEbgWq0eX
+4ZswgjuKTlbBCrh8ghVQS/CKTp8CgYEA6Nnv/NPnKLnP6Cu9LZaV5TPvxb9XH+q1
+jyWLHB6W6iry9WCIl8kDugWL82vUxg2LvH7i7gF30vrf1MFmShSqUdKpOP7rUT6f
+vP0y4HKZhBfzYaCf/g9vSU8Danpb+NQEG0iX6dZRQW9/pAGgvgC6XHCXEufu1UT7
+Zn5+XXAe7asCgYBl70bNqstLtlR0ix0DFdd9Ci63EbeXleI6Ae9EVh9Dd8Wnibyp
+eJUSL4un61ZXeQDxOJVm1edjAiYpUvltpDURmGGkZ34T6UGI5TpS5KHQkWf/PjAv
+09/8Tnf7wrJuscNqUyRVHiUIiQlnd8J2eKo9frxd6vmwQ6QZQVQc32VSXwKBgBLp
+mKd1YqIZLXzTCKOKRpR+OmxaVS4/dw2wY/MdvO46HM+3ToDdj9LtHmfgC0Em2oGt
+4KqqLdxSChoSt0cvFIJe1OXPNre7mWfVPOukAzoKY/c6/6O4BzbyFvnwBEZamhbJ
+N6WDhcgF0V010KN+FaTqdCrR8cEawDyb65GVSL3PAoGBAM06WpK6QlwrojERhnEH
+bRSO5P9czEEA86DWt25K0vvxGoOxF68tncE7K/duaR4+bs1F2KrS/7k1RWAsAFbR
+U54fmB9b4+EDDj+NA5b102L+yQYJZgM8jjtwTm8wFpOlRttI0HT1oUwju2hhC2KK
+OMTZGjwxG7w1tF/eJ7UZpAx3
+-----END PRIVATE KEY-----
+'''
+
+cert_remotestash_cert = '''-----BEGIN CERTIFICATE-----
+MIIDRjCCAi4CCQCfmPvH58mMzzANBgkqhkiG9w0BAQsFADBlMQswCQYDVQQGEwJV
+SzEPMA0GA1UECAwGTG9uZG9uMQ8wDQYDVQQHDAZMb25kb24xDzANBgNVBAoMBnJv
+em5ldDEPMA0GA1UECwwGcm96bmV0MRIwEAYDVQQDDAlsb2NhbGhvc3QwHhcNMjAw
+NjAzMDkxNDMwWhcNMzAwNjAxMDkxNDMwWjBlMQswCQYDVQQGEwJVSzEPMA0GA1UE
+CAwGTG9uZG9uMQ8wDQYDVQQHDAZMb25kb24xDzANBgNVBAoMBnJvem5ldDEPMA0G
+A1UECwwGcm96bmV0MRIwEAYDVQQDDAlsb2NhbGhvc3QwggEiMA0GCSqGSIb3DQEB
+AQUAA4IBDwAwggEKAoIBAQDj8rYaHlAUCKME0df2U+PgMMMCjtNwo1seJZBl8U1q
+4RPfJNoguwVDBjfOb7WxQ/XzECvu3yDMzJ5++EzSBPSkIbaQbRLHNQ6mT7LU90ak
+3FYIComU2oPW0abtY2wHQ3kr/LqxiTgvgcb4yHuv+qYc2wTfIDwnca34fRUkEPRR
+uF0yqv/SqA7IdtDwPwkm31mdD2njbQdUDtGH7HVOMBRYcIZcOAsPp1Obu1/mHy+8
+SPpo9tiFwCGJynHM6LBUFEWvRtu26O52MH3I+YdvainN/kQEISxrCSTNEPYuCLkp
+wZuUCBh7eldgjnYNYKIT3XkWfYRdTbhufsLodMd9zbc1AgMBAAEwDQYJKoZIhvcN
+AQELBQADggEBAIvb+T4njjFWgHbsLh15TgOdZ1G3+RcbT4yDqaitNjNL9/5X2/eW
+OlPBLU4bPiUDhsHXT/Pnazl+Crd2ae6H1LuRQam59hiJ6i0CqEQ2uSC7XIVsfk0F
+jZHgAiJH+Y7gUv5qg+na3dKd/QTFOzgIkzSs6zjPmS9pGrpEALDmgWbxKi1kgFlW
+BbaV9ALyK5Q0lk7LIbcb6JvLkifRIO7cEHJR0cXsl9Nt6dNlybt5yweuj64yNOIv
+SvVgmsZ7mPdYq29CjMhWDqq11CupOih2nMjmTCymFAD0gGrFTT9pw8Gx1y2bOZyB
+/BO1MUkA7yHg1SML2tkgz0XunV5bGdL+m/A=
+-----END CERTIFICATE-----
+'''
+
+def ensure_remote_stash_dir(location = '~/.remotestash'):
+    '''
+    ensure storage directory and certicates exists
+    return tuple with the location and asset location to use
+    '''
+    location_dir = os.path.expanduser(location)
+    location_asset_dir = os.path.join( location_dir, 'assets' )
+    if not os.path.isdir( location_asset_dir ):
+        os.makedirs( location_asset_dir )
+
+    cert_file = os.path.join( location_dir, 'remotestash-cert.pem' )
+    if not os.path.isfile( cert_file ):
+        with open( cert_file, 'w' ) as cf:
+            cf.write( cert_remotestash_cert )
+
+    key_file = os.path.join( location_dir, 'remotestash-key.pem' )
+    if not os.path.isfile( key_file ):
+        with open( key_file, 'w') as kf:
+            kf.write( cert_remotestash_key )
+            
+    return (location_dir, location_asset_dir)
 
 class RemoteStashItem:
     '''
@@ -89,7 +168,6 @@ class RemoteStashItem:
         else:
             return RemoteStashItem.from_data( jsondata.encode( 'utf-8'), { 'content-type':'application/json' }  )
     
-    
     def from_data(data,info):
         rv = RemoteStashItem(info)
         rv.data = data
@@ -128,7 +206,16 @@ class RemoteStashItem:
 
     def content_type(self):
         return self.info['content-type']
-    
+
+    def filename(self):
+        '''
+        if filename was linked to the data return it, otherwise None (for text for ex)
+        '''
+        if 'filename' in self.info:
+            return self.info['filename']
+        else:
+            return None
+        
     def json_dict(self):
         return self.info
 
@@ -218,15 +305,14 @@ class RemoteStashLocal:
             self.verbose = args.verbose
         else:
             self.verbose = False
+        
         if 'dir' in self.args:
             self.location = self.args['dir']
         else:
             self.location = os.path.expanduser("~/.remotestash")
-            self.location_assets = os.path.join(self.location, "assets")
-            if not os.path.isdir( self.location_assets ):
-                if self.verbose:
-                    print( f'Creating {self.location}' )
-                os.makedirs( self.location_assets )
+
+        (self.location, self.location_assets) = ensure_remote_stash_dir(self.location)
+
         self.content_file = os.path.join( self.location, 'contents.json' )
         if os.path.isfile( self.content_file ):
             with open( self.content_file ) as jf:
@@ -252,7 +338,6 @@ class RemoteStashLocal:
         else:
             if self.verbose:
                 print( f'Local Stash empty no item to pull' )
-                
 
         return None
 
@@ -317,8 +402,14 @@ class RemoteStashLocal:
         with open( self.content_file, 'w' ) as jf:
             json.dump( self.contents, jf )
 
-
 class RemoteStashClient:
+    '''
+    class to run a zeroconf listener to find a remotestash server to execute a specific action
+    when there service is found the method 'cmd' will be executed
+    args will be checked for:
+       name: filter on service with that name only
+       verbose: add output as service are found
+    '''
     def __init__(self,cmd,args):
         self.cmd = cmd
         self.args = args
@@ -331,6 +422,10 @@ class RemoteStashClient:
         if self.verbose:
             print( f'Service {name} removed' )
 
+    def update_service(self, zeroconf, type, name):
+        if self.verbose:
+            print( f'Service {name} updated' )
+        
     def add_service(self, zeroconf, type, name):
         if not self.args.name or self.args.name in name:
             info = zeroconf.get_service_info(type, name)
@@ -631,15 +726,17 @@ class RemoteStashServer(BaseHTTPRequestHandler):
             print( f'Response: {response_value}, {len(content)} bytes, {ctype}' )
         else:
             print( f'Response: {response_value}' )
-            
-            
         
 class RemoteStash:
     def __init__(self,args=None):
         self.args = args
         self.verbose = True;
 
-    def cmd_listen(self,path = 'last'):
+    def listen_and_execute(self,path = 'last'):
+        '''
+        listen to find a server to execute the action in path
+        after given timeout if no service found will exit with an error
+        '''
         zeroconf = Zeroconf()
         listener = RemoteStashClient(path,self.args)
         if path == 'push':
@@ -652,7 +749,7 @@ class RemoteStash:
             listener.content = None
             listener.outfile = self.get_output_file()
         
-        listener.content_type = self.get_content_type()
+        listener.content_type = self.get_input_content_type()
         browser = ServiceBrowser(zeroconf, "_remotestash._tcp.local.", listener)
         time.sleep(self.args.timeout)
         if path != 'list':
@@ -663,6 +760,7 @@ class RemoteStash:
         Will start a local server that will advertise over ZeroConf the service
         and start a web server to enable remote access to the local stash
         '''
+        ensure_remote_stash_dir('~/.remotestash')
         zeroconf = Zeroconf()
         advertiser = RemoteStashServerAdvertiser(int(self.args.port) if self.args.port else None)
         if self.args.name:
@@ -702,7 +800,7 @@ class RemoteStash:
         else:
             return (None,sys.stdin)
         
-    def get_content_type(self):
+    def get_input_content_type(self):
         if self.args.content_type:
             return self.args.content_type
 
@@ -717,22 +815,30 @@ class RemoteStash:
             
         return 'text/plain; charset=utf-8'
         
-    def get_output_file(self):
-        if 'output' in self.args and self.args.output:
-            if self.verbose:
-                print( f'Saving to {self.args.output}' )
-            return open( self.args.output, 'wb' )
-        elif 'file' in self.args and self.args.file:
-            if self.verbose:
-                print( f'Saving to {self.args.file}' )
-            return open( self.args.file, 'wb' )
+    def get_output_file(self,item=None):
+        '''
+        return a file handle of where the output of an item should be written to
+        stdout or if applicable the filename from the original item will be use unless overwritten 
+        on the command line. '-' as a file name will force output to stdout
+        '''
+        if 'file' in self.args and self.args.file:
+            if self.args.file == '-':
+                return sys.stdout
+            else:
+                if self.verbose:
+                    print( f'Saving to {self.args.file}' )
+                return open( self.args.file, 'wb' )
         else:
-            return sys.stdout
+            # if no args, just use stdout or filename provided by item
+            if item and item.filename():
+                return item.filename()
+            else:
+                return sys.stdout
             
     def cmd_push(self):
         if self.args.local:
             (filename,inputf) = self.get_input_file()
-            content_type = self.get_content_type()
+            content_type = self.get_input_content_type()
 
             info = {'content-type': content_type }
             if filename:
@@ -742,8 +848,7 @@ class RemoteStash:
             stash = RemoteStashLocal(self.args)
             stash.push( item )
         else:
-            self.cmd_listen('push')
-            
+            self.listen_and_execute('push')
 
     def cmd_pull(self):
         if self.args.local:
@@ -752,7 +857,7 @@ class RemoteStash:
             if item:
                 item.output(self.get_output_file())
         else:
-            self.cmd_listen('pull')
+            self.listen_and_execute('pull')
             
     def cmd_last(self):
         if self.args.local:
@@ -764,7 +869,7 @@ class RemoteStash:
                 if self.verbose:
                     print( 'Local Stash empty no last item' )
         else:
-            self.cmd_listen('last')
+            self.listen_and_execute('last')
             
     def cmd_status(self):
         if self.args.local:
@@ -773,15 +878,14 @@ class RemoteStash:
             item = RemoteStashItem.from_json( json.dumps( status ) )
             item.output( self.get_output_file() )
         else:
-            self.cmd_listen('status')
+            self.listen_and_execute('status')
 
     def cmd_list(self):
         if self.args.local:
             stash = RemoteStashLocal(self.args)
             status = stash.list()
         else:
-            self.cmd_listen('list')
-            
+            self.listen_and_execute('list')
             
     def cmd_clean(self):
         if self.args.local:
@@ -806,13 +910,12 @@ class RemoteStash:
             
 if __name__ == "__main__":
     commands = {
-        'listen':{'attr':'cmd_listen','help':'listen for server'},
         'serve':{'attr':'cmd_serve','help':'start server'},
         'push':{'attr':'cmd_push','help':'push content to stash'},
-        'last':{'attr':'cmd_last','help':'push content to stash'},
-        'pull':{'attr':'cmd_pull','help':'pull content to stash'},
-        'list':{'attr':'cmd_list','help':'list stash'},
-        'clean':{'attr':'cmd_clean','help':'clean stash from leftover assets'},
+        'last':{'attr':'cmd_last','help':'get last content from the stash without removing it'},
+        'pull':{'attr':'cmd_pull','help':'pull content from the stash'},
+        'list':{'attr':'cmd_list','help':'list available stash'},
+        'clean':{'attr':'cmd_clean','help':'clean stash from unused assets'},
         'status':{'attr':'cmd_status','help':'status of stash'},
         'test':{'attr':'cmd_test','help':'random tests'},
         'clear':{'attr':'cmd_clear','help':'clear stash (local only)'},
@@ -820,16 +923,15 @@ if __name__ == "__main__":
     
     description = "\n".join( [ '  {}: {}'.format( k,v['help'] ) for (k,v) in commands.items() ] )
     
-    parser = argparse.ArgumentParser( description='Remote Copy', formatter_class=argparse.RawTextHelpFormatter )
-    parser.add_argument( 'command', metavar='Command', help='command to execute:\n' + description)
+    parser = argparse.ArgumentParser( description='RemoteStash exchange files and data between devices', formatter_class=argparse.RawTextHelpFormatter )
+    parser.add_argument( 'command', help='command to execute:\n' + description)
     parser.add_argument( '-c', '--content-type', help='content type' )
     parser.add_argument( '-l', '--local', action='store_true', help='use local stash' )
     parser.add_argument( '-n', '--name', help='name for service' )
     parser.add_argument( '-v', '--verbose', action='store_true', help='verbose output' )
     parser.add_argument( '-p', '--port', help='port to use if not set will use a free port' )
-    parser.add_argument( '-o', '--output', help='output file if not set save to stdout' )
     parser.add_argument( '-t', '--timeout', help='timeout for searching for a RemoteStash on the network', default=5.0, type=float )
-    parser.add_argument( 'file',    metavar='FILE', nargs='?' )
+    parser.add_argument( 'file',nargs='?', help='file name to read or save, empty or - for stdout/stdin' )
     args = parser.parse_args()
 
     command = RemoteStash(args)
