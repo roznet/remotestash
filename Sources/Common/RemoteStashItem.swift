@@ -211,7 +211,30 @@ class RemoteStashItem {
         self.encoding = other.encoding
         self.filename = other.filename
     }
+    
+    static func loadItem(itemProvider : NSItemProvider,
+                         uttype : UTType,
+                         completion :  @escaping (RemoteStashItem?) -> Void,
+                         convert : @escaping (NSSecureCoding)->RemoteStashItem?){
+        itemProvider.loadItem(forTypeIdentifier: uttype.identifier){
+            item, error in
+            if let error = error {
+                logger.error("Failed to load \(uttype.identifier) from provider \(error as NSError)")
+                completion(nil)
+                return
+            }
+            
+            if let item = item, let stashitem = convert(item) {
+                logger.info("provided \(uttype.identifier) \(stashitem)")
+                completion(stashitem)
+            }else{
+                logger.error("Failed to convert to \(uttype.identifier) from \(type(of: item))")
+                completion(nil)
+            }
+        }
 
+    }
+    
     static func item(itemProviders : [NSItemProvider], completion : @escaping (RemoteStashItem?) -> Void){
         var imageProviders : [NSItemProvider] = []
         var textProviders : [NSItemProvider] = []
@@ -222,88 +245,83 @@ class RemoteStashItem {
             var used = false
             if itemProvider.hasItemConformingToTypeIdentifier(UTType.text.identifier) {
                 used = true
-                logger.info("used text provider of type \(itemProvider.registeredTypeIdentifiers)")
+                logger.info("found text provider of type \(itemProvider.registeredTypeIdentifiers)")
                 textProviders.append(itemProvider)
             }
             if itemProvider.hasItemConformingToTypeIdentifier(UTType.image.identifier){
                 used = true
-                logger.info("used image provider of type \(itemProvider.registeredTypeIdentifiers)")
+                logger.info("found image provider of type \(itemProvider.registeredTypeIdentifiers)")
                 imageProviders.append(itemProvider)
             }
             if itemProvider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier){
                 used = true
-                logger.info("used file url provider of type \(itemProvider.registeredTypeIdentifiers)")
+                logger.info("found file url provider of type \(itemProvider.registeredTypeIdentifiers)")
                 fileProviders.append(itemProvider)
             }
             if itemProvider.hasItemConformingToTypeIdentifier(UTType.url.identifier){
                 used = true
-                logger.info("used url provider of type \(itemProvider.registeredTypeIdentifiers)")
+                logger.info("found url provider of type \(itemProvider.registeredTypeIdentifiers)")
                 urlProviders.append(itemProvider)
             }
             if !used {
-                logger.info("Unused provider of type \(itemProvider.registeredTypeIdentifiers)")
+                logger.info("no known provider found in types \(itemProvider.registeredTypeIdentifiers)")
             }
         }
         
         if let imageProvider = imageProviders.first {
-            imageProvider.loadItem(forTypeIdentifier: UTType.image.identifier){
-                item, error in
-                if let error = error {
-                    logger.error("Failed to convert image \(error as NSError)")
-                }
-                
+            RemoteStashItem.loadItem(itemProvider: imageProvider,
+                                     uttype: UTType.image,
+                                     completion: completion){
+                item in
                 if let url = item as? URL,
                    let data = try? Data(contentsOf: url),
                    let image = UIImage(data: data) {
-                    logger.info("got image \(url)")
-                    completion(RemoteStashItem(image: image, type: MimeType.mimeType(file: url) ?? MimeType.imagejpeg, filename: url.lastPathComponent))
+                    var type = MimeType.mimeType(file: url)
+                    var filename = url.lastPathComponent
+                    if type == nil {
+                        type = MimeType.imagejpeg
+                    }
+                    if url.pathExtension == "" {
+                        filename = "\(filename).jpeg"
+                    }
+                    return RemoteStashItem(image: image, type: type ?? MimeType.imagejpeg, filename: filename)
                 }else{
-                    logger.error("Failed to convert image from \(type(of: item))")
-                    completion(nil)
+                    return nil
                 }
             }
         }else if let textProvider = textProviders.first {
-            textProvider.loadItem(forTypeIdentifier: UTType.text.identifier){
-                item, error in
-                if let error = error {
-                    logger.error("Failed to convert text \(error as NSError)")
-                }
-                
+            RemoteStashItem.loadItem(itemProvider: textProvider,
+                                     uttype: UTType.text,
+                                     completion: completion){
+                item in
                 if let text = item as? String{
-                    completion(RemoteStashItem(string: text))
-                }else{
-                    logger.error("Failed to convert text from \(type(of: item))")
-                    completion(nil)
+                    return RemoteStashItem(string: text)
                 }
+                return nil
             }
         }else if let urlProvider = urlProviders.first {
-            urlProvider.loadItem(forTypeIdentifier: UTType.url.identifier){
-                item, error in
-                if let error = error {
-                    logger.error("Failed to convert text \(error as NSError)")
-                }
-                
+            RemoteStashItem.loadItem(itemProvider: urlProvider,
+                                     uttype: UTType.url,
+                                     completion: completion){
+                item in
                 if let url = item as? URL{
-                    logger.info( "got \(url.lastPathComponent) with ext: \(url.pathExtension)" )
-                    completion(RemoteStashItem(string: url.description))
-                }else{
-                    completion(nil)
+                    return RemoteStashItem(string: url.description)
                 }
+                return nil
+
             }
         }else if let fileProvider = fileProviders.first {
-            fileProvider.loadItem(forTypeIdentifier: UTType.fileURL.description){
-                item, error in
-                if let error = error {
-                    logger.error("Failed to convert file \(error as NSError)")
-                }
-                
+            RemoteStashItem.loadItem(itemProvider: fileProvider,
+                                     uttype: UTType.fileURL,
+                                     completion: completion){
+                item in
                 if let url = item as? URL,
                    let data = try? Data(contentsOf: url) {
-                    logger.info( "got \(url.lastPathComponent) with ext: \(url.pathExtension)" )
-                    completion(RemoteStashItem(data: data, type: MimeType.mimeType(file: url) ?? MimeType.imagejpeg, filename: url.lastPathComponent))
-                }else{
-                    completion(nil)
+                    return RemoteStashItem(data: data,
+                                           type: MimeType.mimeType(file: url) ?? MimeType.applicationoctetstream,
+                                           filename: url.lastPathComponent)
                 }
+                return nil
             }
         }else{
             completion(nil)
@@ -312,7 +330,7 @@ class RemoteStashItem {
     }
     
     static func item( pasteBoard : UIPasteboard, completion : @escaping (RemoteStashItem?) -> Void) {
-        if pasteBoard.hasImages || pasteBoard.hasStrings || pasteBoard.hasURLs {
+        if false && pasteBoard.hasImages || pasteBoard.hasStrings || pasteBoard.hasURLs {
             completion(RemoteStashItem(pasteboard: pasteBoard))
         }else{
             if pasteBoard.itemProviders.count > 0 {
