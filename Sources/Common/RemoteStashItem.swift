@@ -14,7 +14,6 @@ import UniformTypeIdentifiers
 
 fileprivate let logger = Logger(subsystem: "net.ro-z.remotestash", category: "item")
 
-
 class RemoteStashItem {
 
 
@@ -371,7 +370,7 @@ class RemoteStashItem {
     }
     
     func prepare(request : CRRequest, into response : CRResponse){
-        response.setValue(self.contentType, forHTTPHeaderField: "Content-Type")
+        response.setValue(self.httpContentTypeHeader, forHTTPHeaderField: "Content-Type")
         switch self.content {
         case .string(let str):
             response.send(str)

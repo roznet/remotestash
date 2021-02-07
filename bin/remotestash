@@ -146,6 +146,29 @@ class RemoteStashItem:
 
     def __repr__(self):
         return f'RemoteStashItem({self.info})'
+
+
+    def info_from_headers(headers):
+        info = {}
+        if 'content-type' in headers:
+            ctype, pdict = cgi.parse_header(headers['content-type'])
+        else:
+            ctype, pdict = 'application/octet-stream', {}
+            
+        info['content-type'] = ctype
+        
+        encoding = None
+        if 'charset' in pdict:
+            info['encoding'] = options['charset']
+        elif ctype.startswith( 'text/' ):
+            info['encoding'] = 'utf-8'
+        
+        if 'content-disposition' in headers:
+            cdisp, ddict = cgi.parse_header(headers['content-disposition'] )
+            if 'filename' in ddict:
+                info['filename'] = ddict['filename']
+
+        return info
     
     def from_file(info,infile):
         '''
@@ -166,7 +189,7 @@ class RemoteStashItem:
         if isinstance( jsondata, bytes):
             return RemoteStashItem.from_data( jsondata, { 'content-type':'application/json' }  )
         else:
-            return RemoteStashItem.from_data( jsondata.encode( 'utf-8'), { 'content-type':'application/json' }  )
+            return RemoteStashItem.from_data( jsondata.encode( 'utf-8'), { 'content-type':'application/json', 'encoding':'utf-8' }  )
     
     def from_data(data,info):
         rv = RemoteStashItem(info)
@@ -184,25 +207,14 @@ class RemoteStashItem:
         if 'content-type' not in self.info:
             print( 'Missing Content Type' )
 
-    def encoding(self,strict=False):
+    def encoding(self):
         '''
         determine (or guess) the encoding. Will try to parse content-type or
         if strict is False, will guess based on the type of the data 
         '''
-        ctype, options = cgi.parse_header( self.info['content-type'] )
-        encoding = None
-        if 'charset' in options:
-            encoding = options['charset']
-
-        if not encoding:
-            if ctype.startswith( 'text/' ):
-                encoding = 'utf-8'
-
-        if not encoding and not strict:                      
-            if ctype.endswith( 'xml' ) or ctype.endswith('json'):
-                encoding = 'utf-8'
-
-        return encoding
+        if 'encoding' in self.info:
+            return self.info['encoding']
+        return None
 
     def content_type(self):
         return self.info['content-type']
@@ -325,10 +337,14 @@ class RemoteStashLocal:
             print( f'Local Stash {self.location} {size} items' )
 
     def pull(self):
+        '''
+        pull an item from a local stash, will return it and delete from the stash
+        return None if no more items
+        '''
         if len(self.contents['items']):
             info = self.contents['items'].pop()
             item = RemoteStashItem.from_asset(info,self.location_assets)
-            item.clear_asset(self.location_assets)
+            self.clear_asset(item)
             self.save_content()
             if self.verbose:
                 size = len(self.contents['items'])
@@ -342,12 +358,35 @@ class RemoteStashLocal:
         return None
 
     def list(self):
+        '''
+        List the content of the local stash
+        '''
         pprint( self.contents )
-    
+
+    def clear_asset(self,item):
+        '''
+        remove asset for the item, will check if asset not used by another item
+        before removing
+        '''
+        assetname = item.info['assetname']
+        remove=True
+        # don't remove if asset used by another item
+        for other in self.contents['items'][:-1]:
+            if 'assetname' in other and other['assetname'] == assetname:
+                if self.verbose:
+                    print( f'keep asset for {item}' )
+                remove=False
+
+        if remove:
+            item.clear_asset(self.location_assets)
+        
     def clear(self):
+        '''
+        empty the local stash of all items and assets
+        '''
         for c in self.contents['items']:
             item = RemoteStashItem.from_asset(c,self.location_assets)
-            item.clear_asset(self.location_assets)
+            self.clear_asset(item)
         if self.verbose:
             size = len(self.contents['items'])
             print( f'Cleared {size}' )
@@ -355,6 +394,9 @@ class RemoteStashLocal:
         self.save_content()
 
     def clean(self):
+        '''
+        remove any asset that are not associated with an item in the local stash
+        '''
         assets = os.listdir(self.location_assets)
         for assetname in assets:
             found = False
@@ -368,6 +410,9 @@ class RemoteStashLocal:
                 print( f'{assetname} found' )
     
     def status(self):
+        '''
+        status from the local stash
+        '''
         total = len( self.contents['items'] )
         rv = {'items-count':total}
         
@@ -384,6 +429,9 @@ class RemoteStashLocal:
         return rv
             
     def last(self):
+        '''
+        last from the local stash
+        '''
         if len(self.contents['items']):
             item = RemoteStashItem.from_asset(self.contents['items'][-1],self.location_assets)
             return item
@@ -391,13 +439,31 @@ class RemoteStashLocal:
         return None
 
     def push(self,item):
+        '''
+        push item to the local stash
+        '''
         item.save_asset(self.location_assets)
+
+        if len(self.contents['items']) and self.contents['items'][-1]['assetname'] == item.info['assetname']:
+            if True: #self.verbose:
+                print( f'Skipping adding duplicate of last {item}' )
+            return
+        
         self.contents['items'].append( item.json_dict() )
+        
         if self.verbose:
             size = len(self.contents['items'])
             print( f'Local Stash pushed {item} [{size} items]' )
         self.save_content()
 
+    def __eq__(self,other):
+        print( f'checking {self} and {other}' )
+
+        if 'assetname' in self.info and 'assetname' in other.info:
+            return self.info['assetname'] == other.info['assetname']
+
+        return False
+        
     def save_content(self):
         with open( self.content_file, 'w' ) as jf:
             json.dump( self.contents, jf )
@@ -410,11 +476,12 @@ class RemoteStashClient:
        name: filter on service with that name only
        verbose: add output as service are found
     '''
-    def __init__(self,cmd,args):
+    def __init__(self,cmd,stash):
         self.cmd = cmd
-        self.args = args
-        if args.verbose:
-            self.verbose = args.verbose
+        self.stash = stash
+        self.args = stash.args
+        if self.args.verbose:
+            self.verbose = True
         else:
             self.verbose = False
             
@@ -427,6 +494,11 @@ class RemoteStashClient:
             print( f'Service {name} updated' )
         
     def add_service(self, zeroconf, type, name):
+        '''
+        Called when a service is found
+        Will call the command to run on the service
+        unless a name was specified and does not match
+        '''
         if not self.args.name or self.args.name in name:
             info = zeroconf.get_service_info(type, name)
             self.ip = socket.inet_ntoa(info.addresses[0])
@@ -447,13 +519,16 @@ class RemoteStashClient:
                 print( f'Skipping Service {name} on {self.ip}:{self.port}')
             
     def item_from_response(self,response):
-        try:
-            ctype = response.headers['Content-Type']
-            return RemoteStashItem.from_data( response.content, { 'content-type': ctype } )
-        except:
-            return None
+        '''
+        build the item from the http response from the server on the remote stash
+        '''
+        info = RemoteStashItem.info_from_headers(response.headers)
+        return RemoteStashItem.from_data( response.content, info )
 
     def get(self,path):
+        '''
+        execute a get request on the server of the found service
+        '''
         self.session = Session()
         ip = self.ip
         port = self.port
@@ -465,6 +540,9 @@ class RemoteStashClient:
         return response
     
     def post(self,path,data):
+        '''
+        execute a post request on the server of the found service
+        '''
         self.session = Session()
         ip = self.ip
         port = self.port
@@ -485,6 +563,9 @@ class RemoteStashClient:
         return response
 
     def list(self):
+        '''
+        list all the available server found
+        '''
         name = self.info.name
         if name.endswith( '._remotestash._tcp.local.' ):
             name = name[:len('._remotestash._tcp.local.')]
@@ -492,37 +573,59 @@ class RemoteStashClient:
         # don't exit to find more services
     
     def push(self):
+        '''
+        execute a push to the server on the service found
+        '''
         response = self.post('push',self.content)
         print( response.content )
         self.exit()
 
     def pull(self):
+        '''
+        execute a pull to the server on the service found
+        '''
         response = self.get('pull')
         item = self.item_from_response( response )
-        item.output(self.outfile)
+        if item:
+            self.outfile = self.stash.get_output_file(item)
+            item.output(self.outfile)
         self.exit()
 
     def last(self):
+        '''
+        execute a last to the server on the service found
+        '''
         response = self.get('last')
         # if binary use response.content
         item = self.item_from_response( response )
         if item:
+            self.outfile = self.stash.get_output_file(item)
             item.output(self.outfile)
         self.exit()
         
     def status(self):
+        '''
+        execute a status to the server on the service found
+        '''
         response = self.get('status')
         item = self.item_from_response( response )
+        self.outfile = self.stash.get_output_file(item)
         item.output(self.outfile)
         self.exit()
 
     def exit(self):
+        '''
+        exit from all thread and ensure all output is flush  
+        '''
         sys.stdout.flush()
         if self.outfile:
             self.outfile.flush()
         os._exit(0)
         
 class RemoteStashServerAdvertiser:
+    '''
+    This class advertise the server using zeroconf
+    '''
     def __init__(self,port=None):
         self.ip = self.get_ip()
         self.port = port if port else self.get_port() 
@@ -569,31 +672,37 @@ class RemoteStashServerAdvertiser:
         zeroconf.close() 
     
 class RemoteStashServer(BaseHTTPRequestHandler):
+    '''
+    Implement an https server that will process the remotestash protocol using a local stash
+    '''
     def push(self):
         if self.body is None:
             pass
 
         stash = RemoteStashLocal({})
+        stash.verbose = True
         info = { 'content-type': self.content_type }
         if self.filename:
             info['filename'] = self.filename
         item = RemoteStashItem.from_data( self.body, info )
         stash.push( item )
-        rv = RemoteStashItem.from_json( json.dumps( {'success':1} ) )
-        self.respond_item( rv )
+        self.respond( 200, { 'content-type' : 'application/json; charset=utf-8' }, json.dumps({'success':1}), log_message=f'Received: {item}' )
 
     def pull(self):
         stash = RemoteStashLocal({})
+        stash.verbose = True
         item = stash.pull()
         self.respond_item( item )
         
     def last(self):
         stash = RemoteStashLocal({})
+        stash.verbose = True
         item = stash.last()
         self.respond_item( item )
 
     def status(self):
         stash = RemoteStashLocal({})
+        stash.verbose = True
         val = stash.status()
         rv = RemoteStashItem.from_json( json.dumps(val) )
         self.respond_item( rv )
@@ -603,9 +712,6 @@ class RemoteStashServer(BaseHTTPRequestHandler):
         
     def do_GET(self):
         self.breakdown_request()
-        if 'debug' in self.query_dict:
-            self.request_debug_info()
-            return
 
         response = None
         if self.parsed_path.path.startswith( '/push' ):
@@ -668,62 +774,34 @@ class RemoteStashServer(BaseHTTPRequestHandler):
                 print( f'Received {self.content_length} bytes, content-type: {self.content_type} filename: {self.filename}' )
             else:
                 print( f'Received {self.content_length} bytes, content-type: {self.content_type}' )
-            
-    def request_debug_info(self):
-        parsed_path = self.parsed_path
-        message_parts = [
-            'CLIENT VALUES:',
-            'client_address={} ({})'.format(
-                self.client_address,
-                self.address_string()),
-            'command={}'.format(self.command),
-            'path={}'.format(self.path),
-            'real path={}'.format(parsed_path.path),
-            'query={}'.format(parsed_path.query),
-            'query_dict={}'.format(self.query_dict),
-            'request_version={}'.format(self.request_version),
-            '',
-            'SERVER VALUES:',
-            'server_version={}'.format(self.server_version),
-            'sys_version={}'.format(self.sys_version),
-            'protocol_version={}'.format(self.protocol_version),
-            '',
-            'HEADERS RECEIVED:',
-        ]
-        for name, value in sorted(self.headers.items()):
-            message_parts.append(
-                '{}={}'.format(name, value.rstrip())
-            )
-        message_parts.append('')
-        if self.body:
-            message_parts.append( f'BODY [{self.content_length} bytes]' )
-            message_parts.append( self.body.decode('utf-8') )
-            
-        message = '\n'.join(message_parts)
-        self.respond( 200, { 'Content-type' : 'text/plain; charset=utf-8' }, message )
 
     def respond_item(self,item):
         if item:
             headers = { 'content-type' : item.info['content-type'] }
+            if 'filename' in item.info:
+                filename = item.info['filename']
+                headers['content-disposition'] = f'attachment; filename="{filename}"'
             message = item.as_data()
-
-            self.respond( 200, headers, message )
+            self.respond( 200, headers, message, log_message=f'Request: {item}' )
         else:
             self.respond( 200, {}, None )
             
-    def respond(self,response_value, headers, content ):
+    def respond(self,response_value, headers, content, log_message=None ):
         self.send_response(response_value)
+        if log_message:
+            print( log_message )
         ctype = None
         if headers:
             for header,value in headers.items():
                 if header.lower() == 'content-type':
                     ctype = value
+                    
                 self.send_header(header,value)
         self.end_headers()
         
         if content:
             self.wfile.write(content if isinstance(content,bytes) else content.encode( 'utf-8' ) )
-            print( f'Response: {response_value}, {len(content)} bytes, {ctype}' )
+            print( f'Response: {response_value}, {len(content)} bytes, {headers}' )
         else:
             print( f'Response: {response_value}' )
         
@@ -738,7 +816,7 @@ class RemoteStash:
         after given timeout if no service found will exit with an error
         '''
         zeroconf = Zeroconf()
-        listener = RemoteStashClient(path,self.args)
+        listener = RemoteStashClient(path,self)
         if path == 'push':
             (filename,inputf) = self.get_input_file()
             listener.filename = filename
@@ -747,7 +825,7 @@ class RemoteStash:
         else:
             listener.filename = None
             listener.content = None
-            listener.outfile = self.get_output_file()
+            listener.outfile = None
         
         listener.content_type = self.get_input_content_type()
         browser = ServiceBrowser(zeroconf, "_remotestash._tcp.local.", listener)
@@ -821,8 +899,13 @@ class RemoteStash:
         stdout or if applicable the filename from the original item will be use unless overwritten 
         on the command line. '-' as a file name will force output to stdout
         '''
+        if item and self.verbose:
+            pprint( item )
+
         if 'file' in self.args and self.args.file:
             if self.args.file == '-':
+                if self.verbose:
+                    print( f'Sending to stdout' )
                 return sys.stdout
             else:
                 if self.verbose:
@@ -831,8 +914,12 @@ class RemoteStash:
         else:
             # if no args, just use stdout or filename provided by item
             if item and item.filename():
-                return item.filename()
+                if self.verbose:
+                    print( f'Saving to {item.filename()}' )
+                return open( item.filename(), 'wb' )
             else:
+                if self.verbose:
+                    print( f'Sending to stdout' )
                 return sys.stdout
             
     def cmd_push(self):
