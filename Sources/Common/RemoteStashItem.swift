@@ -224,7 +224,7 @@ class RemoteStashItem {
         self.contentType = "text/plain"
         self.encoding = .utf8
         self.filename = nil
-        self.status = Status(size: content.size(), contentType: contentType, filename: nil)es
+        self.status = Status(size: content.size(), contentType: contentType, filename: nil)
     }
 
     //MARK: - load item
