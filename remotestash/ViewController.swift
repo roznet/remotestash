@@ -153,13 +153,17 @@ class ViewController: UIViewController,UITextViewDelegate,RemoteStashClientDeleg
     }
     
     func updateServiceStatus() {
-        if let status = self.lastStatus {
-            DispatchQueue.main.async {
-                var msg = [ "\(status.itemsCount) items"]
-                if let next = status.last?.contentType {
-                    msg.append("next: \(next)")
+        self.client?.service?.status() {
+            _,status in
+            self.lastStatus = status
+            if let status = self.lastStatus {
+                DispatchQueue.main.async {
+                    var msg = [ "\(status.itemsCount) items"]
+                    if let next = status.last?.contentType {
+                        msg.append("next: \(next)")
+                    }
+                    self.connectedTo.text = msg.joined(separator: ", ")
                 }
-                self.connectedTo.text = msg.joined(separator: ", ")
             }
         }
     }

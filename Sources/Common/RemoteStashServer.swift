@@ -65,6 +65,7 @@ class RemoteStashServer : NSObject,NetServiceDelegate,NetServiceBrowserDelegate 
     func stop(){
         self.service?.stop()
         self.httpServer?.stopListening()
+        self.httpServer = nil
     }
 
     //MARK: - get network info
