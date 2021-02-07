@@ -30,7 +30,12 @@ class ViewController: UIViewController,UITextViewDelegate,RemoteStashClientDeleg
             return rv
         }
     }
-    var lastStatus : RemoteStashServer.Status? = nil
+    
+    var localLastStatus : RemoteStashServer.Status {
+        return .init(itemsCount: self.items.count, last: self.last.status)
+    }
+    
+    var remoteLastStatus : RemoteStashServer.Status? = nil
     
     var client : RemoteStashClient? = nil
     var server : RemoteStashServer? = nil
@@ -74,7 +79,7 @@ class ViewController: UIViewController,UITextViewDelegate,RemoteStashClientDeleg
             notification in
             self.client?.service?.status() {
                 _,status in
-                self.lastStatus = status
+                self.remoteLastStatus = status
                 self.update()
             }
         }
@@ -132,37 +137,30 @@ class ViewController: UIViewController,UITextViewDelegate,RemoteStashClientDeleg
                 self.imagePreview.image = img
                 self.textView.isHidden = true
                 self.imagePreview.isHidden = false
-                self.received.text = NSLocalizedString("Image", comment: "Received")
             case .string(let str):
                 self.textView.text = str
                 self.textView.isHidden = false
                 self.imagePreview.isHidden = true
-                self.received.text = NSLocalizedString("test", comment: "Received")
             case .empty:
                 self.textView.text = ""
                 self.textView.isHidden = false
                 self.imagePreview.isHidden = true
-                self.received.text = NSLocalizedString("Empty", comment: "Received")
             case .data:
                 self.textView.text = ""
                 self.textView.isHidden = false
                 self.imagePreview.isHidden = true
-                self.received.text = item.contentType
             }
+            self.received.text = self.localLastStatus.prettyDisplay()
         }
     }
     
     func updateServiceStatus() {
         self.client?.service?.status() {
             _,status in
-            self.lastStatus = status
-            if let status = self.lastStatus {
+            self.remoteLastStatus = status
+            if let status = self.remoteLastStatus {
                 DispatchQueue.main.async {
-                    var msg = [ "\(status.itemsCount) items"]
-                    if let next = status.last?.contentType {
-                        msg.append("next: \(next)")
-                    }
-                    self.connectedTo.text = msg.joined(separator: ", ")
+                    self.connectedTo.text = status.prettyDisplay()
                 }
             }
         }
@@ -201,6 +199,10 @@ class ViewController: UIViewController,UITextViewDelegate,RemoteStashClientDeleg
         }
     }
 
+    @IBAction func actionClear(_ sender: Any) {
+        self.items = [ RemoteStashItem(string: "")]
+        self.update()
+    }
     //MARK: - textview delegate
 
     @objc func done(textView: UITextView){
@@ -210,7 +212,7 @@ class ViewController: UIViewController,UITextViewDelegate,RemoteStashClientDeleg
     
     func textViewDidChange(_ textView: UITextView) {
         self.last.update(text: textView.text)
-        print( "update: \(self.last.content)")
+        self.received.text = self.localLastStatus.prettyDisplay()
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {

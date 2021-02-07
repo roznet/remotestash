@@ -29,10 +29,16 @@ class RemoteStashItem {
         let contentType : String
         let filename : String?
         
+        var formattedSize : String {
+            return ByteCountFormatter.string(fromByteCount: Int64(self.size), countStyle: .file)
+        }
+        
         var description: String {
             let file = filename ?? "nil"
             return "Status(size: \(size), contentType: \(contentType), filename: \(file)"
         }
+        
+        
     }
     
     enum Content {
@@ -218,6 +224,7 @@ class RemoteStashItem {
         self.contentType = "text/plain"
         self.encoding = .utf8
         self.filename = nil
+        self.status = Status(size: content.size(), contentType: contentType, filename: nil)es
     }
 
     //MARK: - load item

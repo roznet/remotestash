@@ -33,6 +33,18 @@ class RemoteStashServer : NSObject,NetServiceDelegate,NetServiceBrowserDelegate 
         
         let itemsCount : Int
         let last : RemoteStashItem.Status?
+        
+        func prettyDisplay() -> String {
+            var msg = [ "\(self.itemsCount) items"]
+            if let mtype = self.last?.contentType {
+                let (ctype,_) = mtype.typeAndEncoding()
+                msg.append(ctype)
+            }
+            if let size = self.last?.formattedSize{
+                msg.append(size)
+            }
+            return msg.joined(separator: ", ")
+        }
     }
     
     let serverUUID :UUID
