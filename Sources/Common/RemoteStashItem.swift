@@ -205,12 +205,23 @@ class RemoteStashItem {
                   filename: response.suggestedFilename )
     }
     
-    func update( with other : RemoteStashItem){
+    //MARK: - update with data
+    
+    func update( with other : RemoteStashItem) {
         self.content = other.content
         self.contentType = other.contentType
         self.encoding = other.encoding
         self.filename = other.filename
     }
+    
+    func update(text : String) {
+        self.content = .string(text)
+        self.contentType = "text/plain"
+        self.encoding = .utf8
+        self.filename = nil
+    }
+
+    //MARK: - load item
     
     static func loadItem(itemProvider : NSItemProvider,
                          uttype : UTType,
@@ -382,12 +393,6 @@ class RemoteStashItem {
         }
     }
     
-    func update(text : String){
-        self.content = .string(text)
-        self.contentType = "text/plain"
-        self.encoding = .utf8
-        self.filename = nil
-    }
     
 }
 

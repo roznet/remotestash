@@ -137,9 +137,17 @@ class ViewController: UIViewController,UITextViewDelegate,RemoteStashClientDeleg
                 self.textView.text = str
                 self.textView.isHidden = false
                 self.imagePreview.isHidden = true
-                self.received.text = NSLocalizedString("String", comment: "Received")
-            default:
-                self.received.text = NSLocalizedString("Data", comment: "Received")
+                self.received.text = NSLocalizedString("test", comment: "Received")
+            case .empty:
+                self.textView.text = ""
+                self.textView.isHidden = false
+                self.imagePreview.isHidden = true
+                self.received.text = NSLocalizedString("Empty", comment: "Received")
+            case .data:
+                self.textView.text = ""
+                self.textView.isHidden = false
+                self.imagePreview.isHidden = true
+                self.received.text = item.contentType
             }
         }
     }
