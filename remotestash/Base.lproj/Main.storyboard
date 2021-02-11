@@ -25,7 +25,7 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aNr-pB-gNO">
+                                    <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aNr-pB-gNO">
                                         <rect key="frame" x="307" y="14.666666666666671" width="35" height="30"/>
                                         <state key="normal" title="Push"/>
                                         <connections>
@@ -65,8 +65,8 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Content" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Tq-nY-po3">
-                                        <rect key="frame" x="8" y="8" width="339" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="No Content" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Tq-nY-po3">
+                                        <rect key="frame" x="8" y="8" width="290" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -74,7 +74,7 @@
                                     <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fAw-tQ-Cec">
                                         <rect key="frame" x="8" y="37" width="339" height="245"/>
                                     </imageView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Kf-fR-sPV">
+                                    <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Kf-fR-sPV">
                                         <rect key="frame" x="306" y="4" width="36" height="30"/>
                                         <state key="normal" title="Clear"/>
                                         <connections>
@@ -84,13 +84,13 @@
                                 </subviews>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="7Tq-nY-po3" secondAttribute="trailing" constant="8" id="PCi-Ni-0hx"/>
                                     <constraint firstItem="fAw-tQ-Cec" firstAttribute="leading" secondItem="B9a-ze-eLw" secondAttribute="leading" constant="8" id="SNp-nP-8Yi"/>
                                     <constraint firstItem="fAw-tQ-Cec" firstAttribute="top" secondItem="7Tq-nY-po3" secondAttribute="bottom" constant="8" id="StR-53-k7n"/>
                                     <constraint firstAttribute="trailing" secondItem="fAw-tQ-Cec" secondAttribute="trailing" constant="8" id="U2u-Pv-ZCj"/>
                                     <constraint firstAttribute="bottom" secondItem="wxR-RG-X08" secondAttribute="bottom" constant="8.5" id="W3J-Kj-NaT"/>
                                     <constraint firstItem="7Kf-fR-sPV" firstAttribute="firstBaseline" secondItem="7Tq-nY-po3" secondAttribute="firstBaseline" id="eOL-vc-4ih"/>
                                     <constraint firstAttribute="trailing" secondItem="wxR-RG-X08" secondAttribute="trailing" constant="8" id="i8o-pg-ZeA"/>
+                                    <constraint firstItem="7Kf-fR-sPV" firstAttribute="leading" secondItem="7Tq-nY-po3" secondAttribute="trailing" constant="8" symbolic="YES" id="mkf-Q6-tRy"/>
                                     <constraint firstItem="wxR-RG-X08" firstAttribute="top" secondItem="7Tq-nY-po3" secondAttribute="bottom" constant="8" id="nPr-if-16P"/>
                                     <constraint firstItem="7Tq-nY-po3" firstAttribute="leading" secondItem="B9a-ze-eLw" secondAttribute="leading" constant="8" id="o2O-ry-q0a"/>
                                     <constraint firstAttribute="bottom" secondItem="fAw-tQ-Cec" secondAttribute="bottom" constant="8.3333333333332575" id="rPj-LK-qTl"/>
@@ -101,20 +101,20 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ai5-ZJ-a2W" userLabel="RemoteViewArea">
                                 <rect key="frame" x="10" y="488.33333333333326" width="355" height="279.66666666666674"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Remote" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vJf-yP-klh">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Remote" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vJf-yP-klh">
                                         <rect key="frame" x="8" y="8" width="63" height="21"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xRr-y2-Xo6">
+                                    <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xRr-y2-Xo6">
                                         <rect key="frame" x="310" y="4" width="30" height="30"/>
                                         <state key="normal" title="Last"/>
                                         <connections>
                                             <action selector="actionLast:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gkt-7w-nWJ"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sVO-uN-Z3d">
+                                    <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sVO-uN-Z3d">
                                         <rect key="frame" x="162.66666666666666" y="4" width="30" height="30"/>
                                         <state key="normal" title="Pull"/>
                                         <connections>
