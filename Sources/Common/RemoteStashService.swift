@@ -201,6 +201,8 @@ class RemoteStashService : NSObject,NetServiceDelegate,URLSessionTaskDelegate {
     //MARK: - URLSession Delegate
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        let url  = task.currentRequest?.url ?? URL(fileURLWithPath: "")
+        
         if let trust = challenge.protectionSpace.serverTrust,
            let caCertPath = Bundle.main.path(forResource: "remotestash-ca", ofType: "der"),
            let caCertData = try? Data(contentsOf: URL(fileURLWithPath: caCertPath)),
@@ -219,7 +221,24 @@ class RemoteStashService : NSObject,NetServiceDelegate,URLSessionTaskDelegate {
                 }
             }
             
-            // Else check if pass trust
+            // Code to try a brand new trust object
+            let policy = SecPolicyCreateBasicX509()
+            var optionalTrust : SecTrust?
+            let _ = SecTrustCreateWithCertificates([caCert] as CFArray, policy, &optionalTrust)
+            if let trust = optionalTrust {
+                var trustResultOther : SecTrustResultType = SecTrustResultType.invalid
+                SecTrustGetTrustResult(trust, &trustResultOther)
+                switch trustResultOther{
+                case .unspecified,.proceed:
+                    logger.info("\(url) new trust ok")
+                case .recoverableTrustFailure:
+                    logger.info("\(url) new trust failed but recoverable")
+                default:
+                    logger.info("\(url) new trust failed")
+                }
+            }
+            // Else check if trust from original trust object with our certificate added
+            // We should not do both later, but this is until we get one of the two working
             var trustResult : SecTrustResultType = SecTrustResultType.invalid
             SecTrustGetTrustResult(trust, &trustResult)
             
@@ -228,18 +247,18 @@ class RemoteStashService : NSObject,NetServiceDelegate,URLSessionTaskDelegate {
                 completionHandler(.useCredential,URLCredential(trust: trust))
             case .recoverableTrustFailure:
                 if isExpectedCert {
-                    logger.warning("Failed trust but known certificate")
+                    logger.warning("\(url) server trust failed but known certificate, proceed")
                     completionHandler(.useCredential,URLCredential(trust: trust))
                 }else{
-                    logger.error("Failed trust and unknown certificate used")
+                    logger.error("\(url) server trust failed and unknown certificate, cancel")
                     completionHandler(.cancelAuthenticationChallenge,nil)
                 }
             default:
-                logger.error("Failed trust with unexpected result")
+                logger.error("\(url) server trust failed with unexpected error, cancel")
                 completionHandler(.cancelAuthenticationChallenge,nil)
             }
         }else{
-            logger.error("Failed manual authentication")
+            logger.error("\(url) server trust failed to setup manual authentication")
             completionHandler(.cancelAuthenticationChallenge,nil)
         }
     }
