@@ -14,12 +14,10 @@ fileprivate let logger = Logger(subsystem: "net.ro-z.remotestash", category: "Ad
 struct AddressAndPort : CustomStringConvertible{
     
     #if targetEnvironment(simulator)
-    static let wifiInterface = "en1"
+    static let wifiInterface = "en0"
     #else
     static let wifiInterface = "en0"
     #endif
-    
-
     
     let ip : String
     let port : Int
@@ -48,6 +46,10 @@ struct AddressAndPort : CustomStringConvertible{
         }
     }
     
+    /// Extract AddressAndPort from a socket
+    /// - Parameters:
+    ///   - ptr: Pointer to a buffer sockaddr, typically either an underlying sockaddr_in or sockaddr_in6
+    ///   - port: optional port to override value from the socket if only the ip address is of interest
     init( ptr : UnsafeBufferPointer<sockaddr>, port: Int? = nil ){
         var hostname = [CChar](repeating: 0, count: Int(NI_MAXHOST))
         var service  = [CChar](repeating: 0, count: Int(NI_MAXSERV))
@@ -72,9 +74,12 @@ struct AddressAndPort : CustomStringConvertible{
         }
     }
     
+    /// Will open and immediately close an ipv4 UDP socket to find an avaialble port
+    /// - Returns: free port number
     static func availablePort() -> AddressAndPort? {
         var rv : AddressAndPort? = nil
         
+        // Create the c structure and get the size with MemoryLayout
         var addr = sockaddr_in()
         var size : socklen_t = socklen_t(MemoryLayout<sockaddr_in>.size)
         
@@ -83,9 +88,18 @@ struct AddressAndPort : CustomStringConvertible{
         addr.sin_port = 0
         // Use UDP socket so it can close immediately and release the port
         let sockfd = socket(AF_INET,SOCK_DGRAM,0)
+        
+        // Now we want to do the equivalent of c typecast:
+        //    sockaddr_in * addr
+        //    bind( (sockaddr*)&addr, ... )
+        
+        // First convert the structure memory to Data
         var data = Data(bytes: &addr, count: Int(size))
+        // Then create a memory buffer with the Data object
         data.withUnsafeMutableBytes { (pointer: UnsafeMutableRawBufferPointer) -> Void in
+            // finally cast the pointer to the buffer as a sockaddr
             let ptr = pointer.bindMemory(to: sockaddr.self)
+            // Pass the sockaddr pointer to bind (the point actually points to a sockaddr_in)
             let bindrv = bind(sockfd, ptr.baseAddress, size)
             if bindrv == 0 {
                 let namerv = getsockname(sockfd, ptr.baseAddress, &size)
