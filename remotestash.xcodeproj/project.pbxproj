@@ -780,7 +780,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/remotestash.app/remotestash";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RemoteStash.app/RemoteStash";
 			};
 			name = Debug;
 		};
@@ -802,7 +802,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/remotestash.app/remotestash";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RemoteStash.app/RemoteStash";
 			};
 			name = Release;
 		};

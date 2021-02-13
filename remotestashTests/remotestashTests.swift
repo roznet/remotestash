@@ -7,13 +7,14 @@
 
 import Foundation
 import XCTest
-@testable import remotestash
+@testable import RemoteStash
 import os
-
+import UniformTypeIdentifiers
 
 fileprivate let logger = Logger(subsystem: "net.ro-z.remotestash", category: "test")
 
 class remotestashTests: XCTestCase,RemoteStashServerDelegate,RemoteStashClientDelegate {
+    
 
     let stringPayload : String = "Hello World en français"
     let imagePayload : UIImage? = nil
@@ -76,6 +77,10 @@ class remotestashTests: XCTestCase,RemoteStashServerDelegate,RemoteStashClientDe
         self.server?.start()
         
         wait(for: [gotService,gotItem], timeout: 3600.0)
+    }
+
+    func remoteStashClient(_ client: RemoteStashClient, shouldAdd service: RemoteStashService) -> Bool {
+        return true
     }
 
     func remoteStashClient(_ client: RemoteStashClient, add service: RemoteStashService) {
@@ -148,6 +153,4 @@ class remotestashTests: XCTestCase,RemoteStashServerDelegate,RemoteStashClientDe
     func serverLastItem(_ server: RemoteStashServer) -> RemoteStashItem? {
         return self.items.last
     }
-    
-
 }
