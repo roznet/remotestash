@@ -9,6 +9,14 @@
 /* Begin PBXBuildFile section */
 		4291887725CAF84200A28701 /* RemoteStashClient+TableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4291887625CAF84200A28701 /* RemoteStashClient+TableDataSource.swift */; };
 		4291887825CAF84200A28701 /* RemoteStashClient+TableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4291887625CAF84200A28701 /* RemoteStashClient+TableDataSource.swift */; };
+		42DB6CF925D7E0AD003AC195 /* remotestash-cert-signed.der in Resources */ = {isa = PBXBuildFile; fileRef = 42DB6CF525D7E0AD003AC195 /* remotestash-cert-signed.der */; };
+		42DB6CFA25D7E0AD003AC195 /* remotestash-cert-signed.der in Resources */ = {isa = PBXBuildFile; fileRef = 42DB6CF525D7E0AD003AC195 /* remotestash-cert-signed.der */; };
+		42DB6CFB25D7E0AD003AC195 /* remotestash-ca.pem in Resources */ = {isa = PBXBuildFile; fileRef = 42DB6CF625D7E0AD003AC195 /* remotestash-ca.pem */; };
+		42DB6CFC25D7E0AD003AC195 /* remotestash-ca.pem in Resources */ = {isa = PBXBuildFile; fileRef = 42DB6CF625D7E0AD003AC195 /* remotestash-ca.pem */; };
+		42DB6CFD25D7E0AD003AC195 /* remotestash-cert-signed.pem in Resources */ = {isa = PBXBuildFile; fileRef = 42DB6CF725D7E0AD003AC195 /* remotestash-cert-signed.pem */; };
+		42DB6CFE25D7E0AD003AC195 /* remotestash-cert-signed.pem in Resources */ = {isa = PBXBuildFile; fileRef = 42DB6CF725D7E0AD003AC195 /* remotestash-cert-signed.pem */; };
+		42DB6CFF25D7E0AD003AC195 /* remotestash-ca.der in Resources */ = {isa = PBXBuildFile; fileRef = 42DB6CF825D7E0AD003AC195 /* remotestash-ca.der */; };
+		42DB6D0025D7E0AD003AC195 /* remotestash-ca.der in Resources */ = {isa = PBXBuildFile; fileRef = 42DB6CF825D7E0AD003AC195 /* remotestash-ca.der */; };
 		42E53CFB25C8088C003AF0D1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53CFA25C8088C003AF0D1 /* AppDelegate.swift */; };
 		42E53CFD25C8088C003AF0D1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53CFC25C8088C003AF0D1 /* SceneDelegate.swift */; };
 		42E53CFF25C8088C003AF0D1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E53CFE25C8088C003AF0D1 /* ViewController.swift */; };
@@ -87,6 +95,10 @@
 		4291886C25CAE92300A28701 /* RemoteStash.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = RemoteStash.entitlements; sourceTree = "<group>"; };
 		4291886D25CAE92F00A28701 /* share.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = share.entitlements; sourceTree = "<group>"; };
 		4291887625CAF84200A28701 /* RemoteStashClient+TableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RemoteStashClient+TableDataSource.swift"; sourceTree = "<group>"; };
+		42DB6CF525D7E0AD003AC195 /* remotestash-cert-signed.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = "remotestash-cert-signed.der"; sourceTree = "<group>"; };
+		42DB6CF625D7E0AD003AC195 /* remotestash-ca.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "remotestash-ca.pem"; sourceTree = "<group>"; };
+		42DB6CF725D7E0AD003AC195 /* remotestash-cert-signed.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "remotestash-cert-signed.pem"; sourceTree = "<group>"; };
+		42DB6CF825D7E0AD003AC195 /* remotestash-ca.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = "remotestash-ca.der"; sourceTree = "<group>"; };
 		42E53CF725C8088C003AF0D1 /* RemoteStash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RemoteStash.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42E53CFA25C8088C003AF0D1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		42E53CFC25C8088C003AF0D1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -243,6 +255,10 @@
 		42E53DC925C81B7E003AF0D1 /* certs */ = {
 			isa = PBXGroup;
 			children = (
+				42DB6CF825D7E0AD003AC195 /* remotestash-ca.der */,
+				42DB6CF625D7E0AD003AC195 /* remotestash-ca.pem */,
+				42DB6CF525D7E0AD003AC195 /* remotestash-cert-signed.der */,
+				42DB6CF725D7E0AD003AC195 /* remotestash-cert-signed.pem */,
 				42E53DD825C8412F003AF0D1 /* remotestash-cert.der */,
 				42E53DCA25C81B7E003AF0D1 /* remotestash-cert.pem */,
 				42E53DCB25C81B7E003AF0D1 /* remotestash-key.pem */,
@@ -403,8 +419,12 @@
 			files = (
 				42E53D0725C8088C003AF0D1 /* LaunchScreen.storyboard in Resources */,
 				42E53DD925C8412F003AF0D1 /* remotestash-cert.der in Resources */,
+				42DB6CFB25D7E0AD003AC195 /* remotestash-ca.pem in Resources */,
+				42DB6CF925D7E0AD003AC195 /* remotestash-cert-signed.der in Resources */,
+				42DB6CFD25D7E0AD003AC195 /* remotestash-cert-signed.pem in Resources */,
 				42E53D0425C8088C003AF0D1 /* Assets.xcassets in Resources */,
 				42E53DCC25C81B7E003AF0D1 /* remotestash-cert.pem in Resources */,
+				42DB6CFF25D7E0AD003AC195 /* remotestash-ca.der in Resources */,
 				42E53D0225C8088C003AF0D1 /* Main.storyboard in Resources */,
 				42E53DCE25C81B7E003AF0D1 /* remotestash-key.pem in Resources */,
 			);
@@ -428,8 +448,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42DB6CFC25D7E0AD003AC195 /* remotestash-ca.pem in Resources */,
+				42DB6CFA25D7E0AD003AC195 /* remotestash-cert-signed.der in Resources */,
 				42E53DCF25C81B7E003AF0D1 /* remotestash-key.pem in Resources */,
+				42DB6D0025D7E0AD003AC195 /* remotestash-ca.der in Resources */,
 				42E53DCD25C81B7E003AF0D1 /* remotestash-cert.pem in Resources */,
+				42DB6CFE25D7E0AD003AC195 /* remotestash-cert-signed.pem in Resources */,
 				42E53D3E25C80920003AF0D1 /* MainInterface.storyboard in Resources */,
 				42E53DDA25C8412F003AF0D1 /* remotestash-cert.der in Resources */,
 			);

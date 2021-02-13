@@ -202,28 +202,44 @@ class RemoteStashService : NSObject,NetServiceDelegate,URLSessionTaskDelegate {
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         if let trust = challenge.protectionSpace.serverTrust,
-           let certPath = Bundle.main.path(forResource: "remotestash-cert", ofType: "der"),
-           let certData = try? Data(contentsOf: URL(fileURLWithPath: certPath)),
-           let cert = SecCertificateCreateWithData(nil, certData as CFData),
+           let caCertPath = Bundle.main.path(forResource: "remotestash-ca", ofType: "der"),
+           let caCertData = try? Data(contentsOf: URL(fileURLWithPath: caCertPath)),
+           let caCert = SecCertificateCreateWithData(nil, caCertData as CFData),
            let remoteCert = SecTrustGetCertificateAtIndex(trust, 0) {
-            SecTrustSetAnchorCertificates(trust, [cert] as CFArray)
+            SecTrustSetAnchorCertificates(trust, [caCert] as CFArray)
             SecTrustSetAnchorCertificatesOnly(trust, false)
             
             // First Check if just exactly the same certificate
             let remoteCertData = SecCertificateCopyData(remoteCert) as Data
-            if remoteCertData == certData {
-                completionHandler(.useCredential,URLCredential(trust: trust))
-            }else {
-                // Else check if pass trust
-                var trustResult : SecTrustResultType = SecTrustResultType.invalid
-                SecTrustGetTrustResult(trust, &trustResult)
-                if trustResult == .unspecified || trustResult == .proceed {
-                    completionHandler(.useCredential,URLCredential(trust: trust))
-                }else{
-                    completionHandler(.cancelAuthenticationChallenge,nil)
+            var isExpectedCert = false
+            if let expectedCertPath = Bundle.main.path(forResource: "remotestash-cert-signed", ofType: "der"),
+               let expectedCertData = try? Data(contentsOf: URL(fileURLWithPath: expectedCertPath)) {
+                if remoteCertData == expectedCertData {
+                    isExpectedCert = true
                 }
             }
+            
+            // Else check if pass trust
+            var trustResult : SecTrustResultType = SecTrustResultType.invalid
+            SecTrustGetTrustResult(trust, &trustResult)
+            
+            switch trustResult{
+            case .unspecified,.proceed:
+                completionHandler(.useCredential,URLCredential(trust: trust))
+            case .recoverableTrustFailure:
+                if isExpectedCert {
+                    logger.warning("Failed trust but known certificate")
+                    completionHandler(.useCredential,URLCredential(trust: trust))
+                }else{
+                    logger.error("Failed trust and unknown certificate used")
+                    completionHandler(.cancelAuthenticationChallenge,nil)
+                }
+            default:
+                logger.error("Failed trust with unexpected result")
+                completionHandler(.cancelAuthenticationChallenge,nil)
+            }
         }else{
+            logger.error("Failed manual authentication")
             completionHandler(.cancelAuthenticationChallenge,nil)
         }
     }

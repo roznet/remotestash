@@ -97,7 +97,7 @@ class RemoteStashServer : NSObject,NetServiceDelegate,NetServiceBrowserDelegate 
         httpServer.isSecure = true
         // Certificate created with
         // openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout remotestash-key.pem -out remotestash-cert.pem
-        httpServer.certificatePath = Bundle.main.path(forResource: "remotestash-cert", ofType: "pem")
+        httpServer.certificatePath = Bundle.main.path(forResource: "remotestash-cert-signed", ofType: "pem")
         httpServer.privateKeyPath = Bundle.main.path(forResource: "remotestash-key", ofType: "pem")
         httpServer.get("/status") {
             (req, res, next) in
