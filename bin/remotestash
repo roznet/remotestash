@@ -810,7 +810,7 @@ class RemoteStashServer(BaseHTTPRequestHandler):
 class RemoteStash:
     def __init__(self,args=None):
         self.args = args
-        self.verbose = True;
+        self.verbose = args.verbose;
 
     def listen_and_execute(self,path = 'last'):
         '''
