@@ -161,7 +161,7 @@ class RemoteStashItem:
         
         encoding = None
         if 'charset' in pdict:
-            info['encoding'] = options['charset']
+            info['encoding'] = pdict['charset']
         elif ctype.startswith( 'text/' ):
             info['encoding'] = 'utf-8'
         
