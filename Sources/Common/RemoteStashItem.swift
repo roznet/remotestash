@@ -404,7 +404,7 @@ class RemoteStashItem {
 
 extension RemoteStashItem : CustomStringConvertible {
     var description: String {
-        var info = [ "\(self.contentType)", "\(self.content.size())" ]
+        var info = [ "\(self.contentType)" ]
         if let file = self.filename {
             info.append(file)
         }
