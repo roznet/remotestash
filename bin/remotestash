@@ -821,19 +821,24 @@ class RemoteStash:
         listener = RemoteStashClient(path,self)
         if path == 'push':
             (filename,inputf) = self.get_input_file()
-            listener.filename = filename
-            listener.content = inputf.read()
-            listener.outfile = None
+            if inputf:
+                listener.filename = filename
+                listener.content = inputf.read()
+                listener.outfile = None
+            else:
+                print( "Failed to open input file" )
+                listener = None
         else:
             listener.filename = None
             listener.content = None
             listener.outfile = None
-        
-        listener.content_type = self.get_input_content_type()
-        browser = ServiceBrowser(zeroconf, "_remotestash._tcp.local.", listener)
-        time.sleep(self.args.timeout)
-        if path != 'list':
-            print( 'Failed to find a stash on the local network'  )
+
+        if listener:
+            listener.content_type = self.get_input_content_type()
+            browser = ServiceBrowser(zeroconf, "_remotestash._tcp.local.", listener)
+            time.sleep(self.args.timeout)
+            if path != 'list':
+                print( 'Failed to find a stash on the local network'  )
 
     def cmd_serve(self):
         '''
