@@ -1,0 +1,19 @@
+
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: macOS-latest
+
+    steps:
+    - uses: actions/checkout@master
+    - name: Pre Build
+      run: |
+        pwd
+        ls
+        pod install
+    - name: Build
+      run: xcodebuild -sdk iphonesimulator -workspace remotestash.xcworkspace -scheme remotestash -destination 'platform=iOS Simulator,name=iPhone 11' build CODE_SIGNING_REQUIRED=NO
